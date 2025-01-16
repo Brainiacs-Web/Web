@@ -6,6 +6,35 @@
   <meta name="theme-color" content="#00c6ff">
   <title>Login</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Mono font styling */
+    .mono-font {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.2em;
+    }
+    .converter-container {
+      margin-top: 20px;
+    }
+    .converter-container input {
+      padding: 5px;
+      font-size: 1em;
+    }
+    .result {
+      margin-top: 10px;
+      font-size: 1.2em;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+    }
+    .copy-btn {
+      margin-top: 10px;
+      padding: 5px 10px;
+      background-color: #00c6ff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -18,7 +47,16 @@
     <div id="errorMessage" style="display: none; color: red;">
       <p>Invalid email. Please try again.</p>
     </div>
+    
+    <!-- Font Converter Section -->
+    <div class="converter-container">
+      <label for="nameInput">Enter your name:</label>
+      <input type="text" id="nameInput" placeholder="Enter your name" />
+      <div class="result" id="resultText"></div>
+      <button class="copy-btn" id="copyBtn">Copy</button>
+    </div>
   </div>
+
   <script>
     document.getElementById('proceedBtn').addEventListener('click', () => {
       const emailInput = document.getElementById('emailInput').value.trim();
@@ -31,6 +69,83 @@
       } else {
         const errorMessage = document.getElementById('errorMessage');
         errorMessage.style.display = 'block';
+      }
+    });
+
+    // Font converter function
+    document.getElementById('nameInput').addEventListener('input', function() {
+      const name = this.value.trim();
+      const resultText = document.getElementById('resultText');
+      if (name) {
+        resultText.textContent = `ʙɴ👾${convertToMonoFont(name)}`;
+      } else {
+        resultText.textContent = '';
+      }
+    });
+
+    // Function to convert to Mono font (like ʙɴ style)
+    function convertToMonoFont(name) {
+      return name.replace(/a/g, 'ᴀ')
+                 .replace(/b/g, 'ʙ')
+                 .replace(/c/g, 'ᴄ')
+                 .replace(/d/g, 'ᴅ')
+                 .replace(/e/g, 'ᴇ')
+                 .replace(/f/g, 'ғ')
+                 .replace(/g/g, 'ɢ')
+                 .replace(/h/g, 'ʜ')
+                 .replace(/i/g, 'ɪ')
+                 .replace(/j/g, 'ᴊ')
+                 .replace(/k/g, 'ᴋ')
+                 .replace(/l/g, 'ʟ')
+                 .replace(/m/g, 'ᴍ')
+                 .replace(/n/g, 'ɴ')
+                 .replace(/o/g, 'ᴏ')
+                 .replace(/p/g, 'ᴘ')
+                 .replace(/q/g, 'Q') // Custom, keeping uppercase for clarity
+                 .replace(/r/g, 'ʀ')
+                 .replace(/s/g, 's')
+                 .replace(/t/g, 'ᴛ')
+                 .replace(/u/g, 'ᴜ')
+                 .replace(/v/g, 'ᴠ')
+                 .replace(/w/g, 'ᴡ')
+                 .replace(/x/g, 'x')
+                 .replace(/y/g, 'ʏ')
+                 .replace(/z/g, 'ᴢ')
+                 .replace(/A/g, 'ᴀ')
+                 .replace(/B/g, 'ʙ')
+                 .replace(/C/g, 'ᴄ')
+                 .replace(/D/g, 'ᴅ')
+                 .replace(/E/g, 'ᴇ')
+                 .replace(/F/g, 'ғ')
+                 .replace(/G/g, 'ɢ')
+                 .replace(/H/g, 'ʜ')
+                 .replace(/I/g, 'ɪ')
+                 .replace(/J/g, 'ᴊ')
+                 .replace(/K/g, 'ᴋ')
+                 .replace(/L/g, 'ʟ')
+                 .replace(/M/g, 'ᴍ')
+                 .replace(/N/g, 'ɴ')
+                 .replace(/O/g, 'ᴏ')
+                 .replace(/P/g, 'ᴘ')
+                 .replace(/Q/g, 'Q')
+                 .replace(/R/g, 'ʀ')
+                 .replace(/S/g, 's')
+                 .replace(/T/g, 'ᴛ')
+                 .replace(/U/g, 'ᴜ')
+                 .replace(/V/g, 'ᴠ')
+                 .replace(/W/g, 'ᴡ')
+                 .replace(/X/g, 'x')
+                 .replace(/Y/g, 'ʏ')
+                 .replace(/Z/g, 'ᴢ');
+    }
+
+    // Copy function for the result text
+    document.getElementById('copyBtn').addEventListener('click', function() {
+      const resultText = document.getElementById('resultText').textContent;
+      if (resultText) {
+        navigator.clipboard.writeText(resultText).then(() => {
+          alert('Copied to clipboard!');
+        });
       }
     });
   </script>
