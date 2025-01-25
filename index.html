@@ -3,150 +3,267 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#00c6ff">
-  <title>Login</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="theme-color" content="#000000">
+  <title>Login & Introduction</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
   <style>
-    /* Mono font styling */
-    .mono-font {
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 1.2em;
+    /* Global Styling */
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Jost', sans-serif;
+      background: #000000; /* Space black background */
+      color: white; /* White text */
     }
-    .converter-container {
-      margin-top: 20px;
+
+    .main {
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
-    .converter-container input {
-      padding: 5px;
-      font-size: 1em;
-    }
-    .result {
-      margin-top: 10px;
-      font-size: 1.2em;
-      font-family: 'Courier New', Courier, monospace;
+
+    /* Title Styling */
+    .title {
+      font-size: 2.5em;
       font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6); /* White text shadow */
     }
-    .copy-btn {
-      margin-top: 10px;
-      padding: 5px 10px;
-      background-color: #00c6ff;
-      color: white;
+
+    .btn-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Buttons Styling */
+    button {
+      width: 200px;
+      padding: 12px;
+      background: #333333; /* Dark gray for buttons */
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #ffffff; /* White text for buttons */
       border: none;
+      border-radius: 5px;
       cursor: pointer;
-      font-size: 1em;
+      transition: 0.2s ease-in-out;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    button:hover {
+      background: #666666; /* Lighter gray on hover */
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Pop-Up Styling */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 300px;
+      padding: 20px;
+      background: #444444; /* Dark gray background for the login container */
+      color: #ffffff; /* White text inside container */
+      border-radius: 10px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6); /* Shadow for realistic effect */
+      text-align: center;
+      z-index: 1000;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .popup.active {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 999;
+      display: none;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    /* Updated Input Fields */
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #444444; /* Darker gray border for input */
+      border-radius: 5px;
+      background: #333333; /* Dark gray background for input */
+      color: white; /* White text for input fields */
+    }
+
+    input::placeholder {
+      color: #A9A9A9; /* Light gray placeholder text */
+      font-size: 0.9em;
+      text-align: left;
+      padding-left: 10px;
+    }
+
+    /* Updated Continue Button */
+    .continue-btn {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #444444; /* Dark gray matching button color */
+      color: #ffffff; /* White text */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .continue-btn:hover {
+      background: #666666; /* Lighter gray on hover */
+    }
+
+    /* Mock Test Pop-Up */
+    .mock-test-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 300px;
+      padding: 20px;
+      background: #444444;
+      color: white;
+      border-radius: 10px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      z-index: 1000;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .mock-test-popup.active {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      button {
+        font-size: 1rem;
+      }
+
+      input {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Login to EXP Tracker</h1>
-    <form id="loginForm">
-      <label for="emailInput">Enter your email:</label>
-      <input type="email" id="emailInput" placeholder="Enter your email" required>
-      <button type="button" id="proceedBtn">Proceed</button>
-    </form>
-    <div id="errorMessage" style="display: none; color: red;">
-      <p>Invalid email. Please try again.</p>
-    </div>
-    
-    <!-- Font Converter Section -->
-    <div class="converter-container">
-      <label for="nameInput">Enter your name:</label>
-      <input type="text" id="nameInput" placeholder="Enter your name" />
-      <div class="result" id="resultText"></div>
-      <button class="copy-btn" id="copyBtn">Copy</button>
+  <div class="main">
+    <!-- Title -->
+    <div class="title">BRAINIACS</div>
+
+    <!-- Buttons -->
+    <div class="btn-container">
+      <button id="loginBtn">Login Here</button>
+      <button id="introBtn">Introduction</button>
+      <button id="mockTestBtn">Mock Test</button> <!-- Mock Test Button -->
     </div>
   </div>
 
+  <!-- Pop-Up Forms -->
+  <div class="overlay" id="overlay"></div>
+
+  <div class="popup" id="loginPopup">
+    <h2>Login</h2>
+    <input type="email" id="loginEmail" placeholder="Enter Email ID">
+    <button class="continue-btn" onclick="handleLogin()">Continue</button>
+  </div>
+
+  <!-- Mock Test Pop-Up -->
+  <div class="mock-test-popup" id="mockTestPopup">
+    <h2>Select Exam</h2>
+    <button onclick="selectExam('JEE MAINS')">JEE MAINS</button>
+    <button onclick="selectExam('NEET')">NEET</button>
+    <button onclick="closeMockTestPopup()">Close</button>
+  </div>
+
   <script>
-    document.getElementById('proceedBtn').addEventListener('click', () => {
-      const emailInput = document.getElementById('emailInput').value.trim();
-      const allowedEmails = ["vishal16980@gmail.com", "07.comer@gmail.com", "rtshroudyt@gmail.com"];
+    const loginBtn = document.getElementById('loginBtn');
+    const introBtn = document.getElementById('introBtn');
+    const mockTestBtn = document.getElementById('mockTestBtn'); // Mock Test Button
+    const loginPopup = document.getElementById('loginPopup');
+    const mockTestPopup = document.getElementById('mockTestPopup'); // Mock Test Pop-Up
+    const overlay = document.getElementById('overlay');
 
-      if (allowedEmails.includes(emailInput)) {
-        window.location.href = 'main.html';
-      } else if (emailInput) {
-        window.location.href = 'userlist.html';
-      } else {
-        const errorMessage = document.getElementById('errorMessage');
-        errorMessage.style.display = 'block';
-      }
+    const allowedEmails = ["vishal16980@gmail.com", "07.comer@gmail.com", "rtshroudyt@gmail.com"];
+
+    // Show Login Pop-Up
+    loginBtn.addEventListener('click', () => {
+      loginPopup.classList.add('active');
+      overlay.classList.add('active');
     });
 
-    // Font converter function
-    document.getElementById('nameInput').addEventListener('input', function() {
-      const name = this.value.trim();
-      const resultText = document.getElementById('resultText');
-      if (name) {
-        resultText.textContent = `ʙɴ👾${convertToMonoFont(name)}`;
-      } else {
-        resultText.textContent = '';
-      }
+    // Show Mock Test Pop-Up
+    mockTestBtn.addEventListener('click', () => {
+      mockTestPopup.classList.add('active');
+      overlay.classList.add('active');
     });
 
-    // Function to convert to Mono font (like ʙɴ style)
-    function convertToMonoFont(name) {
-      return name.replace(/a/g, 'ᴀ')
-                 .replace(/b/g, 'ʙ')
-                 .replace(/c/g, 'ᴄ')
-                 .replace(/d/g, 'ᴅ')
-                 .replace(/e/g, 'ᴇ')
-                 .replace(/f/g, 'ғ')
-                 .replace(/g/g, 'ɢ')
-                 .replace(/h/g, 'ʜ')
-                 .replace(/i/g, 'ɪ')
-                 .replace(/j/g, 'ᴊ')
-                 .replace(/k/g, 'ᴋ')
-                 .replace(/l/g, 'ʟ')
-                 .replace(/m/g, 'ᴍ')
-                 .replace(/n/g, 'ɴ')
-                 .replace(/o/g, 'ᴏ')
-                 .replace(/p/g, 'ᴘ')
-                 .replace(/q/g, 'Q') // Custom, keeping uppercase for clarity
-                 .replace(/r/g, 'ʀ')
-                 .replace(/s/g, 's')
-                 .replace(/t/g, 'ᴛ')
-                 .replace(/u/g, 'ᴜ')
-                 .replace(/v/g, 'ᴠ')
-                 .replace(/w/g, 'ᴡ')
-                 .replace(/x/g, 'x')
-                 .replace(/y/g, 'ʏ')
-                 .replace(/z/g, 'ᴢ')
-                 .replace(/A/g, 'ᴀ')
-                 .replace(/B/g, 'ʙ')
-                 .replace(/C/g, 'ᴄ')
-                 .replace(/D/g, 'ᴅ')
-                 .replace(/E/g, 'ᴇ')
-                 .replace(/F/g, 'ғ')
-                 .replace(/G/g, 'ɢ')
-                 .replace(/H/g, 'ʜ')
-                 .replace(/I/g, 'ɪ')
-                 .replace(/J/g, 'ᴊ')
-                 .replace(/K/g, 'ᴋ')
-                 .replace(/L/g, 'ʟ')
-                 .replace(/M/g, 'ᴍ')
-                 .replace(/N/g, 'ɴ')
-                 .replace(/O/g, 'ᴏ')
-                 .replace(/P/g, 'ᴘ')
-                 .replace(/Q/g, 'Q')
-                 .replace(/R/g, 'ʀ')
-                 .replace(/S/g, 's')
-                 .replace(/T/g, 'ᴛ')
-                 .replace(/U/g, 'ᴜ')
-                 .replace(/V/g, 'ᴠ')
-                 .replace(/W/g, 'ᴡ')
-                 .replace(/X/g, 'x')
-                 .replace(/Y/g, 'ʏ')
-                 .replace(/Z/g, 'ᴢ');
+    // Close Pop-Up
+    function closePopup() {
+      loginPopup.classList.remove('active');
+      overlay.classList.remove('active');
     }
 
-    // Copy function for the result text
-    document.getElementById('copyBtn').addEventListener('click', function() {
-      const resultText = document.getElementById('resultText').textContent;
-      if (resultText) {
-        navigator.clipboard.writeText(resultText).then(() => {
-          alert('Copied to clipboard!');
-        });
+    // Handle Login
+    function handleLogin() {
+      const loginEmail = document.getElementById('loginEmail').value.trim();
+
+      if (allowedEmails.includes(loginEmail)) {
+        window.location.href = 'main.html';
+      } else if (loginEmail) {
+        window.location.href = 'userlist.html';
+      } else {
+        alert("Invalid email. Please try again.");
       }
+      closePopup();
+    }
+
+    // Redirect to Introduction
+    introBtn.addEventListener('click', () => {
+      window.location.href = 'intro.html';
+    });
+
+    // Close mock test pop-up
+    function closeMockTestPopup() {
+      mockTestPopup.classList.remove('active');
+      overlay.classList.remove('active');
+    }
+
+    // Handle selected exam
+    function selectExam(exam) {
+      if (exam === 'JEE MAINS') {
+        window.location.href = 'jee.html';
+      } else if (exam === 'NEET') {
+        window.location.href = 'neet.html';
+      }
+      closeMockTestPopup();
+    }
+
+    // Close pop-up when clicking outside
+    overlay.addEventListener('click', () => {
+      closePopup();
+      closeMockTestPopup();
     });
   </script>
 </body>
