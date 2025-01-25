@@ -409,34 +409,43 @@ select option {
     });
 
     // Confirm EXP entry
-    confirmBtn.addEventListener("click", async function () {
-      const username = usernameSelect.value;
-      const hours = parseInt(hoursInput.value) || 0;
-      const minutes = parseInt(minutesInput.value) || 0;
+confirmBtn.addEventListener("click", async function () {
+  const username = usernameSelect.value;
+  const hours = parseInt(hoursInput.value) || 0;
+  const minutes = parseInt(minutesInput.value) || 0;
 
-      if (!username) {
-        alert("Please select a username.");
-        return;
-      }
+  if (!username) {
+    alert("Please select a username.");
+    return;
+  }
 
-      const totalExp = hours * 60 + minutes;
-      try {
-        const userRef = doc(db, "users", username);
-        const userDoc = await getDoc(userRef);
-        if (userDoc.exists()) {
-          const currentExp = userDoc.data().exp || 0;
-          await updateDoc(userRef, { exp: currentExp + totalExp });
-          alert(`Added ${totalExp} EXP to ${username}`);
-          hoursInput.value = "";
-          minutesInput.value = "";
-        } else {
-          alert("User not found.");
-        }
-      } catch (error) {
-        console.error("Error updating EXP:", error);
-        alert("Error updating EXP.");
-      }
-    });
+  // Calculate total EXP based on the new logic
+  let totalExp = 0;
+
+  // 1 hour = 2 EXP, 30 minutes = 1 EXP
+  totalExp += (Math.floor(hours / 1) * 2); // 2 EXP for every full hour
+  totalExp += (Math.floor(minutes / 30) * 1); // 1 EXP for every 30 minutes
+
+  // For every 10 hours extra, add 5 EXP
+  totalExp += Math.floor(hours / 10) * 5;
+
+  try {
+    const userRef = doc(db, "users", username);
+    const userDoc = await getDoc(userRef);
+    if (userDoc.exists()) {
+      const currentExp = userDoc.data().exp || 0;
+      await updateDoc(userRef, { exp: currentExp + totalExp });
+      alert(`Added ${totalExp} EXP to ${username}`);
+      hoursInput.value = "";
+      minutesInput.value = "";
+    } else {
+      alert("User not found.");
+    }
+  } catch (error) {
+    console.error("Error updating EXP:", error);
+    alert("Error updating EXP.");
+  }
+});
 
     // Remove selected users from Firestore and UI
     removeSelectedBtn.addEventListener("click", async function () {
