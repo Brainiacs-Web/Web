@@ -1,42 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#00c6ff">
+  <meta name="theme-color" content="#1e1e1e">
   <title>User List</title>
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
   <style>
+    /* Global Styling */
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Jost', sans-serif;
+      background: #000000; /* Matching background gradient */
+      color : white ;
+    }
+
+    .container {
+      width: 80%;
+      max-width: 1000px;
+      background: #444444;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Flexbox layout for user items */
     .user-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px;
+      padding: 1em;
       margin: 5px 0;
       border: 1px solid #ccc;
       border-radius: 8px;
-      background-color: #f9f9f9;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: #d3d3d3;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       color: black;
+      width: 100%; /* Make the user item wider */
+      max-width: 800px; /* Set a max-width for the user-item */
     }
+
+    /* Removing list style and resetting margin/padding */
     .user-list {
       list-style: none;
       padding: 0;
       margin: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .username {
-      flex: 1;
+
+    /* Adjust the width of the username and exp sections */
+    .username,
+    .exp {
+      width: 48%; /* Increase the width of each box */
       text-align: left;
     }
+
+    /* Align EXP to the right and username to the left */
     .exp {
-      flex: 1;
       text-align: right;
+    }
+
+    /* Button Styling */
+    button {
+      font-family: inherit;
+      font-size: 18px;
+      background: #00FFFF; /* Matching button color */
+      color: black;
+      padding: 0.8em 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 25px;
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s;
+    }
+
+    /* Button hover effect */
+    button:hover {
+      background: #6d44b8; /* Hover color */
+      transform: translateY(-3px);
+      box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Button active effect */
+    button:active {
+      transform: scale(0.95);
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Button span and SVG animations */
+    button span {
+      display: block;
+      margin-left: 0.4em;
+      transition: all 0.3s;
+    }
+
+    button svg {
+      width: 18px;
+      height: 18px;
+      fill: white;
+      transition: all 0.3s;
+    }
+
+    button .svg-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.2);
+      margin-right: 0.5em;
+      transition: all 0.3s;
+    }
+
+    /* Button hover effect for the icon */
+    button:hover .svg-wrapper {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    button:hover svg {
+      transform: rotate(45deg);
+    }
+
+    /* Center the button at the top of the container */
+    .announcements-btn-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    /* Remove underline from the <a> link */
+    a {
+      text-decoration: none;
+    }
+
+    /* Title styling */
+    h1 {
+      color: white; /* Title color changed to black */
+      font-family: 'Jost', sans-serif; /* Font matching the page */
+      font-size: 2em; /* Adjust font size */
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>User List</h1>
+    <!-- Button container -->
+    <div class="announcements-btn-container">
+      <a href="viewer.html">
+        <button>Go to Announcements</button>
+      </a>
+    </div>
+
+    <!-- Updated User List Title -->
+    <h1>User List</h1> <!-- Title color and font updated -->
+
     <section>
       <ul id="userListUl" class="user-list" aria-live="polite">
         <!-- User list will appear here -->
@@ -63,7 +200,6 @@
 
     // Real-time listener for user data from Firestore
     onSnapshot(collection(db, "users"), (querySnapshot) => {
-      // Collect users into an array and sort by EXP in descending order
       const users = [];
       querySnapshot.forEach((doc) => {
         const username = doc.id;
@@ -73,10 +209,7 @@
 
       users.sort((a, b) => b.exp - a.exp); // Sort by EXP descending
 
-      // Clear existing user list before adding updated data
-      userListUl.innerHTML = "";
-
-      // Iterate over sorted users and display them
+      userListUl.innerHTML = ""; // Clear existing user list
       users.forEach(({ username, exp }) => {
         const listItem = document.createElement("li");
         listItem.className = "user-item";
@@ -97,4 +230,5 @@
     });
   </script>
 </body>
+
 </html>
