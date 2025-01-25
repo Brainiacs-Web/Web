@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#00c6ff">
+  <title>Admin - Intro</title>
+  <style>
+    /* General Reset */
+    body, h1, h2, ul, li, textarea, button, label {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body Styling */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* Container */
+    .container {
+      background: #f2f7fc;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 700px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #573b8a;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #444;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #573b8a;
+      padding-bottom: 5px;
+    }
+
+    label {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      display: block;
+      font-weight: bold;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      resize: vertical;
+      color: black; /* Set text color to black */
+      background-color: #fff;
+      word-wrap: break-word; /* Ensures long text breaks to next line */
+      overflow-wrap: break-word; /* Ensures long text breaks to next line */
+      white-space: pre-wrap; /* Wraps text inside textarea */
+    }
+
+    button {
+      background: #0072ff;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #005bb5;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      display: flex;
+      flex-direction: column; /* Stack the text and button vertically */
+      justify-content: flex-start;
+      align-items: flex-start;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      color: black; /* Set text color to black */
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap; /* Wraps text inside li */
+    }
+
+    li:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .delete-btn {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s;
+    }
+
+    .delete-btn:hover {
+      background: #cc0000;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Admin - Add Announcement</h1>
+
+    <section>
+      <label for="announcementInput">New Announcement:</label>
+      <textarea id="announcementInput" placeholder="Type your announcement here..." aria-label="Announcement Input"></textarea>
+      <button id="addAnnouncementBtn" aria-label="Add Announcement">Add Announcement</button>
+    </section>
+
+    <section>
+      <h2>Current Announcements</h2>
+      <ul id="announcementsList"></ul>
+    </section>
+  </div>
+
+  <script type="module">
+    import { getFirestore, doc, setDoc, collection, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB_UjSLiTFca7sEs6Xjo3KJt3gv7irm4yM",
+      authDomain: "last-try-e2368.firebaseapp.com",
+      projectId: "last-try-e2368",
+      storageBucket: "last-try-e2368.appspot.com",
+      messagingSenderId: "96302628355",
+      appId: "1:96302628355:web:a87f636cec98c89d2f9836"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const announcementsList = document.getElementById("announcementsList");
+    const announcementInput = document.getElementById("announcementInput");
+    const addAnnouncementBtn = document.getElementById("addAnnouncementBtn");
+
+    // Function to display announcements
+    function displayAnnouncements() {
+      const announcementsRef = collection(db, "announcements");
+
+      onSnapshot(announcementsRef, (querySnapshot) => {
+        announcementsList.innerHTML = ""; // Clear existing list
+        querySnapshot.forEach((doc) => {
+          const announcement = doc.data().text;
+          const listItem = document.createElement("li");
+
+          // Text content
+          const announcementText = document.createElement("span");
+          announcementText.textContent = announcement;
+
+          // Delete button
+          const deleteBtn = document.createElement("button");
+          deleteBtn.textContent = "Delete";
+          deleteBtn.classList.add("delete-btn");
+          deleteBtn.addEventListener("click", async () => {
+            if (confirm("Are you sure you want to delete this announcement?")) {
+              await deleteDoc(doc.ref);
+            }
+          });
+
+          listItem.appendChild(announcementText);
+          listItem.appendChild(deleteBtn);
+          announcementsList.appendChild(listItem);
+        });
+      });
+    }
+
+    // Add new announcement to Firestore
+    addAnnouncementBtn.addEventListener("click", async () => {
+      const newAnnouncement = announcementInput.value.trim();
+
+      if (newAnnouncement === "") {
+        alert("Please enter a valid announcement.");
+        return;
+      }
+
+      try {
+        const newAnnouncementRef = doc(collection(db, "announcements"));
+        await setDoc(newAnnouncementRef, { text: newAnnouncement });
+        announcementInput.value = ""; // Clear input field
+        alert("Announcement added!");
+      } catch (error) {
+        console.error("Error adding announcement:", error);
+        alert("An error occurred while adding the announcement.");
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", displayAnnouncements);
+  </script>
+</body>
+
+</html>

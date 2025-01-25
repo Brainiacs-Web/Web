@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coming Soon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #00FFFF;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .coming-soon {
+      font-size: 3rem;
+      line-height: 1.5;
+      font-weight: 600; /* More professional look with heavier font weight */
+    }
+
+    .register-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: gray;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .register-btn:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="coming-soon">
+      <div>Coming</div>
+      <div>Soon</div>
+    </div>
+    <button class="register-btn" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSc1goezKBrtvpDVEcMOlLnny4NdyKqQA7304laQQtjVcwf0eA/viewform?usp=header'">Register Now</button>
+  </div>
+
+</body>
+</html>

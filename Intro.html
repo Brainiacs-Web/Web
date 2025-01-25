@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#00c6ff">
+  <title>Intro</title>
+  <style>
+    /* Global Styling */
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Jost', sans-serif;
+      background: #000000; /* Space black background */
+      color: white; /* White text */
+    }
+
+    .container {
+      background: linear-gradient(to bottom, #444444, #666666); /* Gray gradient */
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      width: 100%;
+      padding: 20px;
+      color: white; /* Adjust text color for readability */
+    }
+
+    /* Title Styling */
+    .title {
+      font-size: 2em; /* Reduce font size slightly */
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6); /* White text shadow */
+      word-wrap: break-word; /* Allow wrapping for long text */
+      text-align: center; /* Keep the text centered */
+      max-width: 90%; /* Limit the width of the title */
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    ul li {
+      background: #333333;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    ul li:hover {
+      background: #555555;
+      transition: 0.3s ease-in-out;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="title">Welcome to Brainiacs</h1>
+    <section>
+      <h2>Group Announcements</h2>
+      <ul id="announcementsList"></ul>
+    </section>
+  </div>
+
+  <script type="module">
+    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB_UjSLiTFca7sEs6Xjo3KJt3gv7irm4yM",
+      authDomain: "last-try-e2368.firebaseapp.com",
+      projectId: "last-try-e2368",
+      storageBucket: "last-try-e2368.appspot.com",
+      messagingSenderId: "96302628355",
+      appId: "1:96302628355:web:a87f636cec98c89d2f9836"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const announcementsList = document.getElementById("announcementsList");
+
+    // Function to display announcements
+    function displayAnnouncements() {
+      const announcementsRef = collection(db, "announcements");
+
+      onSnapshot(announcementsRef, (querySnapshot) => {
+        announcementsList.innerHTML = ""; // Clear existing list
+        querySnapshot.forEach((doc) => {
+          const announcement = doc.data().text; // Assuming the field name is 'text'
+
+          // Create list item
+          const listItem = document.createElement("li");
+
+          // Preserve line breaks and spaces
+          listItem.innerHTML = announcement.replace(/\n/g, "<br>");
+
+          announcementsList.appendChild(listItem);
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", displayAnnouncements);
+  </script>
+</body>
+
+</html>
