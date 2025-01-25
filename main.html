@@ -1,46 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#00c6ff">
   <title>EXP Tracker</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Global Styling */
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Jost', sans-serif;
+      background: #000000; /* Pure black background for a sleek look */
+      color: white; /* White text for better readability */
+    }
+
+    /* Container Styling */
+    .container {
+      width: 90%; /* Adjust width for responsiveness */
+      max-width: 450px;
+      padding: 30px;
+      background: rgba(20, 20, 20, 0.95); /* Darker background for high contrast */
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(255, 255, 255, 0.2); /* Bright outer shadow */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      height: auto; /* Adjust based on content */
+    }
+
+    /* Heading Styles */
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #D3D3D3; /* Cyan for modern look */
+      text-shadow: 0 0 12px #ffffff; /* Glowing effect */
+    }
+/* Three-dot Menu */
+#threeDotMenu {
+  position: fixed;
+  top: 20px;
+  left: 20px; /* Align to the left side */
+  font-size: 26px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+#threeDotMenu:hover {
+  color: #ffffff;
+}
+
+/* Menu Options */
+#menuOptions {
+  display: none;
+  position: absolute;
+  top: 50px; /* Space it a little below the three-dot menu */
+  left: 20px; /* Align with the left side */
+  background: rgba(30, 30, 30, 0.95); /* Dark background */
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(255, 255, 255, 0.15);
+  padding: 5px 0; /* Reduced padding for a more compact menu */
+  list-style: none;
+  z-index: 1000;
+  min-width: 100px; /* Set minimum width */
+  max-width: 200px; /* Restrict max width */
+  width: auto; /* Auto width based on content */
+}
+
+#menuOptions li {
+  padding: 8px 10px; /* Reduced padding */
+  margin: 3px 0; /* Less margin for compactness */
+  font-size: 1em;
+  border-radius: 5px;
+  color: white;
+  transition: background 0.3s ease;
+}
+
+#menuOptions li:hover {
+  background: #00ffff;
+  color: #000000;
+  cursor: pointer;
+}
+
+
+    /* Input and Button Styling */
+    input,
+    select,
+    button {
+      width: 85%;
+      padding: 12px;
+      margin: 10px auto;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      font-size: 1em;
+      transition: box-shadow 0.3s ease;
+    }
+
+    input,
+    select {
+      background: #1c1c1c;
+      color: #ffffff;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+    }
+
+    input::placeholder {
+      color: #888888;
+      font-size: 0.9em;
+    }
+
+    input:focus,
+    select:focus {
+      box-shadow: 0 0 12px #00ffff; /* Glow focus effect */
+    }
+
+    button {
+      background: #333333; /* Neutral button background */
+      color: #00ffff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    button:hover {
+      background: #00ffff; /* Cyan hover effect */
+      color: #000000;
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+/* User List Styling */
+ul {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+li {
+  padding: 10px;
+  margin: 5px 0;
+  background: rgba(255, 255, 255, 0.1); /* Transparent list item background */
+  border-radius: 5px;
+  text-align: left;
+  font-size: 1em;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Ensure space between username and checkbox */
+}
+
+li:hover {
+  background: #00ffff;
+  color: #000000;
+  cursor: pointer;
+}
+
+/* Checkbox Styling */
+input[type="checkbox"] {
+  margin-left: 10px; /* Slight gap between username and checkbox */
+  cursor: pointer;
+  width: 20px; /* Adjust width if necessary */
+  height: 20px; /* Adjust height if necessary */
+}
+
+li.selected {
+  background-color: #1e90ff; /* Blue background when selected */
+  color: white; /* White text for selected users */
+}
+
+/* Style for the Select Dropdown */
+select {
+  width: 85%; /* Adjust width for better alignment */
+  padding: 12px;
+  margin: 10px auto;
+  border-radius: 6px;
+  border: 2px solid #00ffff; /* Cyan border for modern look */
+  background: #1c1c1c; /* Dark background for the dropdown */
+  color: #ffffff; /* White text for visibility */
+  font-size: 1em;
+  outline: none;
+  appearance: none; /* Removes default dropdown arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1); /* Subtle shadow for depth */
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Add a custom arrow icon */
+select::-ms-expand {
+  display: none; /* Hide the default arrow in IE */
+}
+
+/* On focus or hover effect for the select box */
+select:focus {
+  background: #333333; /* Darker background when focused */
+  box-shadow: 0 0 12px #00ffff; /* Glow effect */
+}
+
+/* Styling the dropdown options */
+select option {
+  background: #1c1c1c; /* Dark background for options */
+  color: #ffffff; /* White text for better visibility */
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 1em;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for options */
+select option:hover {
+  background: #00ffff; /* Cyan background when hovering over options */
+  color: #000000; /* Black text on hover */
+}
+
+/* Styling when dropdown opens (for browsers supporting custom dropdown) */
+select:focus option {
+  background: #333333; /* Darker background for options when dropdown is open */
+}
+
+/* Optional: Add a smoother transition for opening the dropdown */
+select option {
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+  /* Rename Section */
+.rename-section {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#renameInput {
+  width: 85%;
+  padding: 12px;
+  margin: 10px auto;
+  border-radius: 6px;
+  border: 2px solid #00ffff;
+  background: #1c1c1c;
+  color: #ffffff;
+}
+
+#renameBtn {
+  width: 85%;
+  padding: 12px;
+  margin: 10px auto;
+  border-radius: 6px;
+  background: #333333;
+  color: #00ffff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#renameBtn:hover {
+  background: #00ffff;
+  color: #000000;
+}
+
+  </style>
 </head>
+
+
 <body>
+  <!-- Three Dot Menu -->
+  <div id="threeDotMenu">⋮</div>
+  <ul id="menuOptions">
+    <li onclick="window.location.href='introadmin.html'">Introduction</li>
+    <li onclick="window.location.href='userlist.html'">Userlist</li>
+    <li onclick="window.location.href='index.html'">Login Page</li>
+  </ul>
+  
+  
+
+
   <div class="container">
     <h1>EXP Tracker</h1>
+
     <section class="add-username">
       <input id="usernameInput" type="text" placeholder="Enter Username" aria-label="Username Input">
       <button id="addUsernameBtn" aria-label="Add Username">Add Username</button>
     </section>
+
     <section class="exp-section">
       <label for="usernameSelect">Select Username:</label>
       <select id="usernameSelect" aria-label="Username Select">
         <option value="" disabled selected>Select Username</option>
       </select>
+
       <div class="exp-inputs">
         <input id="hoursInput" type="number" placeholder="Hours" aria-label="Hours">
         <input id="minutesInput" type="number" placeholder="Minutes" aria-label="Minutes">
       </div>
-      <button id="confirmBtn" aria-label="Confirm EXP Entry">Confirm</button>
 
-      <div class="manual-exp">
-        <input id="manualExpInput" type="number" placeholder="Manual EXP" aria-label="Manual EXP">
-        <button id="addManualExpBtn" aria-label="Add Manual EXP">Add Manual EXP</button>
-      </div>
+      <button id="confirmBtn" aria-label="Confirm EXP Entry">Confirm</button>
     </section>
 
     <section>
       <h2>User List</h2>
-      <ul id="userListUl" aria-live="polite">
-      </ul>
+      <ul id="userListUl" aria-live="polite"></ul>
       <button id="removeSelectedBtn" aria-label="Remove Selected Users">Remove Selected</button>
     </section>
   </div>
+
   <script type="module">
+    // Toggle the menu visibility when the three dots are clicked
+    document.getElementById("threeDotMenu").addEventListener("click", function () {
+      const menu = document.getElementById("menuOptions");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    });
+
     // Firebase configuration and initialization
-    import { getFirestore, doc, setDoc, getDocs, collection, updateDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDocs, collection, updateDoc, getDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
 
     const firebaseConfig = {
@@ -55,6 +337,7 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+
     const usernameInput = document.getElementById("usernameInput");
     const addUsernameBtn = document.getElementById("addUsernameBtn");
     const usernameSelect = document.getElementById("usernameSelect");
@@ -62,6 +345,7 @@
     const confirmBtn = document.getElementById("confirmBtn");
     const hoursInput = document.getElementById("hoursInput");
     const minutesInput = document.getElementById("minutesInput");
+    const removeSelectedBtn = document.getElementById("removeSelectedBtn");
 
     // Add a user to Firestore
     async function addUserToFirestore(username) {
@@ -72,41 +356,31 @@
         alert(`User ${username} added successfully!`);
       } catch (error) {
         console.error("Error adding user to Firestore:", error);
-        alert("An error occurred while adding the user.");
+        alert("Error adding user.");
       }
     }
 
-    // Add user to dropdown and user list
+    // Add user to the dropdown and UI list
     function addUserToList(username, exp = 0) {
+      const listItem = document.createElement("li");
+      listItem.dataset.username = username;
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.classList.add("userCheckbox");
+      checkbox.dataset.username = username;
+
+      const text = document.createTextNode(`${username} (EXP: ${exp})`);
+      listItem.appendChild(checkbox);
+      listItem.appendChild(text);
+      userListUl.appendChild(listItem);
+
+      // Add to dropdown
       const option = document.createElement("option");
       option.value = username;
       option.textContent = username;
       usernameSelect.appendChild(option);
-
-      const listItem = document.createElement("li");
-      listItem.textContent = `${username} (EXP: ${exp})`;
-      userListUl.appendChild(listItem);
     }
-
-    // Handle "Add Username" button click
-    addUsernameBtn.addEventListener("click", async function () {
-      const username = usernameInput.value.trim();
-
-      if (username === "") {
-        alert("Username cannot be empty.");
-        return;
-      }
-
-      const existingUsernames = [...usernameSelect.options].map(option => option.value);
-      if (existingUsernames.includes(username)) {
-        alert("This username already exists.");
-        return;
-      }
-
-      await addUserToFirestore(username);
-      addUserToList(username);
-      usernameInput.value = "";
-    });
 
     // Real-time listener for user data updates
     function listenForUserUpdates() {
@@ -114,6 +388,7 @@
 
       onSnapshot(usersRef, (querySnapshot) => {
         userListUl.innerHTML = '';  // Clear the current list
+
         querySnapshot.forEach((doc) => {
           const username = doc.id;
           const exp = doc.data().exp || 0;
@@ -122,74 +397,170 @@
       });
     }
 
-    // Update EXP based on study time (hours and minutes)
+    // Listen for username input and add user
+    addUsernameBtn.addEventListener("click", function () {
+      const username = usernameInput.value.trim();
+      if (username) {
+        addUserToFirestore(username);
+        usernameInput.value = ""; // Clear the input field
+      } else {
+        alert("Please enter a valid username.");
+      }
+    });
+
+    // Confirm EXP entry
     confirmBtn.addEventListener("click", async function () {
       const username = usernameSelect.value;
-      let hours = parseInt(hoursInput.value);
-      let minutes = parseInt(minutesInput.value);
-
-      // If minutes input is empty or invalid, set to zero
-      if (isNaN(minutes)) {
-        minutes = 0;
-      }
+      const hours = parseInt(hoursInput.value) || 0;
+      const minutes = parseInt(minutesInput.value) || 0;
 
       if (!username) {
         alert("Please select a username.");
         return;
       }
 
-      if (isNaN(hours)) {
-        alert("Please enter valid hours.");
+      const totalExp = hours * 60 + minutes;
+      try {
+        const userRef = doc(db, "users", username);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+          const currentExp = userDoc.data().exp || 0;
+          await updateDoc(userRef, { exp: currentExp + totalExp });
+          alert(`Added ${totalExp} EXP to ${username}`);
+          hoursInput.value = "";
+          minutesInput.value = "";
+        } else {
+          alert("User not found.");
+        }
+      } catch (error) {
+        console.error("Error updating EXP:", error);
+        alert("Error updating EXP.");
+      }
+    });
+
+    // Remove selected users from Firestore and UI
+    removeSelectedBtn.addEventListener("click", async function () {
+      const selectedUsers = [];
+      const checkboxes = document.querySelectorAll(".userCheckbox:checked");
+
+      checkboxes.forEach(checkbox => {
+        const username = checkbox.dataset.username;
+        selectedUsers.push(username);
+      });
+
+      if (selectedUsers.length === 0) {
+        alert("No users selected.");
         return;
       }
 
       try {
-        // Calculate total minutes and EXP
-        const totalMinutes = hours * 60 + minutes;
-        const addedExp = Math.floor(totalMinutes / 60) * 2 + Math.floor((totalMinutes % 60) / 30);
+        for (const username of selectedUsers) {
+          const userRef = doc(db, "users", username);
+          await deleteDoc(userRef); // Delete user from Firestore
 
-        // Bonus EXP for every 10 hours of study
-        const totalHours = totalMinutes / 60;
-        const bonusExp = Math.floor(totalHours / 10) * 5; // Add 5 EXP for every 10 hours
-        const finalExp = addedExp + bonusExp;
-
-        const userRef = doc(db, "users", username);
-        const userDoc = await getDoc(userRef);
-
-        if (userDoc.exists()) {
-          const currentExp = userDoc.data().exp || 0;
-          const updatedExp = currentExp + finalExp;
-
-          // Update EXP in Firestore
-          await updateDoc(userRef, { exp: updatedExp });
-
-          // Update UI
-          updateUserInList(username, updatedExp);
-          alert(`EXP updated! Added ${addedExp} EXP + ${bonusExp} bonus EXP.`);
-          console.log(`Updated ${username} with ${addedExp} EXP and ${bonusExp} bonus EXP.`);
-        } else {
-          alert("User not found in Firestore.");
+          // Remove user from dropdown and UI list
+          removeUserFromUI(username);
         }
+        alert("Selected users removed.");
       } catch (error) {
-        console.error("Error updating EXP:", error);
-        alert("An error occurred while updating EXP.");
+        console.error("Error removing users:", error);
+        alert("An error occurred while removing users.");
       }
     });
 
-    // Update a user in the list after updating EXP
-    function updateUserInList(username, newExp) {
-      const userListItems = document.querySelectorAll("li");
-      userListItems.forEach(item => {
-        if (item.textContent.includes(username)) {
-          item.textContent = `${username} (EXP: ${newExp})`;
-        }
-      });
+    // Remove user from dropdown and UI list
+    function removeUserFromUI(username) {
+      // Remove from dropdown
+      const option = document.querySelector(`option[value="${username}"]`);
+      if (option) {
+        option.remove();
+      }
+
+      // Remove from user list
+      const userItem = document.querySelector(`li[data-username="${username}"]`);
+      if (userItem) {
+        userItem.remove();
+      }
     }
 
     // Load user data on page load and start real-time listener
-    document.addEventListener("DOMContentLoaded", async function () {
+    document.addEventListener("DOMContentLoaded", function () {
       listenForUserUpdates();  // Set up real-time updates
     });
+  const renameUsernameSelect = document.getElementById("renameUsernameSelect");
+const newUsernameInput = document.getElementById("newUsernameInput");
+const renameUsernameBtn = document.getElementById("renameUsernameBtn");
+
+// Function to rename username in Firestore
+async function renameUsernameInFirestore(oldUsername, newUsername) {
+  try {
+    const userRef = doc(db, "users", oldUsername);
+
+    // Check if the new username already exists
+    const newUserDoc = await getDoc(doc(db, "users", newUsername));
+    if (newUserDoc.exists()) {
+      alert("Username already exists! Please choose another one.");
+      return;
+    }
+
+    // Update Firestore with new username
+    await updateDoc(userRef, { username: newUsername });
+
+    // Remove old user data and add new data to Firestore
+    const oldUserRef = doc(db, "users", oldUsername);
+    await deleteDoc(oldUserRef); // Delete old username from Firestore
+
+    // Add the new username to Firestore
+    await setDoc(doc(db, "users", newUsername), {
+      exp: 0, // You can transfer the existing EXP here if needed
+    });
+
+    console.log(`Username changed from ${oldUsername} to ${newUsername}`);
+    alert(`Username changed to ${newUsername} successfully!`);
+  } catch (error) {
+    console.error("Error renaming username in Firestore:", error);
+    alert("Error renaming username.");
+  }
+}
+
+// Update UI after renaming username
+function updateUsernameInUI(oldUsername, newUsername) {
+  // Update dropdown
+  const option = document.querySelector(`option[value="${oldUsername}"]`);
+  if (option) {
+    option.value = newUsername;
+    option.textContent = newUsername;
+  }
+
+  // Update user list
+  const listItem = document.querySelector(`li[data-username="${oldUsername}"]`);
+  if (listItem) {
+    listItem.dataset.username = newUsername;
+    listItem.firstChild.textContent = `${newUsername} (EXP: ${listItem.firstChild.textContent.split(" ")[2]})`;
+  }
+}
+
+// Handle renaming username on button click
+renameUsernameBtn.addEventListener("click", async function () {
+  const oldUsername = renameUsernameSelect.value;
+  const newUsername = newUsernameInput.value.trim();
+
+  if (!oldUsername || !newUsername) {
+    alert("Please select a username and enter a new one.");
+    return;
+  }
+
+  if (oldUsername === newUsername) {
+    alert("New username must be different from the old one.");
+    return;
+  }
+
+  await renameUsernameInFirestore(oldUsername, newUsername);
+  updateUsernameInUI(oldUsername, newUsername);
+  newUsernameInput.value = ""; // Clear the input field
+});
+
   </script>
 </body>
+
 </html>
