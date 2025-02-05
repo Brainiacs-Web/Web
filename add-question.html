@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Add Questions</title>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+
+  <script type="module">
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyD2G48B1EdenSguUT3kYKCKobWcQxM_GV0",
+      authDomain: "test-89239.firebaseapp.com",
+      projectId: "test-89239",
+      storageBucket: "test-89239.firebasestorage.app",
+      messagingSenderId: "945793010997",
+      appId: "1:945793010997:web:60cc3fda32f7591586507c"
+    };
+  
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const questionForm = document.getElementById("question-form");
+
+questionForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  // Get form data
+  const questionText = document.getElementById("question").value.trim();
+  const questionImageURL = document.getElementById("questionImageURL").value.trim();
+
+  const optionA = document.getElementById("optionA").value.trim();
+  const optionAImageURL = document.getElementById("optionAImageURL").value.trim();
+
+  const optionB = document.getElementById("optionB").value.trim();
+  const optionBImageURL = document.getElementById("optionBImageURL").value.trim();
+
+  const optionC = document.getElementById("optionC").value.trim();
+  const optionCImageURL = document.getElementById("optionCImageURL").value.trim();
+
+  const optionD = document.getElementById("optionD").value.trim();
+  const optionDImageURL = document.getElementById("optionDImageURL").value.trim();
+
+  const correctAnswer = document.getElementById("correctAnswer").value;
+
+  try {
+    // Add question with timestamp
+    const docRef = await addDoc(collection(db, "questions"), {
+      question: questionText || questionImageURL, 
+      questionImage: questionText ? "" : questionImageURL, 
+      options: [
+        optionA || optionAImageURL,
+        optionB || optionBImageURL,
+        optionC || optionCImageURL,
+        optionD || optionDImageURL
+      ],
+      correctAnswer: correctAnswer,
+      addedAt: serverTimestamp() // Store Firestore server timestamp
+    });
+
+    alert("Question added successfully!");
+    questionForm.reset();
+  } catch (error) {
+    console.error("Error adding question:", error);
+    alert("Error adding question: " + error.message);
+  }
+});
+
+  </script>
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f6f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    form {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      max-width: 800px;
+    }
+
+    h1 {
+      color: #6200ea;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+    }
+
+    label {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: block;
+      color: #444;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0 20px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    input[type="text"]::placeholder {
+      color: #999;
+    }
+
+    button {
+      background-color: #6200ea;
+      color: white;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #3700b3;
+    }
+
+    @media screen and (max-width: 600px) {
+      form {
+        padding: 20px;
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <form id="question-form">
+    <h1>Add Questions</h1>
+
+    <div>
+      <label for="question">Question:</label>
+      <input type="text" id="question" name="question" placeholder="Enter question text">
+    </div>
+    <div>
+      <label for="questionImageURL">Question Image URL (if no text):</label>
+      <input type="text" id="questionImageURL" name="questionImageURL" placeholder="Paste image URL">
+    </div>
+
+    <div>
+      <label for="optionA">Option A:</label>
+      <input type="text" id="optionA" name="optionA" placeholder="Enter Option A">
+    </div>
+    <div>
+      <label for="optionAImageURL">Option A Image URL (if no text):</label>
+      <input type="text" id="optionAImageURL" name="optionAImageURL" placeholder="Paste image URL">
+    </div>
+
+    <div>
+      <label for="optionB">Option B:</label>
+      <input type="text" id="optionB" name="optionB" placeholder="Enter Option B">
+    </div>
+    <div>
+      <label for="optionBImageURL">Option B Image URL (if no text):</label>
+      <input type="text" id="optionBImageURL" name="optionBImageURL" placeholder="Paste image URL">
+    </div>
+
+    <div>
+      <label for="optionC">Option C:</label>
+      <input type="text" id="optionC" name="optionC" placeholder="Enter Option C">
+    </div>
+    <div>
+      <label for="optionCImageURL">Option C Image URL (if no text):</label>
+      <input type="text" id="optionCImageURL" name="optionCImageURL" placeholder="Paste image URL">
+    </div>
+
+    <div>
+      <label for="optionD">Option D:</label>
+      <input type="text" id="optionD" name="optionD" placeholder="Enter Option D">
+    </div>
+    <div>
+      <label for="optionDImageURL">Option D Image URL (if no text):</label>
+      <input type="text" id="optionDImageURL" name="optionDImageURL" placeholder="Paste image URL">
+    </div>
+
+    <div>
+      <label for="correctAnswer">Correct Answer:</label>
+      <select id="correctAnswer" name="correctAnswer" required>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+      </select>
+    </div>
+
+    <button type="submit">Add Question</button>
+  </form>
+</body>
+</html>

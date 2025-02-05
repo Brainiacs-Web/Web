@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Submission - Cheat Detected</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+      color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 600px;
+      width: 90%;
+    }
+
+    h2 {
+      color: #6200ea;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #6200ea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #3700b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Test Submitted!</h2>
+    <p>Unfortunately, your test was submitted because you switched tabs too many times.</p>
+    <p>😕</p>
+    <button onclick="goToHome()">Go Back to Home</button>
+  </div>
+
+  <script>
+    function goToHome() {
+      // Redirect back to the home page or another page
+      window.location.href = "index.html";
+    }
+
+    // Prevent user from going back to previous page (test-interface.html)
+    window.history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        window.history.pushState(null, null, location.href);  // Push the same state again
+        // Optionally, redirect users immediately when they attempt to go back
+        window.location.replace("cheat.html"); // Force a redirect to cheat.html (or result.html as per your logic)
+    };
+
+    // Optional: Replace the current page in history to prevent going back
+    window.location.replace(window.location.href); // This replaces the current page in the history stack
+  </script>
+</body>
+</html>
