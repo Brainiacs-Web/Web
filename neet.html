@@ -9,7 +9,155 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
+  <style><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neet mock tests</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
+    body {
+      background-color: black;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      color: #00FFFF;
+    }
+
+    .container {
+      width: 80%;
+      max-width: 500px;
+      background-color: #00FFFF;
+      border-radius: 20px;
+      padding: 5px 20px;
+      margin-bottom: 20px;
+      color: black;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      height: 50px; /* Reduced height to 50px */
+      display: flex;
+      justify-content: space-between; /* Added this line to space items */
+      align-items: center;
+    }
+
+    .test-name {
+      font-size: 1.5rem; /* Adjusted font size for smaller container */
+      font-weight: 600;
+      text-align: left; /* Align text to the left */
+      margin: 0; /* Remove margin to fit within 50px height */
+      flex-grow: 1; /* Makes the test name take up available space */
+    }
+
+    .start-btn, .results-btn {
+      padding: 8px 16px; /* Reduced padding for smaller button */
+      background-color: black;
+      color: #00FFFF;
+      text-transform: uppercase;
+      font-size: 1rem; /* Reduced font size */
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .start-btn:hover, .results-btn:hover {
+      background-color: #333;
+    }
+
+    .register-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: gray;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .register-btn:hover {
+      background-color: #555;
+    }
+
+    #timer {
+      font-size: 1rem;
+      color: black;
+    }
+
+    .planner-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: gray;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .planner-btn:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TEST 1 Container -->
+  <div class="container">
+    <div class="test-name">TEST 1</div>
+    <div id="timer"></div> <!-- Timer will be shown here -->
+    <div class="button-container">
+      <button id="startBtn" class="start-btn" onclick="window.location.href='page1.html'" disabled>Start</button>
+    </div>
+  </div>
+  <button class="planner-btn" onclick="window.location.href='https://drive.google.com/file/d/14emdjw4vj6YcVFLBCCiE1sLWRsax1XQK/view?usp=drivesdk'">Planner</button>
+
+  <!-- Register Button -->
+  <button class="register-btn" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSc1goezKBrtvpDVEcMOlLnny4NdyKqQA7304laQQtjVcwf0eA/viewform?usp=header'">Register Now</button>
+
+  <script>
+    // Function to calculate remaining time
+    function calculateTimeRemaining() {
+      const now = new Date();
+      const targetDate = new Date();
+      targetDate.setHours(14, 0, 0, 0); // Tomorrow 2:00 PM
+
+      if (now.getHours() >= 14) {
+        targetDate.setDate(targetDate.getDate() + 1); // If it's past 2:00 PM, set target to next day
+      }
+
+      const timeDiff = targetDate - now;
+      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+      // Update the timer
+      document.getElementById('timer').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+      // Enable the start button if time is reached
+      if (timeDiff <= 0) {
+        document.getElementById('startBtn').disabled = false;
+      } else {
+        setTimeout(calculateTimeRemaining, 1000); // Call the function every second
+      }
+    }
+
+    // Initial call to start the timer
+    calculateTimeRemaining();
+  </script>
+
+</body>
+</html>
+
     body {
       background-color: black;
       display: flex;
