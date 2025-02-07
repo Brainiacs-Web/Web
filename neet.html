@@ -104,7 +104,7 @@
     <div class="test-name">TEST 1</div>
     <div id="timer"></div> <!-- Timer will be shown here -->
     <div class="button-container">
-      <button id="startBtn" class="start-btn" onclick="window.location.href='page1.html'" disabled>Start</button>
+      <button id="startBtn" class="start-btn" onclick="window.location.href='page1.html'" >Start</button>
     </div>
   </div>
   <button class="planner-btn" onclick="window.location.href='https://drive.google.com/file/d/14emdjw4vj6YcVFLBCCiE1sLWRsax1XQK/view?usp=drivesdk'">Planner</button>
@@ -112,36 +112,6 @@
   <!-- Register Button -->
   <button class="register-btn" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSc1goezKBrtvpDVEcMOlLnny4NdyKqQA7304laQQtjVcwf0eA/viewform?usp=header'">Register Now</button>
 
-  <script>
-    // Function to calculate remaining time
-    function calculateTimeRemaining() {
-      const now = new Date();
-      const targetDate = new Date();
-      targetDate.setHours(14, 0, 0, 0); // Tomorrow 2:00 PM
-
-      if (now.getHours() >= 14) {
-        targetDate.setDate(targetDate.getDate() + 1); // If it's past 2:00 PM, set target to next day
-      }
-
-      const timeDiff = targetDate - now;
-      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-
-      // Update the timer
-      document.getElementById('timer').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-      // Enable the start button if time is reached
-      if (timeDiff <= 0) {
-        document.getElementById('startBtn').disabled = false;
-      } else {
-        setTimeout(calculateTimeRemaining, 1000); // Call the function every second
-      }
-    }
-
-    // Initial call to start the timer
-    calculateTimeRemaining();
   </script>
 
 </body>
