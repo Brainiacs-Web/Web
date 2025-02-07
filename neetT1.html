@@ -174,7 +174,7 @@ flex-grow: 1; /* Allow both containers to grow equally */
   border: 2px solid transparent;
   border-radius: 8px;
   padding: 12px 15px;
-  width: 90%;
+  width: 93%;
   max-width: 450px;
   cursor: pointer;
   background: #ffffff;
@@ -426,11 +426,6 @@ function displayQuestion() {
 
 
   const savedAnswer = localStorage.getItem(`response_${currentQuestionIndex}`);
-if (savedAnswer) {
-    const radioBtn = document.querySelector(`input[name="q${currentQuestionIndex}"][value="${savedAnswer}"]`);
-    if (radioBtn) radioBtn.checked = true;
-}
-
   const isMarkedForReview = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
 
   // Function to check if a string is a URL
@@ -467,7 +462,12 @@ if (savedAnswer) {
     </div>
   `;
 
-
+  // Restore saved answer
+  if (savedAnswer) {
+    const radioBtn = document.querySelector(`input[name="q${currentQuestionIndex}"][value="${savedAnswer}"]`);
+    if (radioBtn) radioBtn.checked = true;
+  }
+}
 
     window.markAsReview = function () {
       const isMarkedForReview = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
@@ -604,7 +604,7 @@ window.saveAndNext = function () {
     for (let i = 0; i < questions.length; i++) {
         responseData[`responses.${i}`] = {
             question: questions[i].question,
-            selectedAnswer: localStorage.getItem(`response_${i}`) || null
+            selectedAnswer: userResponses[i] || null
         };
     }
 
