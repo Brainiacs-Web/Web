@@ -765,6 +765,44 @@ if (sessionStorage.getItem("cheatingDetected")) {
 
       }
 
+    
+function copyQuestion(questionId) {
+    let questionElement = document.getElementById(`question-${questionId}`);
+    let options = document.querySelectorAll(`.options-${questionId} label`);
+
+    if (!questionElement) return;
+
+    let questionText = `Q. ${questionElement.innerText.trim()}\n`;
+    let optionsText = "";
+    let optionLabels = ["(A)", "(B)", "(C)", "(D)"];
+
+    options.forEach((option, index) => {
+        optionsText += `${optionLabels[index]} ${option.innerText.trim()}\n`;
+    });
+
+    let fullText = questionText + optionsText;
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(fullText).then(() => {
+        alert("Copied to clipboard!");
+    }).catch(err => {
+        console.error("Failed to copy text: ", err);
+    });
+}
+
+<!-- Example Question Format -->
+<div>
+    <p id="question-1">What is the capital of France?</p>
+    <div class="options-1">
+        <label>(A) Paris</label><br>
+        <label>(B) London</label><br>
+        <label>(C) Berlin</label><br>
+        <label>(D) Madrid</label><br>
+    </div>
+    <button onclick="copyQuestion(1)">Copy</button>
+</div>
+  
+
   </script>
 </body>
 
