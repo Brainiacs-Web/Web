@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neet mock test</title>
+    <title>Neet Mock Test</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -14,9 +16,11 @@
             text-align: center;
             background-color: #f8f8f8;
         }
+
         .buttons {
             margin-bottom: 20px;
         }
+
         .container {
             width: 800px;
             margin: auto;
@@ -24,42 +28,56 @@
             border: 1px solid black;
             padding: 20px;
         }
+
         .screenshot-section {
             width: 800px;
             min-height: 1120px;
             overflow: hidden;
             margin-bottom: 20px;
         }
+
         .question-row {
             display: flex;
             justify-content: space-between;
             border-bottom: 1px solid black;
             padding: 10px 0;
         }
+
         .question-container {
             width: 48%;
             text-align: left;
         }
+
         .question-number {
             font-weight: bold;
             font-size: 18px;
         }
+
         .question-text {
             font-size: 16px;
         }
+
         .option-list {
             list-style-type: none;
             padding: 0;
         }
+
         .option-list li {
             font-size: 15px;
             margin-bottom: 3px;
         }
+
         .question-image {
             max-width: 100%;
             height: auto;
             display: block;
             margin: 10px auto;
+        }
+
+        .correct-answer {
+            font-weight: bold;
+            color: green;
+            margin-top: 5px;
         }
     </style>
 
@@ -67,7 +85,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyD2G48B1EdenSguUT3kYKCKobWcQxM_GV0",
             authDomain: "test-89239.firebaseapp.com",
@@ -93,12 +110,12 @@
             return new Promise((resolve) => {
                 const img = new Image();
                 img.src = url;
-                img.onload = () => resolve(url); // Image loaded successfully
-                img.onerror = () => resolve(null); // Image failed to load
+                img.onload = () => resolve(url);
+                img.onerror = () => resolve(null);
             });
         }
 
-        async function fetchQuestions() {
+        async function fetchQuestionsWithAnswers() {
             const questionsContainer = document.getElementById("questionsContainer");
             questionsContainer.innerHTML = "<p>Loading...</p>";
 
@@ -117,22 +134,19 @@
                     let data = doc.data();
                     data.id = doc.id;
 
-                    // Handling timestamps for sorting
                     if (data.addedAt && data.addedAt.seconds) {
                         data.timestamp = new Date(data.addedAt.seconds * 1000);
                     } else {
                         data.timestamp = null;
                     }
 
-                    // Validate question image before adding
                     if (data.questionImage && isValidURL(data.questionImage)) {
                         data.questionImage = await loadImage(data.questionImage);
                     }
 
-                    // Validate option images before adding
                     if (data.options && Array.isArray(data.options)) {
                         data.options = await Promise.all(
-                            data.options.map(async (option) => 
+                            data.options.map(async (option) =>
                                 isValidURL(option) ? await loadImage(option) : option
                             )
                         );
@@ -141,7 +155,6 @@
                     questionsArray.push(data);
                 }
 
-                // Sorting: Newest questions first, those without timestamps go last
                 questionsArray.sort((a, b) => {
                     if (a.timestamp && b.timestamp) {
                         return b.timestamp - a.timestamp;
@@ -160,7 +173,6 @@
                 let rowContainer = null;
 
                 questionsArray.forEach((data, index) => {
-                    // Start a new row every two questions
                     if (index % 2 === 0) {
                         rowContainer = document.createElement("div");
                         rowContainer.classList.add("question-row");
@@ -171,7 +183,6 @@
 
                     let questionHTML = `<span class="question-number">${questionNumber}. </span>`;
 
-                    // Display only successfully loaded images
                     if (data.questionImage) {
                         questionHTML += `<img src="${data.questionImage}" alt="Question Image" class="question-image">`;
                     }
@@ -184,7 +195,6 @@
                     const optionsList = document.createElement("ul");
                     optionsList.classList.add("option-list");
 
-                    // Display only successfully loaded option images
                     if (data.options && Array.isArray(data.options) && data.options.length > 0) {
                         data.options.forEach((option, optIndex) => {
                             const optionItem = document.createElement("li");
@@ -200,6 +210,14 @@
                     }
 
                     questionContainer.appendChild(optionsList);
+
+                    if (data.correctAnswer) {
+                        const answerText = document.createElement("p");
+                        answerText.classList.add("correct-answer");
+                        answerText.innerHTML = `Answer: <strong>${data.correctAnswer}</strong>`;
+                        questionContainer.appendChild(answerText);
+                    }
+
                     rowContainer.appendChild(questionContainer);
 
                     if (index % 2 === 1 || index === questionsArray.length - 1) {
@@ -210,6 +228,7 @@
                 });
 
                 questionsContainer.appendChild(section);
+
             } catch (error) {
                 console.error("Error fetching questions:", error);
                 questionsContainer.innerHTML = "<p>Error loading questions. Check the console.</p>";
@@ -217,17 +236,25 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("fetchBtn").addEventListener("click", fetchQuestions);
+            document.getElementById("fetchBtn").addEventListener("click", fetchQuestionsWithAnswers);
+            document.getElementById("fetchWithAnswersBtn").addEventListener("click", fetchQuestionsWithAnswers);
         });
+
     </script>
+
 </head>
+
 <body>
 
-    <h2>Neet mock Test 1</h2>
+    <h2>Neet Mock Test 1</h2>
+
     <div class="buttons">
         <button id="fetchBtn">Questions</button>
+        <button id="fetchWithAnswersBtn">Get Question & Answer</button>
     </div>
+
     <div id="questionsContainer" class="container"></div>
 
 </body>
+
 </html>
