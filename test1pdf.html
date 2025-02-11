@@ -81,166 +81,166 @@
         }
     </style>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyD2G48B1EdenSguUT3kYKCKobWcQxM_GV0",
-            authDomain: "test-89239.firebaseapp.com",
-            projectId: "test-89239",
-            storageBucket: "test-89239.appspot.com",
-            messagingSenderId: "945793010997",
-            appId: "1:945793010997:web:60cc3fda32f7591586507c"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyD2G48B1EdenSguUT3kYKCKobWcQxM_GV0",
+        authDomain: "test-89239.firebaseapp.com",
+        projectId: "test-89239",
+        storageBucket: "test-89239.appspot.com",
+        messagingSenderId: "945793010997",
+        appId: "1:945793010997:web:60cc3fda32f7591586507c"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-        function isValidURL(string) {
-            try {
-                new URL(string);
-                return true;
-            } catch (_) {
-                return false;
-            }
+    function isValidURL(string) {
+        try {
+            new URL(string);
+            return true;
+        } catch (_) {
+            return false;
         }
+    }
 
-        function loadImage(url) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.src = url;
-                img.onload = () => resolve(url);
-                img.onerror = () => resolve(null);
-            });
-        }
-
-        async function fetchQuestionsWithAnswers() {
-            const questionsContainer = document.getElementById("questionsContainer");
-            questionsContainer.innerHTML = "<p>Loading...</p>";
-
-            try {
-                const querySnapshot = await getDocs(collection(db, "questions"));
-                questionsContainer.innerHTML = "";
-
-                if (querySnapshot.empty) {
-                    questionsContainer.innerHTML = "<p>No questions found.</p>";
-                    return;
-                }
-
-                let questionsArray = [];
-
-                for (const doc of querySnapshot.docs) {
-                    let data = doc.data();
-                    data.id = doc.id;
-
-                    if (data.addedAt && data.addedAt.seconds) {
-                        data.timestamp = new Date(data.addedAt.seconds * 1000);
-                    } else {
-                        data.timestamp = null;
-                    }
-
-                    if (data.questionImage && isValidURL(data.questionImage)) {
-                        data.questionImage = await loadImage(data.questionImage);
-                    }
-
-                    if (data.options && Array.isArray(data.options)) {
-                        data.options = await Promise.all(
-                            data.options.map(async (option) =>
-                                isValidURL(option) ? await loadImage(option) : option
-                            )
-                        );
-                    }
-
-                    questionsArray.push(data);
-                }
-
-                questionsArray.sort((a, b) => {
-                    if (a.timestamp && b.timestamp) {
-                        return b.timestamp - a.timestamp;
-                    } else if (a.timestamp) {
-                        return -1;
-                    } else if (b.timestamp) {
-                        return 1;
-                    }
-                    return 0;
-                });
-
-                let questionNumber = 1;
-                let section = document.createElement("div");
-                section.classList.add("screenshot-section");
-
-                let rowContainer = null;
-
-                questionsArray.forEach((data, index) => {
-                    if (index % 2 === 0) {
-                        rowContainer = document.createElement("div");
-                        rowContainer.classList.add("question-row");
-                    }
-
-                    const questionContainer = document.createElement("div");
-                    questionContainer.classList.add("question-container");
-
-                    let questionHTML = `<span class="question-number">${questionNumber}. </span>`;
-
-                    if (data.questionImage) {
-                        questionHTML += `<img src="${data.questionImage}" alt="Question Image" class="question-image">`;
-                    }
-                    if (data.question) {
-                        questionHTML += `<span class="question-text">${data.question}</span>`;
-                    }
-
-                    questionContainer.innerHTML = questionHTML;
-
-                    const optionsList = document.createElement("ul");
-                    optionsList.classList.add("option-list");
-
-                    if (data.options && Array.isArray(data.options) && data.options.length > 0) {
-                        data.options.forEach((option, optIndex) => {
-                            const optionItem = document.createElement("li");
-
-                            if (isValidURL(option) && option) {
-                                optionItem.innerHTML = `<strong>(${optIndex + 1})</strong> <img src="${option}" alt="Option Image" class="question-image">`;
-                            } else if (option) {
-                                optionItem.innerHTML = `<strong>(${optIndex + 1})</strong> ${option}`;
-                            }
-
-                            optionsList.appendChild(optionItem);
-                        });
-                    }
-
-                    questionContainer.appendChild(optionsList);
-
-                    if (data.correctAnswer) {
-                        const answerText = document.createElement("p");
-                        answerText.classList.add("correct-answer");
-                        answerText.innerHTML = `Answer: <strong>${data.correctAnswer}</strong>`;
-                        questionContainer.appendChild(answerText);
-                    }
-
-                    rowContainer.appendChild(questionContainer);
-
-                    if (index % 2 === 1 || index === questionsArray.length - 1) {
-                        section.appendChild(rowContainer);
-                    }
-
-                    questionNumber++;
-                });
-
-                questionsContainer.appendChild(section);
-
-            } catch (error) {
-                console.error("Error fetching questions:", error);
-                questionsContainer.innerHTML = "<p>Error loading questions. Check the console.</p>";
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("fetchBtn").addEventListener("click", fetchQuestionsWithAnswers);
-            document.getElementById("fetchWithAnswersBtn").addEventListener("click", fetchQuestionsWithAnswers);
+    function loadImage(url) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => resolve(url);
+            img.onerror = () => resolve(null);
         });
+    }
 
-    </script>
+    async function fetchQuestionsWithAnswers(showAnswers) {
+        const questionsContainer = document.getElementById("questionsContainer");
+        questionsContainer.innerHTML = "<p>Loading...</p>";
+
+        try {
+            const querySnapshot = await getDocs(collection(db, "questions"));
+            questionsContainer.innerHTML = "";
+
+            if (querySnapshot.empty) {
+                questionsContainer.innerHTML = "<p>No questions found.</p>";
+                return;
+            }
+
+            let questionsArray = [];
+
+            for (const doc of querySnapshot.docs) {
+                let data = doc.data();
+                data.id = doc.id;
+
+                if (data.addedAt && data.addedAt.seconds) {
+                    data.timestamp = new Date(data.addedAt.seconds * 1000);
+                } else {
+                    data.timestamp = null;
+                }
+
+                if (data.questionImage && isValidURL(data.questionImage)) {
+                    data.questionImage = await loadImage(data.questionImage);
+                }
+
+                if (data.options && Array.isArray(data.options)) {
+                    data.options = await Promise.all(
+                        data.options.map(async (option) =>
+                            isValidURL(option) ? await loadImage(option) : option
+                        )
+                    );
+                }
+
+                questionsArray.push(data);
+            }
+
+            questionsArray.sort((a, b) => {
+                if (a.timestamp && b.timestamp) {
+                    return b.timestamp - a.timestamp;
+                } else if (a.timestamp) {
+                    return -1;
+                } else if (b.timestamp) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            let questionNumber = 1;
+            let section = document.createElement("div");
+            section.classList.add("screenshot-section");
+
+            let rowContainer = null;
+
+            questionsArray.forEach((data, index) => {
+                if (index % 2 === 0) {
+                    rowContainer = document.createElement("div");
+                    rowContainer.classList.add("question-row");
+                }
+
+                const questionContainer = document.createElement("div");
+                questionContainer.classList.add("question-container");
+
+                let questionHTML = `<span class="question-number">${questionNumber}. </span>`;
+
+                if (data.questionImage) {
+                    questionHTML += `<img src="${data.questionImage}" alt="Question Image" class="question-image">`;
+                }
+                if (data.question) {
+                    questionHTML += `<span class="question-text">${data.question}</span>`;
+                }
+
+                questionContainer.innerHTML = questionHTML;
+
+                const optionsList = document.createElement("ul");
+                optionsList.classList.add("option-list");
+
+                if (data.options && Array.isArray(data.options) && data.options.length > 0) {
+                    data.options.forEach((option, optIndex) => {
+                        const optionItem = document.createElement("li");
+
+                        if (isValidURL(option) && option) {
+                            optionItem.innerHTML = `<strong>(${optIndex + 1})</strong> <img src="${option}" alt="Option Image" class="question-image">`;
+                        } else if (option) {
+                            optionItem.innerHTML = `<strong>(${optIndex + 1})</strong> ${option}`;
+                        }
+
+                        optionsList.appendChild(optionItem);
+                    });
+                }
+
+                questionContainer.appendChild(optionsList);
+
+                if (showAnswers && data.correctAnswer) {
+                    const answerText = document.createElement("p");
+                    answerText.classList.add("correct-answer");
+                    answerText.innerHTML = `Answer: <strong>${data.correctAnswer}</strong>`;
+                    questionContainer.appendChild(answerText);
+                }
+
+                rowContainer.appendChild(questionContainer);
+
+                if (index % 2 === 1 || index === questionsArray.length - 1) {
+                    section.appendChild(rowContainer);
+                }
+
+                questionNumber++;
+            });
+
+            questionsContainer.appendChild(section);
+
+        } catch (error) {
+            console.error("Error fetching questions:", error);
+            questionsContainer.innerHTML = "<p>Error loading questions. Check the console.</p>";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("fetchBtn").addEventListener("click", () => fetchQuestionsWithAnswers(false));
+        document.getElementById("fetchWithAnswersBtn").addEventListener("click", () => fetchQuestionsWithAnswers(true));
+    });
+
+</script>
 
 </head>
 
