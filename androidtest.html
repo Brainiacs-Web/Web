@@ -556,7 +556,8 @@ window.saveAndNext = function () {
 };
 
 
-    window.submitTest = function (autoSubmit = false) {
+    
+window.submitTest = function (autoSubmit = false) {
     if (!autoSubmit) {
         const confirmation = confirm("Are you sure you want to submit the test?");
         if (!confirmation) return;
@@ -564,10 +565,14 @@ window.saveAndNext = function () {
 
     const userDocRef = doc(db, "responses", username);
     const responseData = {};
+
     for (let i = 0; i < questions.length; i++) {
+        // Fetch saved response from localStorage
+        const storedAnswer = localStorage.getItem(`response_${i}`) || null;
+
         responseData[`responses.${i}`] = {
             question: questions[i].question,
-            selectedAnswer: userResponses[i] || null
+            selectedAnswer: storedAnswer // Use stored answer instead of `userResponses[i]`
         };
     }
 
@@ -581,7 +586,7 @@ window.saveAndNext = function () {
         { merge: true }
     )
     .then(() => {
-        // After saving data, clear local storage
+        // Clear local storage after successful submission
         localStorage.clear();
 
         if (autoSubmit) {
