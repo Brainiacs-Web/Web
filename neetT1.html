@@ -630,7 +630,7 @@ window.saveAndNext = function () {
             window.location.href = "cheat.html"; // Redirect to cheat page if auto-submitted
         } else {
             alert("Test submitted successfully!");
-            window.location.href = `result.html?username=${username}`; // Redirect to result page for manual submission
+            window.location.href = `results.html?username=${username}`; // Redirect to result page for manual submission
         }
     })
     .catch((error) => {
@@ -765,7 +765,7 @@ function showWarningPopup() {
 
 if (sessionStorage.getItem("cheatingDetected")) {
         window.location.href = "cheat.html"; // Immediately redirect if flagged
-        window.location.href = "result.html"; // Immediately redirect if flagged
+        window.location.href = "results.html"; // Immediately redirect if flagged
 
       }
 
