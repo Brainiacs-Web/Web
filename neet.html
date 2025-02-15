@@ -3,173 +3,171 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Neet mock tests</title>
+  <title>NEET Mock Tests</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: black;
+      background-color: #121212;
+      font-family: 'Poppins', sans-serif;
+      color: #e0e0e0;
+      margin: 0;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-      color: #00FFFF;
     }
 
-    .container {
-      width: 80%;
-      max-width: 500px;
-      background-color: #00FFFF;
-      border-radius: 20px;
-      padding: 10px 20px;
-      margin-bottom: 20px;
-      color: black;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    .test-card {
+      width: 85%;
+      max-width: 650px;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      border: 1px solid #333;
+    }
+
+    .test-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 8px;
     }
 
-    .test-name {
-      font-size: 1.5rem;
-      font-weight: 600;
-      text-align: left;
-      margin: 0;
-      flex-grow: 1;
-    }
-
-    .button-container {
-      display: flex;
-      gap: 10px;
-    }
-
-    .start-btn {
-      padding: 8px 16px;
-      background-color: black;
-      color: #00FFFF;
-      text-transform: uppercase;
+    .test-title {
       font-size: 1rem;
       font-weight: 600;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
     }
 
-    .start-btn:disabled {
-      background-color: gray;
+    .test-info {
+      font-size: 0.85rem;
+      color: #b0b0b0;
+      margin: 3px 0;
+    }
+
+    .syllabus-link {
+      color: #00bcd4;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+
+    .syllabus-link:hover {
+      text-decoration: underline;
+    }
+
+    .start-button {
+      display: inline-block;
+      padding: 6px 14px;
+      background-color: #00bcd4;
+      color: #121212;
+      border: none;
+      border-radius: 5px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .start-button:hover {
+      background-color: #0097a7;
+    }
+
+    .start-button:disabled {
+      background-color: #555;
+      color: #888;
       cursor: not-allowed;
     }
 
-    .register-btn, .planner-btn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: gray;
-      color: white;
-      border: none;
+    .upcoming-badge {
+      background-color: #2d2d2d;
+      color: #00bcd4;
+      padding: 4px 8px;
+      font-size: 0.75rem;
       border-radius: 5px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
+      font-weight: 600;
     }
 
-    .register-btn:hover, .planner-btn:hover {
-      background-color: #555;
+    .button-container {
+      margin-top: 8px;
+      text-align: right;
     }
 
-    /* Modal styles */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-
-    .modal-content {
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      width: 300px;
-      text-align: center;
-      margin: 20% auto;
-    }
-
-    .close {
-      float: right;
-      font-size: 20px;
-      cursor: pointer;
+    #countdown {
+      font-size: 0.85rem;
+      color: #ff5252;
+      font-weight: 600;
+      margin-top: 5px;
     }
   </style>
 </head>
 <body>
 
-  <!-- TEST 1 Container -->
-  <div class="container">
-    <div class="test-name">TEST 1</div>
-    <div id="timer1"></div>
+  <!-- TEST 1 -->
+  <div class="test-card">
+    <div class="test-header">
+      <span class="upcoming-badge">Held</span>
+      <span class="test-title">Full syllabus Test 01</span>
+    </div>
+    <p class="test-info">📄 180 Questions | 🏆 720 Marks | ⏳ 180 Mins </p>
+    <p class="test-info">📅 Held on Feb 07, 2025 at 2:00 PM</p>
+    <a href="#" class="syllabus-link">📖 View Syllabus</a>
     <div class="button-container">
-      <button id="startBtn1" class="start-btn" onclick="window.location.href='page1.html'">Start</button>
-      <button class="start-btn" onclick="window.location.href='test1pdf.html'">PDF</button>
+      <button class="start-button" onclick="window.location.href='page1.html'">➜ Start</button>
+      <button class="start-button" onclick="window.location.href='test1pdf.html'">PDF</button>
+
     </div>
   </div>
 
-  <!-- TEST 2 Container -->
-  <div class="container">
-    <div class="test-name">TEST 2</div>
-    <div id="timer2"></div>
-    <div class="button-container" onclick="showModal()">
-      <button id="startBtn2" class="start-btn" disabled>Start</button>
+  <!-- TEST 2 (Unlocks on Feb 16, 2025, at 2:00 PM) -->
+  <div class="test-card">
+    <div class="test-header">
+      <span class="upcoming-badge">Upcoming</span>
+      <span class="test-title">Full syllabus Test 02</span>
+    </div>
+    <p class="test-info">📄 180 Questions | 🏆 720 Marks | ⏳ 180 Mins </p>
+    <p class="test-info">📅 Starts on Feb 16, 2025 at 2:00 PM | Ends at 5:00 PM</p>
+    <a href="#" class="syllabus-link">📖 View Syllabus</a>
+    <div class="button-container">
+      <button id="test2Start" class="start-button" onclick="window.location.href='neetT2.html'" disabled>➜ Start</button>
+      <div id="countdown">Unlocks in: --:--:--</div>
     </div>
   </div>
 
-  <button class="planner-btn" onclick="window.location.href='https://drive.google.com/file/d/14emdjw4vj6YcVFLBCCiE1sLWRsax1XQK/view?usp=drivesdk'">Planner</button>
-  <button class="register-btn" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSc1goezKBrtvpDVEcMOlLnny4NdyKqQA7304laQQtjVcwf0eA/viewform?usp=header'">Register Now</button>
+  <!-- Planner Button -->
+  <button class="start-button" style="margin-top: 10px;" onclick="window.location.href='https://drive.google.com/file/d/14emdjw4vj6YcVFLBCCiE1sLWRsax1XQK/view?usp=drivesdk'">📅 Planner</button>
 
-  <!-- Modal -->
-  <div id="myModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <p id="modalText">Test will be live in 30:30:00</p>
-    </div>
-  </div>
+  <!-- Register Button -->
+  <button class="start-button" style="margin-top: 10px;" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSc1goezKBrtvpDVEcMOlLnny4NdyKqQA7304laQQtjVcwf0eA/viewform?usp=header'">📝 Register Now</button>
 
   <script>
-    function startCountdown(duration, display, button) {
-      let timer = duration, hours, minutes, seconds;
-      let interval = setInterval(function () {
-        hours = Math.floor(timer / 3600);
-        minutes = Math.floor((timer % 3600) / 60);
-        seconds = timer % 60;
-        let timeString = `${hours}h ${minutes}m ${seconds}s`;
-        display.textContent = timeString;
-        document.getElementById("modalText").textContent = `Test will be live in ${timeString}`;
-        if (--timer < 0) {
-          clearInterval(interval);
-          display.textContent = "Ready!";
-          button.disabled = false;
-        }
-      }, 1000);
+    // Unlock time: Feb 16, 2025, 2:00 PM
+    const unlockDate = new Date("February 16, 2025 14:00:00").getTime();
+
+    function updateCountdown() {
+      let now = new Date().getTime();
+      let timeLeft = unlockDate - now;
+
+      let hours = Math.floor(timeLeft / (1000 * 60 * 60));
+      let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      let seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+      let countdownElement = document.getElementById("countdown");
+      let startButton = document.getElementById("test2Start");
+
+      if (timeLeft > 0) {
+        countdownElement.textContent = `Unlocks in: ${hours}h ${minutes}m ${seconds}s`;
+      } else {
+        clearInterval(countdownTimer);
+        countdownElement.textContent = "Test Unlocked!";
+        startButton.disabled = false;
+      }
     }
 
-    function showModal() {
-      document.getElementById("myModal").style.display = "block";
-    }
-
-    function closeModal() {
-      document.getElementById("myModal").style.display = "none";
-    }
-
-    window.onload = function () {
-      let countdownDuration = 30 * 3600 + 30 * 60;
-      startCountdown(countdownDuration, document.getElementById("timer2"), document.getElementById("startBtn2"));
-    };
+    let countdownTimer = setInterval(updateCountdown, 1000);
+    updateCountdown();
   </script>
 
 </body>
