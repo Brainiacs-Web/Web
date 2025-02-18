@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results</title>
+
+    <style>
+    /* General Styles */
+    body {
+        font-family: 'Poppins', sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 20px;
+        background: #eef1f7;
+        color: #333;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+        color: #007bff;
+        font-size: 26px;
+    }
+
+    .question-box {
+        text-align: left;
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 10px;
+        background: #f9f9f9;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .options {
+        list-style: none;
+        padding: 0;
+    }
+
+    .option-box {
+        padding: 12px;
+        margin: 6px 0;
+        border-radius: 6px;
+        border: 2px solid #ccc;
+        text-align: left;
+        font-size: 16px;
+        font-weight: bold;
+        background: #fff;
+        transition: 0.3s ease;
+        cursor: pointer;
+    }
+
+    .option-box:hover {
+        background: #e9ecef;
+    }
+
+    .correct {
+        background: #d4edda !important;
+        border-color: #28a745 !important;
+        color: #155724;
+    }
+
+    .wrong {
+        background: #f8d7da !important;
+        border-color: #dc3545 !important;
+        color: #721c24;
+    }
+
+    .skipped {
+        background: #fff3cd !important;
+        border-color: #ffc107 !important;
+        color: #856404;
+    }
+
+    .selected-answer {
+        font-weight: bold;
+        color: #fff;
+        padding: 6px 10px;
+        display: inline-block;
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+
+    .selected-correct {
+        background: #28a745;
+    }
+
+    .selected-wrong {
+        background: #dc3545;
+    }
+
+    .correct-answer {
+        font-weight: bold;
+        color: #155724;
+        background: #d4edda;
+        padding: 6px 10px;
+        display: inline-block;
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+
+    .stats {
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 15px;
+        color: #444;
+    }
+
+    img {
+        max-width: 100%;
+        border-radius: 6px;
+        margin-top: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+        .container {
+            width: 95%;
+            padding: 15px;
+        }
+
+        h1 {
+            font-size: 22px;
+        }
+
+        .option-box {
+            font-size: 14px;
+            padding: 10px;
+        }
+    }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Results</h1>
+        <div id="result">Loading...</div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+  apiKey: "AIzaSyD_N1uDeih2P21N9MqqRpBpwL3t0lGCQ1o",
+  authDomain: "neet-9a165.firebaseapp.com",
+  projectId: "neet-9a165",
+  storageBucket: "neet-9a165.firebasestorage.app",
+  messagingSenderId: "728629514572",
+  appId: "1:728629514572:web:4b6e9e7b2ceeb12cb9bfe9"
+};
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        function formatTextWithImages(text) {
+            if (!text) return text;
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, (url) => `<img src="${url}" alt="Image" class="question-image">`);
+        }
+
+        async function calculateResult(username) {
+            try {
+                document.getElementById("result").innerHTML = "Calculating... Please wait.";
+
+                const userDocRef = doc(db, "responses", username);
+                const userDocSnap = await getDoc(userDocRef);
+
+                if (!userDocSnap.exists()) {
+                    document.getElementById("result").innerHTML = `User '${username}' not found in responses collection.`;
+                    return;
+                }
+
+                const userResponses = userDocSnap.data();
+                if (!userResponses || Object.keys(userResponses).length === 0) {
+                    document.getElementById("result").innerHTML = `No responses found for user '${username}'.`;
+                    return;
+                }
+
+                const questionsRef = collection(db, "questions");
+                const questionsSnap = await getDocs(questionsRef);
+
+                if (questionsSnap.empty) {
+                    document.getElementById("result").innerHTML = "No questions found in the database.";
+                    return;
+                }
+
+                let totalScore = 0, correctCount = 0, wrongCount = 0, unansweredCount = 0;
+                let resultHTML = "";
+                let questionsArray = [];
+
+                questionsSnap.forEach((doc) => {
+                    const questionData = doc.data();
+                    questionsArray.push({
+                        ...questionData, 
+                        addedAt: questionData.addedAt ? questionData.addedAt.toMillis() : 0 
+                    });
+                });
+
+                questionsArray.sort((a, b) => b.addedAt - a.addedAt);
+
+                questionsArray.forEach((questionData) => {
+                    const questionText = questionData.question ? questionData.question.trim().toLowerCase() : "";
+                    const userResponse = Object.values(userResponses).find(q => q.question && q.question.trim().toLowerCase() === questionText);
+
+                    if (!userResponse) return;
+
+                    const selectedAnswer = userResponse.selectedAnswer ? userResponse.selectedAnswer.trim().toUpperCase() : "";
+                    const correctAnswer = questionData.correctAnswer ? questionData.correctAnswer.trim().toUpperCase() : "";
+                    const options = questionData.options || [];
+
+                    let statusClass = "", selectedAnswerHTML = "";
+                    let correctAnswerHTML = `<span class="correct-answer">Correct Answer: ${correctAnswer}</span>`;
+
+                    if (!selectedAnswer) {
+                        statusClass = "skipped";
+                        unansweredCount++;
+                        selectedAnswerHTML = `<span class="selected-answer selected-wrong">Not Answered</span>`;
+                    } else if (selectedAnswer === correctAnswer) {
+                        statusClass = "correct";
+                        correctCount++;
+                        totalScore += 4;
+                        selectedAnswerHTML = `<span class="selected-answer selected-correct">Your Answer: ${selectedAnswer}</span>`;
+                    } else {
+                        statusClass = "wrong";
+                        wrongCount++;
+                        totalScore -= 1;
+                        selectedAnswerHTML = `<span class="selected-answer selected-wrong">Your Answer: ${selectedAnswer}</span>`;
+                    }
+
+                    resultHTML += `<div class="question-box">
+                        <p><strong>Q:</strong> ${formatTextWithImages(questionData.question)}</p>
+                        <ul class="options">`;
+
+                    options.forEach((opt) => {
+                        let optionClass = opt.trim().toUpperCase() === correctAnswer ? "correct" : "";
+                        resultHTML += `<li class="option-box ${optionClass}">${formatTextWithImages(opt)}</li>`;
+                    });
+
+                    resultHTML += `</ul>${selectedAnswerHTML}<br>${selectedAnswer !== correctAnswer ? correctAnswerHTML : ""}
+                    </div>`;
+                });
+
+                document.getElementById("result").innerHTML = `<h2>Total Marks: ${totalScore} / 720</h2>
+                    <p class="stats">Correct: ${correctCount}</p>
+                    <p class="stats">Wrong: ${wrongCount}</p>
+                    <p class="stats">Unanswered: ${unansweredCount}</p>${resultHTML}`;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        window.onload = () => {
+            const username = prompt("Enter your username:");
+            if (username) calculateResult(username.trim());
+        };
+    </script>
+</body>
+</html>
