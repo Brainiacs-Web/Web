@@ -5,9 +5,8 @@
 <head>
   <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="https://i.postimg.cc/JzzPN25Y/alien-monster-microsoft.png">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEET Mock Test</title>
+  <title>Mock Test 02</title>
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
@@ -357,8 +356,10 @@ body.no-right-click::after {
   </div>
   
   <div class="timer" id="timer">
-    Time Left: <span id="time-left">03:00:00</span>
-  </div>
+    <img src="https://i.postimg.cc/Fs22Dm1C/timer-1.png" alt="Timer Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;">
+    <span id="time-left">03:00:00</span>
+</div>
+
 </div>
 
   <div class="modal-overlay" id="modal-overlay">
@@ -387,7 +388,7 @@ body.no-right-click::after {
   
 
   <script type="module">
-      const firebaseConfig = {
+    const firebaseConfig = {
   apiKey: "AIzaSyD_N1uDeih2P21N9MqqRpBpwL3t0lGCQ1o",
   authDomain: "neet-9a165.firebaseapp.com",
   projectId: "neet-9a165",
@@ -660,7 +661,6 @@ window.submitTest = function (autoSubmit = false) {
         alert("Error submitting test: " + error.message);
     });
 };
-
 window.clearSelection = function () {
   const radios = document.querySelectorAll(`input[name="q${currentQuestionIndex}"]`);
   radios.forEach(radio => (radio.checked = false));
@@ -713,32 +713,7 @@ function closeModal() {
 
 
   
-    let timerInterval;
-let timeLeft = 3 * 60 * 60; // 3 hours in seconds
-
-function updateTimerDisplay() {
-  const hours = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
-  const minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
-  const seconds = String(timeLeft % 60).padStart(2, '0');
-  document.getElementById('time-left').textContent = `${hours}:${minutes}:${seconds}`;
-}
-
-function startTimer() {
-  // Start the timer interval, this will run every second regardless of tab visibility
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    updateTimerDisplay();
-
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      alert("Time's up!");
-      submitTest(); // Call the function to submit the test after time is up
-    }
-  }, 1000);
-}
-
-// Start the timer as soon as the page loads
-window.onload = startTimer;let timerInterval;
+  let timerInterval;
 let timeLeft = localStorage.getItem('timeLeft') ? Number(localStorage.getItem('timeLeft')) : 3 * 60 * 60; // Load saved time or default to 3 hours in seconds
 
 function updateTimerDisplay() {
