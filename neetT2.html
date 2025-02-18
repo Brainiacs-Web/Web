@@ -615,11 +615,19 @@ window.submitTest = function (autoSubmit = false) {
     for (let i = 0; i < questions.length; i++) {
         // Fetch saved response from localStorage
         const storedAnswer = localStorage.getItem(`response_${i}`) || null;
+        const isMarkedForReview = localStorage.getItem(`review_${i}`) === "true";
 
+        // Store the answer as it is, without modifying it for review
         responseData[`responses.${i}`] = {
             question: questions[i].question,
-            selectedAnswer: storedAnswer // Use stored answer instead of `userResponses[i]`
+            selectedAnswer: storedAnswer // Store the selected answer normally, regardless of review status
         };
+
+        // Optionally, you can track the review status separately for internal purposes if needed
+        // This could be stored in a separate field or used for processing later.
+        if (isMarkedForReview) {
+            responseData[`responses.${i}.markedForReview`] = true;
+        }
     }
 
     // Save user responses to Firestore
@@ -634,13 +642,18 @@ window.submitTest = function (autoSubmit = false) {
     .then(() => {
         // Clear local storage after successful submission
         localStorage.clear();
+        localStorage.removeItem('timeLeft'); // Ensure timer is reset in localStorage
+
+        // Reset timer display to default time
+        timeLeft = 3 * 60 * 60; // Reset to 3 hours (in seconds)
+        updateTimerDisplay();
 
         if (autoSubmit) {
             alert("You have switched tabs too many times. Your test has been submitted.");
             window.location.href = "cheat.html"; // Redirect to cheat page if auto-submitted
         } else {
             alert("Test submitted successfully!");
-            window.location.href = `results.html?username=${username}`; // Redirect to result page for manual submission
+            window.location.href = `result.html?username=${username}`; // Redirect to result page for manual submission
         }
     })
     .catch((error) => {
@@ -725,7 +738,39 @@ function startTimer() {
 }
 
 // Start the timer as soon as the page loads
+window.onload = startTimer;let timerInterval;
+let timeLeft = localStorage.getItem('timeLeft') ? Number(localStorage.getItem('timeLeft')) : 3 * 60 * 60; // Load saved time or default to 3 hours in seconds
+
+function updateTimerDisplay() {
+  const hours = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
+  const minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
+  const seconds = String(timeLeft % 60).padStart(2, '0');
+  document.getElementById('time-left').textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+function startTimer() {
+  // Start the timer interval, this will run every second regardless of tab visibility
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    localStorage.setItem('timeLeft', timeLeft); // Save the current timeLeft in local storage
+    updateTimerDisplay();
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      alert("Time's up!");
+      submitTest(); // Call the function to submit the test after time is up
+      localStorage.removeItem('timeLeft'); // Clear the timer from localStorage when time's up
+    }
+  }, 1000);
+}
+
+// Call updateTimerDisplay() on page load to initialize the display with the correct time
+updateTimerDisplay();
+
+
+// Start the timer as soon as the page loads
 window.onload = startTimer;
+
 
 // Optionally, display a message when the tab is switched
 document.addEventListener('visibilitychange', () => {
