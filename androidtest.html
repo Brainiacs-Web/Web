@@ -1,317 +1,490 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEET Mock Test</title>
+  <meta charset="UTF-8" />
+  <!-- Prevent zooming and scales the layout properly -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Mock O2</title>
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
 
   <style>
-    body {
-      font-family: "DM Sans", sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f0f0f0;
-      color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      flex-direction: column;
-    }
-
-    .top-container {
-      width: 120%;
-      height: 90px;
-      background-color: #6200ea;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: white;
-      font-size: 1.5rem;
-      padding: 0 20px;
-      margin-bottom: 5px;
-      box-sizing: border-box;
-    }
-
-    .top-container .logo {
-      height: 80px; /* Adjust as needed */
-      width: auto;
-    }
-
-    .top-container .user-name {
-      font-size: 1rem;
-      font-weight: bold;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column; /* Stack children vertically */
-      width: 100%;
-      max-width: 1200px;
-      min-height: 500px;
-      justify-content: flex-start; /* Align children to the top */
-      margin-top: 5px;
-      height: calc(100vh - 120px); /* Ensure full height minus the top container */
-    }
-
-    .progress-container {
-      width: 100%; /* Full width */
-      background-color: #ffffff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px; /* Add some space between progress and question card */
-      height : 50px
-    }
-  
-
-    .question-card {
-      width: 98%; /* Full width */
-      background-color: #ffffff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      height : 3000px
-    }
-
-    #question-progress {
+/* Base styles */
+/* Base styles */
+body {
+  font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+  color: rgb(26, 36, 40);
   display: flex;
-  flex-wrap: nowrap; /* Prevent wrapping */
-  overflow-x: auto; /* Allow horizontal scrolling if needed */
-  gap: 10px;
-  justify-content: flex-start; /* Align numbers to the left */
+  flex-direction: column;
   align-items: center;
-  padding: 10px;
-  white-space: nowrap; /* Ensure numbers stay in one line */
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
+/* Top Container */
+.top-container {
+  width: 100%;
+  background-color: #7363fc;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
+  color: #ffffff;
+  box-sizing: border-box;
+  position: relative;
+}
 
-    .question-number {
-      display: inline-block;
-      margin-bottom: 10px;
-      padding: 5px 10px;
-      border: 1px solid black;
-      border-radius: 10px; /* Ensure circular appearance */
-      cursor: pointer;
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
+.left-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
-    .question-number.active {
-      background-color: white;
-      border: 2px solid black;
-    }
+.candidate-name,
+.test-name {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #fefcfb;
+}
 
-    .question-number.answered {
-      background-color: #28a745;
-      color: white;
-    }
+.timer {
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center;
+}
 
-    .question-number.reviewed {
-      background-color: #b907ff;
-      color: black;
-    }
+.timer img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
 
-    .question-number.unanswered {
-      background-color: #f8061a;
-      color: black;
-    }
+/* Top Container Submit Button */
+.top-container button.submit-btn {
+  display: none;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  padding: 5px 10px;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.top-container button.submit-btn:hover {
+  background-color: #b246ff;
+}
 
-    .option-container {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      width: 100%;
-    }
+/* Main Container */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 500px;
+  margin-top: 5px;
+  height: calc(100vh - 120px);
+  position: relative;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
 
-    .image-option {
+/* Question Card */
+.question-card {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.question-text {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.question-number {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  border: 1px solid black;
+  border-radius: 50px;
+  background-color: #cdd1d8;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Option Styling */
+.option-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.image-option {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   border: 2px solid transparent;
   border-radius: 8px;
   padding: 12px 15px;
-  width: 90%;
-  max-width: 450px;
+  width: 100%;
+  max-width: 100%;
   cursor: pointer;
   background: #ffffff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   font-size: 1rem;
   position: relative;
-}
-
-.image-option:hover {
-  border-color: #6200ea;
+  box-sizing: border-box;
 }
 
 .image-option.selected {
   background: #6200ea;
-  color: white;
-  border: 2px solid #3700b3;
+  color: #fff;
 }
 
-/* REMOVE unnecessary styles from label */
+.image-option:hover,
+.image-option.selected {
+  border: 2px solid black;
+}
+
 .image-option label {
   width: 100%;
   height: 100%;
-  padding: 0;  /* Remove extra padding */
+  padding: 0;
   cursor: pointer;
   box-sizing: border-box;
-  background: none; /* Remove background */
+  background: none;
 }
 
 .option-content {
   width: 100%;
-  height: 100%;
+  height: auto;
   padding: 10px;
   border-radius: 8px;
   font-size: 1rem;
-  font-weight: bold;
   transition: all 0.3s ease;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
 }
 
-
-    .button-container {
-      display: flex;
-      justify-content: space-between;
-      margin-top: auto;
-    }
-.save-next-btn,
-.previous-btn,
-.clear-btn,
-.mark-review-btn {
-  width: 100px; /* Reduced width for specific buttons */
-    height:50px;
-  margin-top: 80px
+/* Review Checkbox Container */
+.review-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 15px;
 }
 
-.submit-button {
-  width: 100px; /* Reduced width for the submit button */
-  margin-top: auto;
-  margin-bottom: 20px;
+.review-container input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
 }
-    
-button {
-  padding: 8px 16px; /* Reduced padding */
-  background-color: #5A4BDA;
+
+.review-container label {
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* Button Container */
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.button-container button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #7363fc;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 0.9rem; /* Reduced font size */
-  width: auto; /* Allow buttons to shrink based on content */
-  min-width: 100px; /* Set a minimum width to avoid too small buttons */
-  margin-top: -10px
+  flex: 1;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+.button-container button:hover {
+  background-color: #5a4ecf;
 }
 
-    button:hover {
-      background-color: #3700b3;
-    }
+/* Hamburger Button */
+.hamburger-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  color: black;
+}
 
-    /* Modal styles */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
+/* Progress Modal (Reduced Overall Size) */
+.progress-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 240px;  /* Reduced width */
+  height: 100vh;
+  background-color: #ffffff;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  padding: 15px; /* Adjusted padding */
+  overflow-y: auto;
+  z-index: 1000;
+}
 
-    .modal {
-      background-color: #ffffff;
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+.progress-modal header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
 
-    input[type="text"] {
-      padding: 10px;
-      width: 80%;
-      margin-top: 10px;
-      border: none;
-      border-radius: 4px;
-      background-color: #e0e0e0;
-      color: black;
-    }
+.progress-modal header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
 
-    .continue-btn {
-      margin-top: 10px;
-    }
+.progress-modal .close-btn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
 
-    .submit-button {
-      align-self: center;
-      margin-top: auto; /* Pushes the submit button to the bottom */
-      margin-bottom: 20px; /* Adjust the spacing from the bottom */
-    }
+/* Enhanced Progress Grid */
+#question-progress {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
 
-    .timer {
-      font-size: 1rem;
-      font-weight: bold;
-      background: transparent;
-      color: white;
-      padding: 5px 10px;
-      margin: 0;
-    }
+/* Each question number box: smaller */
+#question-progress span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;   /* Reduced width */
+  height: 40px;  /* Reduced height */
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;  /* Reduced font-size */
+  font-weight: 600;
+  color: #333;
+  background-color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
 
-    /* Disable text selection */
-    body,
-    .question-card,
-    .option-container,
-    .top-container,
-    .progress-container {
-      user-select: none; /* Prevents text selection */
-      -webkit-user-select: none; /* For Safari */
-      -moz-user-select: none; /* For Firefox */
-      -ms-user-select: none; /* For Internet Explorer/Edge */
-    }
+/* Hover effect for progress boxes */
+#question-progress span:hover {
+  transform: scale(1.1);
+  background-color: #eef;
+}
 
-    /* Disable right-click */
-    body {
-      -webkit-touch-callout: none; /* Prevents "copy" on iOS */
-      -webkit-user-select: none; /* Prevents text selection in WebKit browsers */
-    }
+/* State classes for question numbers */
+.question-number.active {
+  background-color: #7363fc;
+  border: 2px solid #000;
+  color: #fff;
+}
 
-    /* Disable drag of images and elements */
-    img {
-      pointer-events: none; /* Disable image drag */
-    }
+.question-number.answered {
+  background-color: #3f8e58;
+  border: 2px solid #3f8e58;
+  color: #fff;
+}
 
-    /* Optional: Show a message on right-click attempt */
-    body::after {
-      content: "Right-click is disabled on this page.";
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      color: red;
-      display: none;
-      font-size: 1.2rem;
-    }
+.question-number.reviewed {
+  background-color: #b907ff;
+  border: 2px solid #b907ff;
+  color: #fff;
+}
 
-    body.no-right-click::after {
-      display: block;
-    }
+.question-number.unanswered {
+  background-color: #f8061a;
+  border: 2px solid #f8061a;
+  color: #fff;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .top-container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 5px;
+    position: relative;
+  }
+  .container {
+    width: 95%;
+    padding: 5px;
+    height: auto;
+  }
+  .question-card {
+    padding: 10px;
+  }
+  .question-text {
+    font-size: 1rem;
+  }
+  .hamburger-btn {
+    font-size: 20px;
+    top: 5px;
+    right: 5px;
+  }
+  .button-container {
+    flex-direction: row;
+  }
+  .button-container button {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+  #question-progress {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+  #question-progress span {
+    height: 35px;
+    width: 35px;
+    font-size: 0.8rem;
+  }
+  .progress-modal {
+    width: 90%;
+    right: 5%;
+    padding: 10px;
+  }
+}
+
+/* MODAL POPUP FOR USERNAME */
+
+/* Modal Overlay with Fade-In Animation */
+.modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Modal Box */
+.modal {
+  background: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  margin: 0 20px;
+}
+
+.modal h2 {
+  font-size: 1.6rem;
+  margin-bottom: 30px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Username Input Field */
+.modal input[type="text"] {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto 20px auto;
+  padding: 12px;
+  font-size: 1rem;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  background-color: #ddd; /* Light gray background */
+  text-align: center;
+  outline: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  box-shadow: none;
+}
+
+.modal input[type="text"]:focus {
+  background-color: #ccc;
+  border-color: #bbb;
+}
+
+.modal input[type="text"]::placeholder {
+  color: #777;
+  font-style: italic;
+}
+
+/* Continue Button */
+.continue-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #7a5af8; /* Purple tone */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.continue-btn:hover {
+  background-color: #6b4ee3;
+  transform: translateY(-2px);
+}
+
+.continue-btn:active {
+  transform: translateY(0);
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+}
+
   </style>
 </head>
-
 <body>
-
   <div class="top-container">
-    <div>NEET MOCK TEST</div>
+    <div class="left-info">
+      <div><strong>Candidate Name</strong>: <span class="candidate-name" id="logged-username">Username</span></div>
+      <div><strong>Test Name</strong>: <span class="test-name">Mock Test 02</span></div>
+      <button class="submit-btn" onclick="submitTest()">Submit Test</button>
+    </div>
+    
     <div class="timer" id="timer">
-      Time Left: <span id="time-left">03:00:00</span>
+      <img src="https://i.postimg.cc/Fs22Dm1C/timer-1.png" alt="Timer Icon">
+      <span id="time-left">03:00:00</span>
     </div>
   </div>
 
@@ -323,33 +496,33 @@ button {
     </div>
   </div>
 
+  <!-- Main container with the question card -->
   <div class="container blur" id="content">
-    <div class="progress-container">
-    
-      <div id="question-progress"></div>
-      <button onclick="submitTest()">Submit Test</button>
+    <div class="question-card" id="question-card">
+      <!-- Hamburger button -->
+      <button class="hamburger-btn" onclick="toggleProgress()">☰</button>
+      <!-- Question content injected here -->
     </div>
-    <div class="question-card" id="question-card"></div>
+  </div>
+
+  <!-- Hidden progress modal -->
+  <div class="progress-modal" id="progress-modal">
+    <header>
+      <h3>Questions</h3>
+      <button class="close-btn" onclick="toggleProgress()">×</button>
+    </header>
+    <div id="question-progress"></div>
+    <button onclick="submitTest()">Submit Test</button>
   </div>
 
   <script type="module">
-    // Your existing JavaScript code remains unchanged
-  </script>
-</body>
-
-</html>
-
-  
-  
-
-  <script type="module">
     const firebaseConfig = {
-      apiKey: "AIzaSyD2G48B1EdenSguUT3kYKCKobWcQxM_GV0",
-      authDomain: "test-89239.firebaseapp.com",
-      projectId: "test-89239",
-      storageBucket: "test-89239.firebasestorage.app",
-      messagingSenderId: "945793010997",
-      appId: "1:945793010997:web:60cc3fda32f7591586507c"
+      apiKey: "AIzaSyD_N1uDeih2P21N9MqqRpBpwL3t0lGCQ1o",
+      authDomain: "neet-9a165.firebaseapp.com",
+      projectId: "neet-9a165",
+      storageBucket: "neet-9a165.firebasestorage.app",
+      messagingSenderId: "728629514572",
+      appId: "1:728629514572:web:4b6e9e7b2ceeb12cb9bfe9"
     };
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
@@ -361,104 +534,90 @@ button {
     let username = "";
     let currentQuestionIndex = 0;
     let questions = [];
-    let userResponses = [];
 
     async function fetchQuestions() {
-  const questionsSnapshot = await getDocs(collection(db, "questions"));
-  questions = [];
-
-  questionsSnapshot.forEach((doc) => {
-    const data = doc.data();
-    questions.push({ ...data, id: doc.id });
-  });
-
-  console.log("Fetched Questions Before Sorting:", questions);
-
-  // Sort questions based on timestamp (newest first)
-  questions.sort((a, b) => (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0));
-
-  console.log("Sorted Questions:", questions); // Debugging log
-
-  displayQuestion();
-  displayProgress();
-}
-
+      const questionsSnapshot = await getDocs(collection(db, "questions"));
+      questions = [];
+      questionsSnapshot.forEach((doc) => {
+        const data = doc.data();
+        questions.push({ ...data, id: doc.id });
+      });
+      // Sort questions based on timestamp (newest first)
+      questions.sort((a, b) => (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0));
+      displayQuestion();
+      displayProgress();
+    }
 
     function displayQuestion() {
   const questionData = questions[currentQuestionIndex];
   const questionCard = document.getElementById("question-card");
-
   const savedAnswer = localStorage.getItem(`response_${currentQuestionIndex}`);
-  const isMarkedForReview = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
+  const reviewChecked = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
 
-  // Function to check if a string is a URL
   function isURL(str) {
     return /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$/i.test(str);
   }
 
-  questionCard.innerHTML = `  
+  questionCard.innerHTML = `
+    <button class="hamburger-btn" onclick="toggleProgress()">☰</button>
     <p class="question-number">Question ${currentQuestionIndex + 1}</p>
     <div class="question-text">
-      ${isURL(questionData.question) ? `<img src="${questionData.question}" alt="Question Image" style="max-width:90%; height:auto;">` : questionData.question}
+      ${isURL(questionData.question)
+        ? `<img src="${questionData.question}" alt="Question Image" style="max-width:90%; height:auto;">`
+        : questionData.question}
+    </div>
+    <!-- Review checkbox placed between question and options -->
+    <div class="review-container">
+      <input type="checkbox" id="review-checkbox" ${reviewChecked ? "checked" : ""}>
+      <label for="review-checkbox">Mark as Review</label>
     </div>
     <div class="option-container">
-      ${questionData.options
-        .map(
-          (option, index) => ` 
+      ${questionData.options.map((option, index) => `
         <div class="image-option">
-          <input type="radio" name="q${currentQuestionIndex}" id="option${index}" value="${String.fromCharCode(65 + index)}">
+          <input 
+            type="radio" 
+            name="q${currentQuestionIndex}" 
+            id="option${index}" 
+            value="${String.fromCharCode(65 + index)}"
+            onclick="toggleRadio(event, 'q${currentQuestionIndex}', ${currentQuestionIndex})"
+          >
           <label for="option${index}">
             <div class="option-content">
-              ${isURL(option) ? `<img src="${option}" alt="Option Image" style="max-width:100px; height:auto;">` : `${String.fromCharCode(65 + index)}. ${option}`}
+              <!-- REMOVED the prefix: ${String.fromCharCode(65 + index)}. -->
+              ${isURL(option)
+                ? `<img src="${option}" alt="Option Image" style="max-width:100px; height:auto;">`
+                : `${option}`} 
             </div>
           </label>
         </div>
-      `
-        )
-        .join("")}
+      `).join('')}
     </div>
     <div class="button-container">
       <button class="previous-btn" onclick="goToPrevious()">Previous</button>
-      <button class="clear-btn" onclick="clearSelection()">Clear Section</button>
-      <button class="mark-review-btn" onclick="markAsReview()">${isMarkedForReview ? "Unmark Review" : "Mark Review"}</button>
       <button class="save-next-btn" onclick="saveAndNext()">Save & Next</button>
     </div>
   `;
 
-  // Restore saved answer
+  // Restore previously selected option
   if (savedAnswer) {
     const radioBtn = document.querySelector(`input[name="q${currentQuestionIndex}"][value="${savedAnswer}"]`);
-    if (radioBtn) radioBtn.checked = true;
+    if (radioBtn) {
+      radioBtn.checked = true;
+      radioBtn.dataset.waschecked = "true";
+    }
   }
 }
 
-    window.markAsReview = function () {
-      const isMarkedForReview = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
 
-      if (isMarkedForReview) {
-        // Unmark the question for review
-        localStorage.removeItem(`review_${currentQuestionIndex}`);
-      } else {
-        // Mark the question for review
-        localStorage.setItem(`review_${currentQuestionIndex}`, "true");
-      }
-
-      // Update the question display and progress bar
-      displayQuestion();
-      updateProgress();
-    };
-    // Previous button function (updated)
     window.goToPrevious = function () {
       if (currentQuestionIndex > 0) {
-        currentQuestionIndex--; // Decrement the question index
-        displayQuestion(); // Display the previous question
-        updateProgress(); // Update the progress bar
+        currentQuestionIndex--;
+        displayQuestion();
+        updateProgress();
       } else {
         alert("This is the first question!");
       }
     };
-
-
 
     function displayProgress() {
       const progressContainer = document.getElementById("question-progress");
@@ -477,87 +636,113 @@ button {
       displayQuestion();
       updateProgress();
     }
-    function updateProgress() {
-  const progressContainer = document.getElementById("question-progress");
-  const questionNumbers = progressContainer.querySelectorAll(".question-number");
 
-  questionNumbers.forEach((num, index) => {
-    num.classList.remove("active", "answered", "reviewed", "unanswered", "completed");
-
-    // If the question has not been visited, leave it unchanged
-    if (!localStorage.getItem(`visited_${index}`) && index !== currentQuestionIndex) {
-      return;
-    }
-
-    // Mark question as visited
-    localStorage.setItem(`visited_${index}`, "true");
-
-    // Retrieve saved answer and review status
-    const selectedAnswer = localStorage.getItem(`response_${index}`);
-    const isMarkedForReview = localStorage.getItem(`review_${index}`) === "true";
-
-    // Determine color based on state
-    if (selectedAnswer) {
-      if (isMarkedForReview) {
-        localStorage.setItem(`color_${index}`, "gray"); // Answered & Marked for review
-      } else {
-        localStorage.setItem(`color_${index}`, "green"); // Answered
-      }
-    } else if (isMarkedForReview) {
-      localStorage.setItem(`color_${index}`, "purple"); // Only marked for review
-    } else {
-      localStorage.setItem(`color_${index}`, "red"); // Viewed but unanswered
-    }
-
-    // Apply stored color
-    num.style.backgroundColor = localStorage.getItem(`color_${index}`);
-    num.style.color = 'white';
-
-    // Highlight the current question
-    if (index === currentQuestionIndex) {
-      num.classList.add("active");
-    }
-  });
-}
-
-window.saveAndNext = function () {
-  const selectedOption = document.querySelector(`input[name="q${currentQuestionIndex}"]:checked`);
-  const selectedAnswer = selectedOption ? selectedOption.value : null;
-
-  // Save answer if selected
-  if (selectedAnswer) {
-    localStorage.setItem(`response_${currentQuestionIndex}`, selectedAnswer);
-  } else {
-    localStorage.removeItem(`response_${currentQuestionIndex}`); // Ensure unanswered questions are cleared
+    window.toggleRadio = function(event, groupName, questionIndex) {
+  const clickedRadio = event.target; 
+  // If the user clicked the label, event.target might be the label, 
+  // so ensure it's actually the <input>:
+  if (clickedRadio.tagName.toLowerCase() !== "input") {
+    return;
   }
 
-  // Check if marked for review
-  const isMarkedForReview = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
+  // If this radio is already checked, uncheck it
+  if (clickedRadio.checked && clickedRadio.dataset.waschecked === "true") {
+    // Uncheck it
+    clickedRadio.checked = false;
+    clickedRadio.dataset.waschecked = "false";
+    
+    // Remove from localStorage
+    localStorage.removeItem(`response_${questionIndex}`);
+  } 
+  else {
+    // Mark all radios in the same group as waschecked = false
+    const radios = document.getElementsByName(groupName);
+    radios.forEach(radio => {
+      radio.dataset.waschecked = "false";
+    });
+    // Mark the clicked one as waschecked = true
+    clickedRadio.dataset.waschecked = "true";
 
-  // Update color logic
-  if (selectedAnswer) {
-    if (isMarkedForReview) {
-      localStorage.setItem(`color_${currentQuestionIndex}`, "gray");
-    } else {
-      localStorage.setItem(`color_${currentQuestionIndex}`, "green");
-    }
-  } else {
-    localStorage.setItem(`color_${currentQuestionIndex}`, "red"); // If unanswered, mark as red
+    // Save the selected answer
+    const selectedAnswer = clickedRadio.value;
+    localStorage.setItem(`response_${questionIndex}`, selectedAnswer);
   }
-
-  // Move to next question
-  currentQuestionIndex++;
-  if (currentQuestionIndex >= questions.length) {
-    currentQuestionIndex = 0;
-  }
-
-  displayQuestion();
-  updateProgress();
 };
 
+    function updateProgress() {
+      const progressContainer = document.getElementById("question-progress");
+      const questionNumbers = progressContainer.querySelectorAll(".question-number");
 
-    
-window.submitTest = function (autoSubmit = false) {
+      questionNumbers.forEach((num, index) => {
+        num.classList.remove("active", "answered", "reviewed", "unanswered", "completed");
+
+        if (!localStorage.getItem(`visited_${index}`) && index !== currentQuestionIndex) {
+          return;
+        }
+
+        localStorage.setItem(`visited_${index}`, "true");
+
+        const selectedAnswer = localStorage.getItem(`response_${index}`);
+        const isMarkedForReview = localStorage.getItem(`review_${index}`) === "true";
+
+        if (selectedAnswer) {
+          if (isMarkedForReview) {
+            localStorage.setItem(`color_${index}`, "gray");
+          } else {
+            localStorage.setItem(`color_${index}`, "#3f8e58");
+          }
+        } else if (isMarkedForReview) {
+          localStorage.setItem(`color_${index}`, "#b907ff");
+        } else {
+          localStorage.setItem(`color_${index}`, "#f8061a");
+        }
+
+        num.style.backgroundColor = localStorage.getItem(`color_${index}`);
+        num.style.color = 'white';
+
+        if (index === currentQuestionIndex) {
+          num.classList.add("active");
+        }
+      });
+    }
+
+    window.saveAndNext = function () {
+      // Save selected answer
+      const selectedOption = document.querySelector(`input[name="q${currentQuestionIndex}"]:checked`);
+      const selectedAnswer = selectedOption ? selectedOption.value : null;
+      if (selectedAnswer) {
+        localStorage.setItem(`response_${currentQuestionIndex}`, selectedAnswer);
+      } else {
+        localStorage.removeItem(`response_${currentQuestionIndex}`);
+      }
+      // Save review flag from checkbox
+      const reviewCheckbox = document.getElementById("review-checkbox");
+      if (reviewCheckbox && reviewCheckbox.checked) {
+        localStorage.setItem(`review_${currentQuestionIndex}`, "true");
+      } else {
+        localStorage.removeItem(`review_${currentQuestionIndex}`);
+      }
+      // Update progress color logic
+      const isMarkedForReview = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
+      if (selectedAnswer) {
+        if (isMarkedForReview) {
+          localStorage.setItem(`color_${currentQuestionIndex}`, "gray");
+        } else {
+          localStorage.setItem(`color_${currentQuestionIndex}`, "#3f8e58");
+        }
+      } else {
+        localStorage.setItem(`color_${currentQuestionIndex}`, "#f8061a");
+      }
+      // Move to next question
+      currentQuestionIndex++;
+      if (currentQuestionIndex >= questions.length) {
+        currentQuestionIndex = 0;
+      }
+      displayQuestion();
+      updateProgress();
+    };
+
+    window.submitTest = function (autoSubmit = false) {
     if (!autoSubmit) {
         const confirmation = confirm("Are you sure you want to submit the test?");
         if (!confirmation) return;
@@ -594,42 +779,38 @@ window.submitTest = function (autoSubmit = false) {
             window.location.href = "cheat.html"; // Redirect to cheat page if auto-submitted
         } else {
             alert("Test submitted successfully!");
-            window.location.href = `results.html?username=${username}`; // Redirect to result page for manual submission
+            window.location.href = `results2.html?username=${username}`; // Redirect to result page for manual submission
         }
     })
     .catch((error) => {
         alert("Error submitting test: " + error.message);
     });
 };
-window.clearSelection = function () {
-  const radios = document.querySelectorAll(`input[name="q${currentQuestionIndex}"]`);
-  radios.forEach(radio => (radio.checked = false));
-
-  // Remove answer from storage
-  localStorage.removeItem(`response_${currentQuestionIndex}`);
-
-  // If visited, mark it red
-  if (localStorage.getItem(`visited_${currentQuestionIndex}`)) {
-    localStorage.setItem(`color_${currentQuestionIndex}`, "red");
-  }
-
-  updateProgress();
-};
-
+    // window.clearSelection = function () {
+    //   const radios = document.querySelectorAll(`input[name="q${currentQuestionIndex}"]`);
+    //   radios.forEach(radio => (radio.checked = false));
+    //   localStorage.removeItem(`response_${currentQuestionIndex}`);
+    //   if (localStorage.getItem(`visited_${currentQuestionIndex}`)) {
+    //     localStorage.setItem(`color_${currentQuestionIndex}`, "red");
+    //   }
+    //   updateProgress();
+    // };
 
     window.validateUsername = function () {
       const usernameInput = document.getElementById("username").value;
       const modalOverlay = document.getElementById("modal-overlay");
       const content = document.getElementById("content");
+      document.querySelector('.top-container button.submit-btn').style.display = 'block';
 
       if (usernameInput) {
+        document.getElementById("logged-username").textContent = usernameInput;
         username = usernameInput;
         setDoc(doc(db, "responses", username), {
           timestamp: serverTimestamp(),
-          responses: []
+          responses: [],
         });
         modalOverlay.style.display = "none";
-        content.classList.remove("blur");
+        content.classList.remove("dim-background");
         alert("Welcome, " + username);
         fetchQuestions();
       } else {
@@ -637,102 +818,80 @@ window.clearSelection = function () {
       }
     };
 
+    // Toggle progress modal
+    window.toggleProgress = function () {
+      const modal = document.getElementById("progress-modal");
+      modal.style.display = modal.style.display === "block" ? "none" : "block";
+    };
 
-
-  
     let timerInterval;
-let timeLeft = 3 * 60 * 60; // 3 hours in seconds
-
-function updateTimerDisplay() {
-  const hours = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
-  const minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
-  const seconds = String(timeLeft % 60).padStart(2, '0');
-  document.getElementById('time-left').textContent = `${hours}:${minutes}:${seconds}`;
-}
-
-function startTimer() {
-  // Start the timer interval, this will run every second regardless of tab visibility
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    updateTimerDisplay();
-
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      alert("Time's up!");
-      submitTest(); // Call the function to submit the test after time is up
+    let timeLeft = 3 * 60 * 60;
+    function updateTimerDisplay() {
+      const hours = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
+      const minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
+      const seconds = String(timeLeft % 60).padStart(2, '0');
+      document.getElementById('time-left').textContent = `${hours}:${minutes}:${seconds}`;
     }
-  }, 1000);
-}
-
-// Start the timer as soon as the page loads
-window.onload = startTimer;
-
-// Optionally, display a message when the tab is switched
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    // Show a warning message (you can customize this)
-    console.log("You switched tabs. The timer will continue running in the background.");
-  } else {
-    // Optionally, show that the tab is back in focus (you can customize this)
-    console.log("You're back on the page. The timer continues.");
-  }
-});
-
-
-
-    // Disable right-click functionality
-document.addEventListener('contextmenu', function (event) {
-  event.preventDefault(); // Disable the right-click menu
-  document.body.classList.add('no-right-click');
-});
-
-// Optional: You can also disable text selection using JavaScript
-document.addEventListener('selectstart', function (event) {
-  event.preventDefault(); // Prevents text selection
-});
-
-
-let tabSwitchCount = 0;
-const maxTabSwitches = 5;
-
-document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-        tabSwitchCount++;
-
-        if (tabSwitchCount >= maxTabSwitches) {
-            alert("You have switched tabs too many times. Your test is being submitted.");
-            submitTest(true); // Auto-submit due to tab switching
-        } else {
-            showWarningPopup();
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert("Time's up!");
+          submitTest();
         }
+      }, 1000);
     }
-});
 
-
-
-function showWarningPopup() {
-    const popup = document.createElement("div");
-    popup.innerHTML = `
-        <div style="
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            border-radius: 8px; z-index: 1000; text-align: center;
-        ">
-            <h2>Switching tabs will submit the test</h2>
-            <p>Changing tab while attempting the test will submit the test next time, please make sure that you don't switch tabs.</p>
-            <button onclick="this.parentElement.remove()">OK</button>
-        </div>
-    `;
-    document.body.appendChild(popup);
-}
-
-if (sessionStorage.getItem("cheatingDetected")) {
-        window.location.href = "cheat.html"; // Immediately redirect if flagged
-        window.location.href = "results.html"; // Immediately redirect if flagged
-
+    
+    window.onload = startTimer;
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        console.log("You switched tabs. The timer will continue running in the background.");
+      } else {
+        console.log("You're back on the page. The timer continues.");
       }
-
+    });
+    document.addEventListener('contextmenu', function (event) {
+      event.preventDefault();
+      document.body.classList.add('no-right-click');
+    });
+    document.addEventListener('selectstart', function (event) {
+      event.preventDefault();
+    });
+    let tabSwitchCount = 0;
+    const maxTabSwitches = 5;
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        tabSwitchCount++;
+        if (tabSwitchCount >= maxTabSwitches) {
+          alert("You have switched tabs too many times. Your test is being submitted.");
+          submitTest(true);
+        } else {
+          showWarningPopup();
+        }
+      }
+    });
+    function showWarningPopup() {
+      const popup = document.createElement("div");
+      popup.innerHTML = `
+        <div style="
+          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: white; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+          border-radius: 8px; z-index: 1000; text-align: center;
+        ">
+          <h2>Switching tabs will submit the test</h2>
+          <p>Changing tab while attempting the test will submit the test next time, please make sure that you don't switch tabs.</p>
+          <button onclick="this.parentElement.remove()">OK</button>
+        </div>
+      `;
+      document.body.appendChild(popup);
+    }
+    if (sessionStorage.getItem("cheatingDetected")) {
+      window.location.href = "cheat.html";
+      window.location.href = "results.html";
+    }
   </script>
 </body>
-
 </html>
