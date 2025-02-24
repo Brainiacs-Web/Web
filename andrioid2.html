@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Prevent zooming and scales the layout properly -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>NEET Mock Test</title>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+
+  <style>
+ /* Base styles */
+body {
+  font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.top-container {
+  width: 100%;
+  background-color: #7363fc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+.left-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.candidate-name,
+.test-name {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #fefcfb;
+}
+
+.timer {
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.timer img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+/* Main container */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 500px;
+  margin-top: 5px;
+  height: calc(100vh - 120px);
+  position: relative;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.question-card {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.question-text {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.question-number {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  border: 1px solid black;
+  border-radius: 50px;
+  background-color: #cdd1d8;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Option styling */
+.option-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.image-option {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 12px 15px;
+  width: 100%;
+  max-width: 100%;
+  cursor: pointer;
+  background: #ffffff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.image-option.selected {
+  background: #6200ea;
+  color: #fff;
+}
+
+.image-option:hover,
+.image-option.selected {
+  border: 2px solid black;
+}
+
+.image-option label {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  cursor: pointer;
+  box-sizing: border-box;
+  background: none;
+}
+
+.option-content {
+  width: 100%;
+  height: auto;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+}
+
+/* Review checkbox container placed between question and options */
+.review-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.review-container input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.review-container label {
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* Button container: arranged horizontally */
+.button-container {
+  display: flex;
+  flex-direction: row; /* Force horizontal layout */
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.button-container button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #7363fc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  flex: 1; /* Equal width for all buttons */
+  text-align: center;
+}
+
+/* Hamburger button styling */
+.hamburger-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  color: black;
+}
+
+/* Progress modal styling */
+.progress-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100vh;
+  background-color: #ffffff;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  padding: 15px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.progress-modal header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-modal header h3 {
+  margin: 0;
+}
+
+.progress-modal .close-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Enhanced progress container styling */
+#question-progress {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+  padding: 10px;
+  background: #f8f8f8;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+}
+
+#question-progress span {
+  width: 100%;
+  height: 30px;                 /* Preserves original size */
+  background-color: #ffffff;    /* Default white background */
+  border: 2px solid #ddd;       /* Light border */
+  border-radius: 50%;           /* Circular shape */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;              /* Original font size */
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+#question-progress span:hover {
+  transform: scale(1.1);        /* Slight zoom effect on hover */
+  background-color: #eef;       /* Light hover background color */
+}
+
+/* State classes for progress numbers */
+.question-number.active {
+  background-color: #7363fc;
+  border: 2px solid #000;
+  color: #fff;
+}
+
+.question-number.answered {
+  background-color: #3f8e58;
+  border: 2px solid #3f8e58;
+  color: #fff;
+}
+
+.question-number.reviewed {
+  background-color: #b907ff;
+  border: 2px solid #b907ff;
+  color: #fff;
+}
+
+.question-number.unanswered {
+  background-color: #f8061a;
+  border: 2px solid #f8061a;
+  color: #fff;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+  .top-container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 5px;
+  }
+  .container {
+    width: 95%;
+    padding: 5px;
+    height: auto;
+  }
+  .question-card {
+    padding: 10px;
+  }
+  .question-text {
+    font-size: 1rem;
+  }
+  .hamburger-btn {
+    font-size: 20px;
+    top: 5px;
+    right: 5px;
+  }
+  /* Ensure buttons remain horizontal on small screens */
+  .button-container {
+    flex-direction: row;
+  }
+  .button-container button {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+  #question-progress {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+  }
+  #question-progress span {
+    height: 25px;
+    font-size: 9px;
+  }
+  .progress-modal {
+    width: 90%;
+    right: 5%;
+    padding: 10px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="top-container">
+    <div class="left-info">
+      <div><strong>Candidate Name</strong>: <span class="candidate-name" id="logged-username">Username</span></div>
+      <div><strong>Test Name</strong>: <span class="test-name">Mock Test 01</span></div>
+    </div>
+    <div class="timer" id="timer">
+      <img src="https://i.postimg.cc/Fs22Dm1C/timer-1.png" alt="Timer Icon">
+      <span id="time-left">03:00:00</span>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <h2>Enter Username to Begin</h2>
+      <input type="text" id="username" placeholder="Enter your username">
+      <button class="continue-btn" onclick="validateUsername()">Continue</button>
+    </div>
+  </div>
+
+  <!-- Main container with the question card -->
+  <div class="container blur" id="content">
+    <div class="question-card" id="question-card">
+      <!-- Hamburger button -->
+      <button class="hamburger-btn" onclick="toggleProgress()">☰</button>
+      <!-- Question content injected here -->
+    </div>
+  </div>
+
+  <!-- Hidden progress modal -->
+  <div class="progress-modal" id="progress-modal">
+    <header>
+      <h3>Questions</h3>
+      <button class="close-btn" onclick="toggleProgress()">×</button>
+    </header>
+    <div id="question-progress"></div>
+    <button onclick="submitTest()">Submit Test</button>
+  </div>
+
+  <script type="module">
+    const firebaseConfig = {
+      apiKey: "AIzaSyD_N1uDeih2P21N9MqqRpBpwL3t0lGCQ1o",
+      authDomain: "neet-9a165.firebaseapp.com",
+      projectId: "neet-9a165",
+      storageBucket: "neet-9a165.firebasestorage.app",
+      messagingSenderId: "728629514572",
+      appId: "1:728629514572:web:4b6e9e7b2ceeb12cb9bfe9"
+    };
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let username = "";
+    let currentQuestionIndex = 0;
+    let questions = [];
+
+    async function fetchQuestions() {
+      const questionsSnapshot = await getDocs(collection(db, "questions"));
+      questions = [];
+      questionsSnapshot.forEach((doc) => {
+        const data = doc.data();
+        questions.push({ ...data, id: doc.id });
+      });
+      // Sort questions based on timestamp (newest first)
+      questions.sort((a, b) => (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0));
+      displayQuestion();
+      displayProgress();
+    }
+
+    function displayQuestion() {
+      const questionData = questions[currentQuestionIndex];
+      const questionCard = document.getElementById("question-card");
+      const savedAnswer = localStorage.getItem(`response_${currentQuestionIndex}`);
+      const reviewChecked = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
+
+      function isURL(str) {
+        return /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$/i.test(str);
+      }
+
+      questionCard.innerHTML = `
+        <button class="hamburger-btn" onclick="toggleProgress()">☰</button>
+        <p class="question-number">Question ${currentQuestionIndex + 1}</p>
+        <div class="question-text">
+          ${isURL(questionData.question)
+            ? `<img src="${questionData.question}" alt="Question Image" style="max-width:90%; height:auto;">`
+            : questionData.question}
+        </div>
+        <!-- Review checkbox placed between question and options -->
+        <div class="review-container">
+          <input type="checkbox" id="review-checkbox" ${reviewChecked ? "checked" : ""}>
+          <label for="review-checkbox">Mark as Review</label>
+        </div>
+        <div class="option-container">
+          ${questionData.options.map((option, index) => `
+            <div class="image-option">
+              <input type="radio" name="q${currentQuestionIndex}" id="option${index}" value="${String.fromCharCode(65 + index)}">
+              <label for="option${index}">
+                <div class="option-content">
+                  ${isURL(option)
+                    ? `<img src="${option}" alt="Option Image" style="max-width:100px; height:auto;">`
+                    : `${String.fromCharCode(65 + index)}. ${option}`}
+                </div>
+              </label>
+            </div>
+          `).join('')}
+        </div>
+        <!-- Three buttons arranged horizontally -->
+        <div class="button-container">
+          <button class="previous-btn" onclick="goToPrevious()">Previous</button>
+          <button class="clear-btn" onclick="clearSelection()">Clear Selection</button>
+          <button class="save-next-btn" onclick="saveAndNext()">Save & Next</button>
+        </div>
+      `;
+
+      if (savedAnswer) {
+        const radioBtn = document.querySelector(`input[name="q${currentQuestionIndex}"][value="${savedAnswer}"]`);
+        if (radioBtn) radioBtn.checked = true;
+      }
+    }
+
+    window.goToPrevious = function () {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        displayQuestion();
+        updateProgress();
+      } else {
+        alert("This is the first question!");
+      }
+    };
+
+    function displayProgress() {
+      const progressContainer = document.getElementById("question-progress");
+      progressContainer.innerHTML = '';
+      questions.forEach((_, index) => {
+        const questionNumber = document.createElement("span");
+        questionNumber.textContent = index + 1;
+        questionNumber.classList.add("question-number");
+        questionNumber.onclick = () => goToQuestion(index);
+        progressContainer.appendChild(questionNumber);
+      });
+    }
+
+    function goToQuestion(index) {
+      currentQuestionIndex = index;
+      displayQuestion();
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const progressContainer = document.getElementById("question-progress");
+      const questionNumbers = progressContainer.querySelectorAll(".question-number");
+
+      questionNumbers.forEach((num, index) => {
+        num.classList.remove("active", "answered", "reviewed", "unanswered", "completed");
+
+        if (!localStorage.getItem(`visited_${index}`) && index !== currentQuestionIndex) {
+          return;
+        }
+
+        localStorage.setItem(`visited_${index}`, "true");
+
+        const selectedAnswer = localStorage.getItem(`response_${index}`);
+        const isMarkedForReview = localStorage.getItem(`review_${index}`) === "true";
+
+        if (selectedAnswer) {
+          if (isMarkedForReview) {
+            localStorage.setItem(`color_${index}`, "gray");
+          } else {
+            localStorage.setItem(`color_${index}`, "#3f8e58");
+          }
+        } else if (isMarkedForReview) {
+          localStorage.setItem(`color_${index}`, "#b907ff");
+        } else {
+          localStorage.setItem(`color_${index}`, "#f8061a");
+        }
+
+        num.style.backgroundColor = localStorage.getItem(`color_${index}`);
+        num.style.color = 'white';
+
+        if (index === currentQuestionIndex) {
+          num.classList.add("active");
+        }
+      });
+    }
+
+    window.saveAndNext = function () {
+      // Save selected answer
+      const selectedOption = document.querySelector(`input[name="q${currentQuestionIndex}"]:checked`);
+      const selectedAnswer = selectedOption ? selectedOption.value : null;
+      if (selectedAnswer) {
+        localStorage.setItem(`response_${currentQuestionIndex}`, selectedAnswer);
+      } else {
+        localStorage.removeItem(`response_${currentQuestionIndex}`);
+      }
+      // Save review flag from checkbox
+      const reviewCheckbox = document.getElementById("review-checkbox");
+      if (reviewCheckbox && reviewCheckbox.checked) {
+        localStorage.setItem(`review_${currentQuestionIndex}`, "true");
+      } else {
+        localStorage.removeItem(`review_${currentQuestionIndex}`);
+      }
+      // Update progress color logic
+      const isMarkedForReview = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
+      if (selectedAnswer) {
+        if (isMarkedForReview) {
+          localStorage.setItem(`color_${currentQuestionIndex}`, "gray");
+        } else {
+          localStorage.setItem(`color_${currentQuestionIndex}`, "#3f8e58");
+        }
+      } else {
+        localStorage.setItem(`color_${currentQuestionIndex}`, "#f8061a");
+      }
+      // Move to next question
+      currentQuestionIndex++;
+      if (currentQuestionIndex >= questions.length) {
+        currentQuestionIndex = 0;
+      }
+      displayQuestion();
+      updateProgress();
+    };
+
+    window.submitTest = function (autoSubmit = false) {
+    if (!autoSubmit) {
+        const confirmation = confirm("Are you sure you want to submit the test?");
+        if (!confirmation) return;
+    }
+
+    const userDocRef = doc(db, "responses", username);
+    const responseData = {};
+
+    for (let i = 0; i < questions.length; i++) {
+        // Fetch saved response from localStorage
+        const storedAnswer = localStorage.getItem(`response_${i}`) || null;
+
+        responseData[`responses.${i}`] = {
+            question: questions[i].question,
+            selectedAnswer: storedAnswer // Use stored answer instead of `userResponses[i]`
+        };
+    }
+
+    // Save user responses to Firestore
+    setDoc(
+        userDocRef,
+        {
+            ...responseData,
+            timestamp: serverTimestamp(),
+        },
+        { merge: true }
+    )
+    .then(() => {
+        // Clear local storage after successful submission
+        localStorage.clear();
+
+        if (autoSubmit) {
+            alert("You have switched tabs too many times. Your test has been submitted.");
+            window.location.href = "cheat.html"; // Redirect to cheat page if auto-submitted
+        } else {
+            alert("Test submitted successfully!");
+            window.location.href = `results.html?username=${username}`; // Redirect to result page for manual submission
+        }
+    })
+    .catch((error) => {
+        alert("Error submitting test: " + error.message);
+    });
+};
+    window.clearSelection = function () {
+      const radios = document.querySelectorAll(`input[name="q${currentQuestionIndex}"]`);
+      radios.forEach(radio => (radio.checked = false));
+      localStorage.removeItem(`response_${currentQuestionIndex}`);
+      if (localStorage.getItem(`visited_${currentQuestionIndex}`)) {
+        localStorage.setItem(`color_${currentQuestionIndex}`, "red");
+      }
+      updateProgress();
+    };
+
+    window.validateUsername = function () {
+      const usernameInput = document.getElementById("username").value;
+      const modalOverlay = document.getElementById("modal-overlay");
+      const content = document.getElementById("content");
+      if (usernameInput) {
+        document.getElementById("logged-username").textContent = usernameInput;
+        username = usernameInput;
+        setDoc(doc(db, "responses", username), {
+          timestamp: serverTimestamp(),
+          responses: [],
+        });
+        modalOverlay.style.display = "none";
+        content.classList.remove("dim-background");
+        alert("Welcome, " + username);
+        fetchQuestions();
+      } else {
+        alert("Invalid username. Access denied.");
+      }
+    };
+
+    // Toggle progress modal
+    window.toggleProgress = function () {
+      const modal = document.getElementById("progress-modal");
+      modal.style.display = modal.style.display === "block" ? "none" : "block";
+    };
+
+    let timerInterval;
+    let timeLeft = 3 * 60 * 60;
+    function updateTimerDisplay() {
+      const hours = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
+      const minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
+      const seconds = String(timeLeft % 60).padStart(2, '0');
+      document.getElementById('time-left').textContent = `${hours}:${minutes}:${seconds}`;
+    }
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert("Time's up!");
+          submitTest();
+        }
+      }, 1000);
+    }
+    window.onload = startTimer;
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        console.log("You switched tabs. The timer will continue running in the background.");
+      } else {
+        console.log("You're back on the page. The timer continues.");
+      }
+    });
+    document.addEventListener('contextmenu', function (event) {
+      event.preventDefault();
+      document.body.classList.add('no-right-click');
+    });
+    document.addEventListener('selectstart', function (event) {
+      event.preventDefault();
+    });
+    let tabSwitchCount = 0;
+    const maxTabSwitches = 5;
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        tabSwitchCount++;
+        if (tabSwitchCount >= maxTabSwitches) {
+          alert("You have switched tabs too many times. Your test is being submitted.");
+          submitTest(true);
+        } else {
+          showWarningPopup();
+        }
+      }
+    });
+    function showWarningPopup() {
+      const popup = document.createElement("div");
+      popup.innerHTML = `
+        <div style="
+          position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: white; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+          border-radius: 8px; z-index: 1000; text-align: center;
+        ">
+          <h2>Switching tabs will submit the test</h2>
+          <p>Changing tab while attempting the test will submit the test next time, please make sure that you don't switch tabs.</p>
+          <button onclick="this.parentElement.remove()">OK</button>
+        </div>
+      `;
+      document.body.appendChild(popup);
+    }
+    if (sessionStorage.getItem("cheatingDetected")) {
+      window.location.href = "cheat.html";
+      window.location.href = "results.html";
+    }
+  </script>
+</body>
+</html>
