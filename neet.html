@@ -131,9 +131,8 @@
     <p class="test-info">📄 180 Questions | 🏆 720 Marks | ⏳ 180 Mins </p>
     <p class="test-info">📅 Starts on Feb 25, 2025 at 2:00 PM | Ends at 5:00 PM</p>
     <a href="#" class="syllabus-link">📖 View Syllabus</a>
-    <div class="button-container">
-      <button id="test2Start" class="start-button" onclick="window.location.href='neetT2.html'" disabled>➜ Start</button>
-      <div id="countdown">Unlocks in: --:--:--</div>
+    <button id="test2Start" class="start-button" disabled>➜ Start</button>
+<div id="countdown">Unlocks in: --:--:--</div>
     </div>
   </div>
 
@@ -169,6 +168,36 @@
 
     let countdownTimer = setInterval(updateCountdown, 1000);
     updateCountdown();
+
+    
+// Wait for the DOM to load before attaching the event listener
+document.addEventListener("DOMContentLoaded", function () {
+  const startButton = document.getElementById("test2Start");
+
+  // Function to determine the target URL based on device type
+  function getRedirectURL() {
+    // Check if the user agent contains "Android"
+    if (navigator.userAgent.match(/Android/i)) {
+      return "andrioid2.htnl";  // For Android devices
+    } else {
+      return "neetT2.html";     // For PC/Laptop and other devices
+    }
+  }
+
+  // Attach the click event listener to the button
+  startButton.addEventListener("click", function () {
+    window.location.href = getRedirectURL();
+  });
+
+  // Example: enable the button after a countdown (you can adjust your logic)
+  // This is just a simple demonstration. Replace with your actual countdown code.
+  setTimeout(function() {
+    startButton.disabled = false;
+    document.getElementById("countdown").textContent = "Unlocked!";
+  }, 3000); // Enables the button after 3 seconds
+});
+
+    
   </script>
 
 </body>
