@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -17,7 +17,6 @@
       flex-direction: column;
       align-items: center;
     }
-
     .test-card {
       width: 85%;
       max-width: 650px;
@@ -28,36 +27,30 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       border: 1px solid #333;
     }
-
     .test-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
     }
-
     .test-title {
       font-size: 1rem;
       font-weight: 600;
     }
-
     .test-info {
       font-size: 0.85rem;
       color: #b0b0b0;
       margin: 3px 0;
     }
-
     .syllabus-link {
       color: #00bcd4;
       text-decoration: none;
       font-weight: 500;
       font-size: 0.85rem;
     }
-
     .syllabus-link:hover {
       text-decoration: underline;
     }
-
     .start-button {
       display: inline-block;
       padding: 6px 14px;
@@ -71,17 +64,14 @@
       text-decoration: none;
       transition: 0.3s;
     }
-
     .start-button:hover {
       background-color: #0097a7;
     }
-
     .start-button:disabled {
       background-color: #555;
       color: #888;
       cursor: not-allowed;
     }
-
     .upcoming-badge {
       background-color: #2d2d2d;
       color: #00bcd4;
@@ -90,12 +80,10 @@
       border-radius: 5px;
       font-weight: 600;
     }
-
     .button-container {
       margin-top: 8px;
       text-align: right;
     }
-
     #countdown {
       font-size: 0.85rem;
       color: #ff5252;
@@ -105,7 +93,6 @@
   </style>
 </head>
 <body>
-
   <!-- TEST 1 -->
   <div class="test-card">
     <div class="test-header">
@@ -118,11 +105,10 @@
     <div class="button-container">
       <button class="start-button" onclick="window.location.href='page1.html'">➜ Start</button>
       <button class="start-button" onclick="window.location.href='test1pdf.html'">PDF</button>
-
     </div>
   </div>
 
-  <!-- TEST 2 (Unlocks on Feb 16, 2025, at 2:00 PM) -->
+  <!-- TEST 2 (Unlocks on Feb 25, 2025, at 2:00 PM) -->
   <div class="test-card">
     <div class="test-header">
       <span class="upcoming-badge">Upcoming</span>
@@ -131,9 +117,10 @@
     <p class="test-info">📄 180 Questions | 🏆 720 Marks | ⏳ 180 Mins </p>
     <p class="test-info">📅 Starts on Feb 25, 2025 at 2:00 PM | Ends at 5:00 PM</p>
     <a href="#" class="syllabus-link">📖 View Syllabus</a>
-    <button id="test2Start" class="start-button" disabled>➜ Start</button>
-<div id="countdown">Unlocks in: --:--:--</div>
+    <div class="button-container">
+      <button id="test2Start" class="start-button" disabled>➜ Start</button>
     </div>
+    <div id="countdown">Unlocks in: --:--:--</div>
   </div>
 
   <!-- Planner Button -->
@@ -143,21 +130,19 @@
   <button class="start-button" style="margin-top: 10px;" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSc1goezKBrtvpDVEcMOlLnny4NdyKqQA7304laQQtjVcwf0eA/viewform?usp=header'">📝 Register Now</button>
 
   <script>
-    // Unlock time: Feb 16, 2025, 2:00 PM
+    // Unlock time: Feb 25, 2025, 2:00 PM
     const unlockDate = new Date("February 25, 2025 14:00:00").getTime();
 
     function updateCountdown() {
-      let now = new Date().getTime();
-      let timeLeft = unlockDate - now;
-
-      let hours = Math.floor(timeLeft / (1000 * 60 * 60));
-      let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-      let seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-      let countdownElement = document.getElementById("countdown");
-      let startButton = document.getElementById("test2Start");
+      const now = new Date().getTime();
+      const timeLeft = unlockDate - now;
+      const countdownElement = document.getElementById("countdown");
+      const startButton = document.getElementById("test2Start");
 
       if (timeLeft > 0) {
+        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
         countdownElement.textContent = `Unlocks in: ${hours}h ${minutes}m ${seconds}s`;
       } else {
         clearInterval(countdownTimer);
@@ -166,39 +151,28 @@
       }
     }
 
-    let countdownTimer = setInterval(updateCountdown, 1000);
+    const countdownTimer = setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    
-// Wait for the DOM to load before attaching the event listener
-document.addEventListener("DOMContentLoaded", function () {
-  const startButton = document.getElementById("test2Start");
+    // Device-based redirection for Test 2 Start button.
+    document.addEventListener("DOMContentLoaded", function () {
+      const startButton = document.getElementById("test2Start");
 
-  // Function to determine the target URL based on device type
-  function getRedirectURL() {
-    // Check if the user agent contains "Android"
-    if (navigator.userAgent.match(/Android/i)) {
-      return "andrioid2.htnl";  // For Android devices
-    } else {
-      return "neetT2.html";     // For PC/Laptop and other devices
-    }
-  }
+      // Determine the target URL based on the user's device
+      function getRedirectURL() {
+        // Check if the user agent contains "Android"
+        if (navigator.userAgent.match(/Android/i)) {
+          return "andrioid2.htnl";  // For Android devices
+        } else {
+          return "neetT2.html";     // For PC/Laptop and other devices
+        }
+      }
 
-  // Attach the click event listener to the button
-  startButton.addEventListener("click", function () {
-    window.location.href = getRedirectURL();
-  });
-
-  // Example: enable the button after a countdown (you can adjust your logic)
-  // This is just a simple demonstration. Replace with your actual countdown code.
-  setTimeout(function() {
-    startButton.disabled = false;
-    document.getElementById("countdown").textContent = "Unlocked!";
-  }, 3000); // Enables the button after 3 seconds
-});
-
-    
+      // Attach the click event listener to the button
+      startButton.addEventListener("click", function () {
+        window.location.href = getRedirectURL();
+      });
+    });
   </script>
-
 </body>
 </html>
