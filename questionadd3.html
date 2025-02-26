@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Add Questions</title>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+
+  <script type="module">
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyD_N1uDeih2P21N9MqqRpBpwL3t0lGCQ1o",
+      authDomain: "neet-9a165.firebaseapp.com",
+      projectId: "neet-9a165",
+      storageBucket: "neet-9a165.firebasestorage.app",
+      messagingSenderId: "728629514572",
+      appId: "1:728629514572:web:4b6e9e7b2ceeb12cb9bfe9"
+    };
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, doc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    
+    document.addEventListener("DOMContentLoaded", () => {
+      const questionForm = document.getElementById("question-form");
+
+      if (!questionForm) {
+        console.error("Form not found!");
+        return;
+      }
+
+      questionForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Get selected subject
+        const subjectElement = document.getElementById("subject");
+        if (!subjectElement) {
+          console.error("Subject element not found!");
+          return;
+        }
+        const subject = subjectElement.value.trim();
+        if (!subject) {
+          alert("Please select a subject!");
+          return;
+        }
+
+        // Get form data safely
+        const getValue = (id) => {
+          const element = document.getElementById(id);
+          return element ? element.value.trim() : "";
+        };
+
+        const questionText = getValue("question");
+        const questionImageURL = getValue("questionImageURL");
+
+        const optionA = getValue("optionA");
+        const optionAImageURL = getValue("optionAImageURL");
+
+        const optionB = getValue("optionB");
+        const optionBImageURL = getValue("optionBImageURL");
+
+        const optionC = getValue("optionC");
+        const optionCImageURL = getValue("optionCImageURL");
+
+        const optionD = getValue("optionD");
+        const optionDImageURL = getValue("optionDImageURL");
+
+        const correctAnswer = getValue("correctAnswer");
+        if (!correctAnswer) {
+          alert("Please select a correct answer!");
+          return;
+        }
+
+        try {
+          // Get total questions count
+          const subjectRef = collection(db, "Mock03", "subjects", subject);
+          const snapshot = await getDocs(subjectRef);
+          const nextQuestionNumber = snapshot.size + 1; // Auto-increment question number
+
+          // Store question data
+          await setDoc(doc(db, "Mock03", "subjects", subject, nextQuestionNumber.toString()), {
+            question: questionText || questionImageURL, 
+            questionImage: questionText ? "" : questionImageURL, 
+            options: [
+              optionA || optionAImageURL,
+              optionB || optionBImageURL,
+              optionC || optionCImageURL,
+              optionD || optionDImageURL
+            ],
+            correctAnswer: correctAnswer
+          });
+
+          alert("Question added successfully!");
+          questionForm.reset();
+        } catch (error) {
+          console.error("Error adding question:", error);
+          alert("Error adding question: " + error.message);
+        }
+      });
+    });
+  </script>
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f6f9;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    form {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      max-width: 800px;
+    }
+
+    h1 {
+      color: #6200ea;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+    }
+
+    label {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: block;
+      color: #444;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0 20px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    button {
+      background-color: #6200ea;
+      color: white;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #3700b3;
+    }
+
+    @media screen and (max-width: 600px) {
+      form {
+        padding: 20px;
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <form id="question-form">
+    <h1>Add Questions</h1>
+
+    <div>
+      <label for="subject">Select Subject:</label>
+      <select id="subject" name="subject" required>
+        <option value="">--Select--</option>
+        <option value="physics">Physics</option>
+        <option value="chemistry">Chemistry</option>
+        <option value="biology">Biology</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="question">Question:</label>
+      <input type="text" id="question" name="question" placeholder="Enter question text">
+    </div>
+    <div>
+      <label for="questionImageURL">Question Image URL (if no text):</label>
+      <input type="text" id="questionImageURL" name="questionImageURL" placeholder="Paste image URL">
+    </div>
+
+    <div>
+      <label for="optionA">Option A:</label>
+      <input type="text" id="optionA" name="optionA" placeholder="Enter Option A">
+    </div>
+
+    <div>
+      <label for="optionB">Option B:</label>
+      <input type="text" id="optionB" name="optionB" placeholder="Enter Option B">
+    </div>
+
+    <div>
+      <label for="optionC">Option C:</label>
+      <input type="text" id="optionC" name="optionC" placeholder="Enter Option C">
+    </div>
+
+    <div>
+      <label for="optionD">Option D:</label>
+      <input type="text" id="optionD" name="optionD" placeholder="Enter Option D">
+    </div>
+
+    <div>
+      <label for="correctAnswer">Correct Answer:</label>
+      <select id="correctAnswer" name="correctAnswer" required>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+      </select>
+    </div>
+
+    <button type="submit">Add Question</button>
+  </form>
+</body>
+</html>
