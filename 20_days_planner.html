@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NFAT 20-Day Planner</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .day {
+      border-bottom: 1px solid #ccc;
+      padding: 15px 0;
+    }
+
+    .day h2 {
+      color: #007bff;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .task {
+      display: flex;
+      align-items: center;
+      padding: 5px 0;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+
+    label {
+      font-size: 16px;
+    }
+
+    .reset-btn {
+      display: block;
+      margin: 30px auto 10px;
+      padding: 10px 25px;
+      font-size: 16px;
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .reset-btn:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>NFAT 20-Day Checklist Planner</h1>
+
+    <div id="planner"></div>
+
+    <button class="reset-btn" onclick="resetAll()">Reset Entire Planner</button>
+  </div>
+
+  <script>
+    const days = [
+      "May 10", "May 11", "May 12", "May 13", "May 14",
+      "May 15", "May 16", "May 17", "May 18", "May 19",
+      "May 20", "May 21", "May 22", "May 23", "May 24",
+      "May 25", "May 26", "May 27", "May 28", "May 29"
+    ];
+
+    const chapters = [
+      // May 10
+      { physics: "Kinematics + Laws of Motion", chemistry: "Mole Concept + Atomic Structure", math: "Trigonometry Basics", english: "Grammar Rules", aptitude: "Time & Speed" },
+      // May 11
+      { physics: "Work, Power, Energy", chemistry: "Periodic Table + Properties", math: "Trigonometry Identities", english: "RC Practice", aptitude: "Ratios & Averages" },
+      // May 12
+      { physics: "Circular Motion + Friction", chemistry: "Chemical Bonding", math: "Quadratic Equations", english: "Synonyms/Antonyms", aptitude: "Percentages" },
+      // May 13
+      { physics: "Thermodynamics + Heat Transfer", chemistry: "States of Matter", math: "Coordinate Geometry Part 1", english: "Error Spotting", aptitude: "Time & Work" },
+      // May 14
+      { physics: "Oscillations & SHM", chemistry: "Equilibrium (Chem + Ionic)", math: "Coordinate Geometry Part 2", english: "Cloze Test", aptitude: "Series, Patterns" },
+      // May 15
+      { physics: "Electrostatics", chemistry: "Redox + Electrochemistry", math: "Functions & Graphs", english: "Sentence Correction", aptitude: "Number System" },
+      // May 16
+      { physics: "Current Electricity", chemistry: "Organic (Hydrocarbons)", math: "Differentiation", english: "RC + One-word Sub", aptitude: "Coding-Decoding" },
+      // May 17
+      { physics: "Magnetism + EMI", chemistry: "Organic Reactions + Isomerism", math: "Integration", english: "Idioms + Spellings", aptitude: "DI (Basic)" },
+      // May 18
+      { physics: "Optics (Ray + Wave)", chemistry: "Biomolecules + Polymers", math: "Vectors + 3D", english: "Mixed English Quiz", aptitude: "Apti Mixed Quiz" },
+      // May 19
+      { physics: "Modern Physics + Dual Nature", chemistry: "Environmental + Chemistry in Everyday Life", math: "Probability & Statistics", english: "Mixed Quiz", aptitude: "Apti Mixed Quiz" },
+      // May 20
+      { physics: "Revise Mechanics + Electrostatics", chemistry: "Mole & Bonding", math: "Trigo + Algebra", english: "Grammar & Practice", aptitude: "Revise Time & Speed" },
+      // May 21
+      { physics: "Mock Test 1", chemistry: "Full Chemistry Revision", math: "Full Math Revision", english: "Revise English Weak Areas", aptitude: "Practice Aptitude" },
+      // May 22
+      { physics: "Revise Thermo + EMI", chemistry: "Coordinate Geometry + Reactions", math: "Coordinate Geometry + Integration", english: "Sentence Practice", aptitude: "Mock Test & Review" },
+      // May 23
+      { physics: "Solve Physics PYQs", chemistry: "Chemistry MCQs", math: "Math Practice", english: "English Practice", aptitude: "Apti Mock" },
+      // May 24
+      { physics: "Mock Test 2", chemistry: "MCQs + Full Revision", math: "Mock Test", english: "RC + Sentence Correction", aptitude: "Full Review" },
+      // May 25
+      { physics: "Revise Modern + Optics", chemistry: "Organic Basics", math: "Functions & Graphs", english: "Cloze + Error Spotting", aptitude: "Mock Test 2" },
+      // May 26
+      { physics: "Aptitude Focus Day", chemistry: "Flashcards", math: "Practice Math", english: "RC + Practice", aptitude: "DI Practice" },
+      // May 27
+      { physics: "Mock Test 3", chemistry: "Full Formula Revision", math: "Math Final Revision", english: "Grammar Check", aptitude: "Apti Practice" },
+      // May 28
+      { physics: "Review Mock Mistakes", chemistry: "Chemistry Flashcards", math: "Math Mixed Questions", english: "Reading Practice", aptitude: "Mixed Apti Practice" },
+      // May 29
+      { physics: "Final Revision", chemistry: "Final Review", math: "Last Minute Practice", english: "Full RC + Revision", aptitude: "Relax & Confidence Boost" }
+    ];
+
+    const planner = document.getElementById("planner");
+
+    days.forEach((day, dayIndex) => {
+      const dayDiv = document.createElement("div");
+      dayDiv.classList.add("day");
+
+      const title = document.createElement("h2");
+      title.innerText = `Day ${dayIndex + 1} - ${day}`;
+      dayDiv.appendChild(title);
+
+      const chapter = chapters[dayIndex];
+
+      const tasks = [
+        `Physics: ${chapter.physics}`,
+        `Chemistry: ${chapter.chemistry}`,
+        `Math: ${chapter.math}`,
+        `English: ${chapter.english}`,
+        `Aptitude: ${chapter.aptitude}`
+      ];
+
+      tasks.forEach((task, taskIndex) => {
+        const taskId = `d${dayIndex}_t${taskIndex}`;
+
+        const taskDiv = document.createElement("div");
+        taskDiv.classList.add("task");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = taskId;
+        checkbox.checked = localStorage.getItem(taskId) === "true";
+        checkbox.addEventListener("change", () => {
+          localStorage.setItem(taskId, checkbox.checked);
+        });
+
+        const label = document.createElement("label");
+        label.htmlFor = taskId;
+        label.innerText = task;
+
+        taskDiv.appendChild(checkbox);
+        taskDiv.appendChild(label);
+        dayDiv.appendChild(taskDiv);
+      });
+
+      planner.appendChild(dayDiv);
+    });
+
+    function resetAll() {
+      if (confirm("Are you sure you want to reset everything?")) {
+        localStorage.clear();
+        location.reload();
+      }
+    }
+  </script>
+</body>
+</html>
