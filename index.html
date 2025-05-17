@@ -4,17 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PWiansZone – Select Exam</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet" />
   <style>
+    /* — your existing styles… — */
     :root {
       --primary:   #009688;
       --secondary: #00796b;
       --light:     #e0f2f1;
       --text:      #333;
       --shadow:    rgba(0,0,0,0.1);
-      --toast-bg:  #323232;
-      --toast-fg:  #fff;
-      --toast-accent: #ffca28;
     }
     *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
     body {
@@ -25,156 +24,82 @@
       min-height:100vh;padding:40px 20px;position:relative;
     }
     h1 { font-size:3rem;color:var(--primary);margin-bottom:.5em; }
+    /* …other existing styles… */
 
-    .controls {
-      display:inline-flex;align-items:center;gap:.5em;
-      margin-bottom:2em;
-    }
-    .controls button {
-      font-size:1.1rem;padding:.6em 1.2em;
-      border:none;border-radius:6px;cursor:pointer;
-      background:var(--primary);color:#fff;transition:background .3s;
-    }
-    .controls button:hover { background:var(--secondary); }
-
-    .icon-btn {
-      width:2.4em;height:2.4em;padding:0;
-      background:var(--primary);border-radius:50%;
-      display:flex;align-items:center;justify-content:center;
-    }
-    .icon-btn img { width:1.2em;height:1.2em; }
-
-    /* Toast */
-    #toast {
-      position:fixed;top:-100px;left:50%;
-      transform:translateX(-50%);
-      width:320px;background:var(--toast-bg);color:var(--toast-fg);
-      padding:1em 1.2em .6em;border-radius:6px;
-      box-shadow:0 4px 12px var(--shadow);
-      display:flex;align-items:center;gap:.6em;
-      opacity:0;pointer-events:none;z-index:1000;
-      animation:slideDown .5s forwards;animation-delay:0.2s;
-    }
-    #toast.hide { animation:slideUp .5s forwards; }
-    #toast .icon { font-size:1.4em; color:var(--toast-accent); }
-    #toast .close { margin-left:auto;cursor:pointer;font-size:1.2em;line-height:1; }
-    #toast .progress {
-      position:absolute;bottom:0;left:0;height:4px;
-      background:var(--toast-accent);width:100%;
-      animation:progressBar 5s linear forwards;
-    }
-    #toast:hover .progress { animation-play-state:paused; }
-    @keyframes slideDown { from{top:-100px;opacity:0;} to{top:20px;opacity:1;} }
-    @keyframes slideUp   { from{top:20px;opacity:1;}   to{top:-100px;opacity:0;} }
-    @keyframes progressBar { from{width:100%;} to{width:0;} }
-
-    .flash-container {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-      gap:24px;width:100%;max-width:800px;
-      margin-bottom:3em;
-    }
-    .flash-card {
-      position:relative;
-      background:#fff;border-radius:20px;padding:30px 20px;
-      text-align:center;font-size:1.3rem;font-weight:600;
-      color:var(--primary);box-shadow:0 4px 12px var(--shadow);
-      cursor:pointer;opacity:0;transform:translateY(20px);
-      animation:bounceIn .6s ease forwards;
-      transition:transform .3s,box-shadow .3s,background .3s,color .3s;
-    }
-    .flash-card:hover {
-      transform:translateY(-6px) scale(1.03);
-      box-shadow:0 8px 20px var(--shadow);
-      background:var(--primary);color:#fff;
-    }
-    @keyframes bounceIn {
-      0%   {opacity:0;transform:translateY(40px) scale(.95);}
-      60%  {opacity:1;transform:translateY(-10px) scale(1.02);}
-      100% {opacity:1;transform:translateY(0) scale(1);}
-    }
-
-    /* Modal for Telegram WebView */
-    #tgModal {
+    /* — new: full-screen modal overlay — */
+    #tgPrompt {
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.6);
       align-items: center;
       justify-content: center;
-      z-index: 99999;
+      z-index: 9999;
     }
-    #tgModal .dialog {
+    #tgPrompt .box {
       background: #fff;
       padding: 1.5em;
       border-radius: 8px;
       max-width: 90%;
       text-align: center;
       font-family: sans-serif;
+      box-shadow: 0 4px 12px var(--shadow);
     }
-    #tgModal button {
-      margin: 0.5em;
-      padding: 0.6em 1.2em;
-      font-size: 1em;
+    #tgPrompt button {
+      margin-top: 1em;
+      padding: 0.8em 1.4em;
+      font-size: 1rem;
       cursor: pointer;
       border: none;
       border-radius: 4px;
       background: var(--primary);
       color: #fff;
     }
-    #tgModal button.stay {
-      background: var(--secondary);
-    }
   </style>
 </head>
 <body>
 
-  <!-- Telegram WebView Modal -->
-  <div id="tgModal">
-    <div class="dialog">
+  <!-- — new: Telegram prompt modal — -->
+  <div id="tgPrompt">
+    <div class="box">
       <h2>Better Experience Ahead!</h2>
-      <p>Please open this page in your phone’s browser for full functionality.</p>
-      <button id="btnOpen">Open Now</button>
-      <button id="btnStay" class="stay">Stay in Telegram</button>
+      <p>For full functionality and stability, please open this page in your browser.</p>
+      <button id="openBrowser">Open in Browser</button>
     </div>
   </div>
 
+  <!-- — your existing content… — -->
   <h1>PWiansZone</h1>
   <div class="controls">
     <button id="jeeBtn">JEE</button>
     <button id="neetBtn">NEET</button>
     <button id="UdaanBtn">UDAAN</button>
     <button id="keyBtn" class="icon-btn" title="Access Key">
-      <img id="lockIcon" src="https://i.postimg.cc/7hrpzw7g/secured-lock.png" alt="lock">
+      <img id="lockIcon"
+           src="https://i.postimg.cc/7hrpzw7g/secured-lock.png"
+           alt="lock">
     </button>
   </div>
-
-  <!-- Toast -->
-  <div id="toast" role="alert" aria-live="assertive">
-    <span class="icon">🔔</span>
-    <span id="toastText"></span>
-    <span class="close" onclick="hideToast()">×</span>
-    <div class="progress"></div>
-  </div>
-
-  <div class="flash-container" id="flashContainer"></div>
+  <!-- …toast, flash-cards, etc.… -->
 
   <script>
-    // --- Telegram WebView detection & modal logic ---
-    function isTelegramWebView() {
+    // 1) Detect Telegram in-app WebView
+    function inTelegram() {
       return /Telegram/i.test(navigator.userAgent);
     }
 
+    // 2) On full load, show prompt only if inside Telegram
     window.addEventListener('load', () => {
-      console.log('navigator.userAgent =', navigator.userAgent);
-      if (!isTelegramWebView()) return;
+      if (!inTelegram()) return;          // already in browser → do nothing
 
-      const modal = document.getElementById('tgModal');
-      modal.style.display = 'flex';
+      const prompt = document.getElementById('tgPrompt');
+      const btn    = document.getElementById('openBrowser');
+      prompt.style.display = 'flex';
 
-      document.getElementById('btnOpen').addEventListener('click', () => {
+      btn.addEventListener('click', () => {
         const href = window.location.href;
         if (/Android/i.test(navigator.userAgent)) {
+          // Intent to Chrome on Android
           const path = href.replace(/^https?:\/\//, '');
           const intentUrl =
             `intent://${path}` +
@@ -184,94 +109,16 @@
             `package=com.android.chrome;` +
             `end`;
           window.location.href = intentUrl;
+          // fallback to new tab after 1.5s
           setTimeout(() => window.open(href, '_blank'), 1500);
         } else {
+          // iOS or desktop → open new tab/safari
           window.open(href, '_blank');
         }
       });
-
-      document.getElementById('btnStay').addEventListener('click', () => {
-        modal.style.display = 'none';
-      });
     });
 
-    // --- Your existing toast + key + flash-card logic below ---
-
-    const EXP_MS = 12 * 60 * 60 * 1000;
-    const ts = localStorage.getItem('keyTimestamp');
-    if (ts && (Date.now() - +ts > EXP_MS)) {
-      localStorage.removeItem('keyID');
-      localStorage.removeItem('keyTimestamp');
-    }
-
-    const toast = document.getElementById('toast');
-    const toastText = document.getElementById('toastText');
-    function hideToast() { toast.classList.add('hide'); }
-
-    window.addEventListener('load', () => {
-      const key = localStorage.getItem('keyID');
-      if (key) {
-        const rem = Math.max(EXP_MS - (Date.now() - +localStorage.getItem('keyTimestamp')), 0);
-        const hrs = Math.floor(rem / 3600000);
-        const mins = Math.floor((rem % 3600000) / 60000);
-        toastText.textContent = `Welcome! Your key is valid for ${hrs} hrs ${mins} min.`;
-      } else {
-        toastText.textContent = 'Please generate your access key to unlock all tests.';
-      }
-      toast.classList.remove('hide');
-      toast.querySelector('.progress').addEventListener('animationend', hideToast);
-    });
-
-    const lockIcon = document.getElementById('lockIcon');
-    if (localStorage.getItem('keyID')) {
-      lockIcon.src = 'https://i.postimg.cc/0QwTrb6k/padlock-unlock.png';
-      lockIcon.alt = 'unlocked';
-    }
-    document.getElementById('keyBtn').addEventListener('click', () => {
-      if (!localStorage.getItem('keyID')) {
-        window.location.href = 'key.html';
-      }
-    });
-
-    function redirectOrVisit(targetUrl) {
-      if (localStorage.getItem('keyID')) {
-        window.location.href = targetUrl;
-      } else {
-        window.location.href = 'visit.html';
-      }
-    }
-
-    const batches = {
-      jee: [
-        { label: 'Arjuna Jee',    url: 'Arjunajeetests.html'   },
-        { label: 'Lakshya Jee',   url: 'Lakshyajeetests.html'   },
-        { label: 'Prayas Jee',    url: 'prayasjeetests.html'    }
-      ],
-      neet: [
-        { label: 'Arjuna Neet',   url: 'Arjunaneettests.html'   },
-        { label: 'Lakshya Neet',  url: 'Lakshyaneettests.html'  }
-      ],
-      Udaan: [
-        { label: 'Udaan 2026',    url: 'udaantests.html'         },
-      ]
-    };
-
-    const fc = document.getElementById('flashContainer');
-    function render(exam) {
-      fc.innerHTML = '';
-      batches[exam].forEach((b, i) => {
-        const card = document.createElement('div');
-        card.className = 'flash-card';
-        card.textContent = b.label;
-        card.style.animationDelay = (i * 0.15) + 's';
-        card.onclick = () => redirectOrVisit(b.url);
-        fc.appendChild(card);
-      });
-    }
-    document.getElementById('jeeBtn').addEventListener('click', () => render('jee'));
-    document.getElementById('neetBtn').addEventListener('click', () => render('neet'));
-    document.getElementById('UdaanBtn').addEventListener('click', () => render('Udaan'));
-    render('jee');
+    // 3) — the rest of your existing JS (toast, key logic, flash-cards) goes here…
   </script>
 </body>
 </html>
