@@ -102,7 +102,7 @@
       background: rgba(0,0,0,0.6);
       align-items: center;
       justify-content: center;
-      z-index: 2000;
+      z-index: 99999;
     }
     #tgModal .dialog {
       background: #fff;
@@ -164,40 +164,50 @@
     function isTelegramWebView() {
       return /Telegram/i.test(navigator.userAgent);
     }
-    document.addEventListener('DOMContentLoaded', () => {
-      if (isTelegramWebView()) {
-        const modal = document.getElementById('tgModal');
-        modal.style.display = 'flex';
-        document.getElementById('btnOpen').addEventListener('click', () => {
-          const href = window.location.href;
-          if (/Android/i.test(navigator.userAgent)) {
-            // Intent for Android → Chrome
-            const path = href.replace(/^https?:\/\//, '');
-            window.location.href = `intent://${path}#Intent;scheme=https;package=com.android.chrome;end`;
-          } else {
-            // iOS or others → open a new tab (Safari, default browser)
-            window.open(href, '_blank');
-          }
-        });
-        document.getElementById('btnStay').addEventListener('click', () => {
-          modal.style.display = 'none';
-        });
-      }
+
+    window.addEventListener('load', () => {
+      console.log('navigator.userAgent =', navigator.userAgent);
+      if (!isTelegramWebView()) return;
+
+      const modal = document.getElementById('tgModal');
+      modal.style.display = 'flex';
+
+      document.getElementById('btnOpen').addEventListener('click', () => {
+        const href = window.location.href;
+        if (/Android/i.test(navigator.userAgent)) {
+          const path = href.replace(/^https?:\/\//, '');
+          const intentUrl =
+            `intent://${path}` +
+            `#Intent;action=android.intent.action.VIEW;` +
+            `category=android.intent.category.BROWSABLE;` +
+            `scheme=https;` +
+            `package=com.android.chrome;` +
+            `end`;
+          window.location.href = intentUrl;
+          setTimeout(() => window.open(href, '_blank'), 1500);
+        } else {
+          window.open(href, '_blank');
+        }
+      });
+
+      document.getElementById('btnStay').addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
     });
 
-    // --- Your existing logic below ---
+    // --- Your existing toast + key + flash-card logic below ---
 
     const EXP_MS = 12 * 60 * 60 * 1000;
-    // Expire old key
     const ts = localStorage.getItem('keyTimestamp');
     if (ts && (Date.now() - +ts > EXP_MS)) {
       localStorage.removeItem('keyID');
       localStorage.removeItem('keyTimestamp');
     }
-    // Toast logic
+
     const toast = document.getElementById('toast');
     const toastText = document.getElementById('toastText');
-    function hideToast(){ toast.classList.add('hide'); }
+    function hideToast() { toast.classList.add('hide'); }
+
     window.addEventListener('load', () => {
       const key = localStorage.getItem('keyID');
       if (key) {
@@ -211,7 +221,7 @@
       toast.classList.remove('hide');
       toast.querySelector('.progress').addEventListener('animationend', hideToast);
     });
-    // Lock‐icon logic
+
     const lockIcon = document.getElementById('lockIcon');
     if (localStorage.getItem('keyID')) {
       lockIcon.src = 'https://i.postimg.cc/0QwTrb6k/padlock-unlock.png';
@@ -222,7 +232,7 @@
         window.location.href = 'key.html';
       }
     });
-    // Guard function
+
     function redirectOrVisit(targetUrl) {
       if (localStorage.getItem('keyID')) {
         window.location.href = targetUrl;
@@ -231,7 +241,6 @@
       }
     }
 
-    // Batch data
     const batches = {
       jee: [
         { label: 'Arjuna Jee',    url: 'Arjunajeetests.html'   },
@@ -246,7 +255,7 @@
         { label: 'Udaan 2026',    url: 'udaantests.html'         },
       ]
     };
-    // Render function
+
     const fc = document.getElementById('flashContainer');
     function render(exam) {
       fc.innerHTML = '';
@@ -262,7 +271,6 @@
     document.getElementById('jeeBtn').addEventListener('click', () => render('jee'));
     document.getElementById('neetBtn').addEventListener('click', () => render('neet'));
     document.getElementById('UdaanBtn').addEventListener('click', () => render('Udaan'));
-    // Initial load: show JEE batches
     render('jee');
   </script>
 </body>
