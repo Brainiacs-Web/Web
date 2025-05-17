@@ -1,271 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#000000">
-  <title>Login & Introduction</title>
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/JzzPN25Y/alien-monster-microsoft.png">
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PWiansZone – Select Exam</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* Global Styling */
+    :root {
+      --primary:   #009688;
+      --secondary: #00796b;
+      --light:     #e0f2f1;
+      --text:      #333;
+      --shadow:    rgba(0,0,0,0.1);
+      --toast-bg:  #323232;
+      --toast-fg:  #fff;
+      --toast-accent: #ffca28;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
     body {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      font-family: 'Jost', sans-serif;
-      background: #000000; /* Space black background */
-      color: white; /* White text */
+      font-family: "Poppins",sans-serif;
+      background: linear-gradient(135deg,var(--light),#fff);
+      color: var(--text);
+      display:flex;flex-direction:column;align-items:center;
+      min-height:100vh;padding:40px 20px;position:relative;
+    }
+    h1 { font-size:3rem;color:var(--primary);margin-bottom:.5em; }
+
+    .controls {
+      display:inline-flex;align-items:center;gap:.5em;
+      margin-bottom:2em;
+    }
+    .controls button {
+      font-size:1.1rem;padding:.6em 1.2em;
+      border:none;border-radius:6px;cursor:pointer;
+      background:var(--primary);color:#fff;transition:background .3s;
+    }
+    .controls button:hover { background:var(--secondary); }
+
+    .icon-btn {
+      width:2.4em;height:2.4em;padding:0;
+      background:var(--primary);border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .icon-btn img { width:1.2em;height:1.2em; }
+
+    /* Toast */
+    #toast {
+      position:fixed;top:-100px;left:50%;
+      transform:translateX(-50%);
+      width:320px;background:var(--toast-bg);color:var(--toast-fg);
+      padding:1em 1.2em .6em;border-radius:6px;
+      box-shadow:0 4px 12px var(--shadow);
+      display:flex;align-items:center;gap:.6em;
+      opacity:0;pointer-events:none;z-index:1000;
+      animation:slideDown .5s forwards;animation-delay:0.2s;
+    }
+    #toast.hide { animation:slideUp .5s forwards; }
+    #toast .icon { font-size:1.4em; color:var(--toast-accent); }
+    #toast .close { margin-left:auto;cursor:pointer;font-size:1.2em;line-height:1; }
+    #toast .progress {
+      position:absolute;bottom:0;left:0;height:4px;
+      background:var(--toast-accent);width:100%;
+      animation:progressBar 5s linear forwards;
+    }
+    #toast:hover .progress { animation-play-state:paused; }
+    @keyframes slideDown { from{top:-100px;opacity:0;} to{top:20px;opacity:1;} }
+    @keyframes slideUp   { from{top:20px;opacity:1;}   to{top:-100px;opacity:0;} }
+    @keyframes progressBar { from{width:100%;} to{width:0;} }
+
+    .flash-container {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:24px;width:100%;max-width:800px;
+      margin-bottom:3em;
+    }
+    .flash-card {
+      position:relative;
+      background:#fff;border-radius:20px;padding:30px 20px;
+      text-align:center;font-size:1.3rem;font-weight:600;
+      color:var(--primary);box-shadow:0 4px 12px var(--shadow);
+      cursor:pointer;opacity:0;transform:translateY(20px);
+      animation:bounceIn .6s ease forwards;
+      transition:transform .3s,box-shadow .3s,background .3s,color .3s;
+    }
+    .flash-card:hover {
+      transform:translateY(-6px) scale(1.03);
+      box-shadow:0 8px 20px var(--shadow);
+      background:var(--primary);color:#fff;
+    }
+    @keyframes bounceIn {
+      0%   {opacity:0;transform:translateY(40px) scale(.95);}
+      60%  {opacity:1;transform:translateY(-10px) scale(1.02);}
+      100% {opacity:1;transform:translateY(0) scale(1);}
     }
 
-    .main {
-      text-align: center;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Title Styling */
-    .title {
-      font-size: 2.5em;
-      font-weight: bold;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6); /* White text shadow */
-    }
-
-    .btn-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Buttons Styling */
-    button {
-      width: 200px;
-      padding: 12px;
-      background: #333333; /* Dark gray for buttons */
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #ffffff; /* White text for buttons */
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: 0.2s ease-in-out;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    }
-
-    button:hover {
-      background: #666666; /* Lighter gray on hover */
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
-    }
-
-    /* Pop-Up Styling */
-    .popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 300px;
-      padding: 20px;
-      background: #444444; /* Dark gray background for the login container */
-      color: #ffffff; /* White text inside container */
-      border-radius: 10px;
-      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6); /* Shadow for realistic effect */
-      text-align: center;
-      z-index: 1000;
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .popup.active {
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 999;
+    /* Modal for Telegram WebView */
+    #tgModal {
       display: none;
-    }
-
-    .overlay.active {
-      display: block;
-    }
-
-    /* Updated Input Fields */
-    input {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #444444; /* Darker gray border for input */
-      border-radius: 5px;
-      background: #333333; /* Dark gray background for input */
-      color: white; /* White text for input fields */
-    }
-
-    input::placeholder {
-      color: #A9A9A9; /* Light gray placeholder text */
-      font-size: 0.9em;
-      text-align: left;
-      padding-left: 10px;
-    }
-
-    /* Updated Continue Button */
-    .continue-btn {
-      margin-top: 10px;
-      padding: 8px 12px;
-      background: #444444; /* Dark gray matching button color */
-      color: #ffffff; /* White text */
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .continue-btn:hover {
-      background: #666666; /* Lighter gray on hover */
-    }
-
-    /* Mock Test Pop-Up */
-    .mock-test-popup {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      width: 300px;
-      padding: 20px;
-      background: #444444;
-      color: white;
-      border-radius: 10px;
-      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6);
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    #tgModal .dialog {
+      background: #fff;
+      padding: 1.5em;
+      border-radius: 8px;
+      max-width: 90%;
       text-align: center;
-      z-index: 1000;
-      transition: transform 0.3s ease-in-out;
+      font-family: sans-serif;
     }
-
-    .mock-test-popup.active {
-      transform: translate(-50%, -50%) scale(1);
+    #tgModal button {
+      margin: 0.5em;
+      padding: 0.6em 1.2em;
+      font-size: 1em;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background: var(--primary);
+      color: #fff;
     }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      button {
-        font-size: 1rem;
-      }
-
-      input {
-        font-size: 1rem;
-      }
+    #tgModal button.stay {
+      background: var(--secondary);
     }
   </style>
 </head>
 <body>
-  <div class="main">
-    <!-- Title -->
-    <div class="title">BRAINIACS</div>
 
-    <!-- Buttons -->
-    <div class="btn-container">
-      <button id="loginBtn">Login Here</button>
-      <button id="introBtn">Introduction</button>
-      <button id="mockTestBtn">Mock Test</button> <!-- Mock Test Button -->
+  <!-- Telegram WebView Modal -->
+  <div id="tgModal">
+    <div class="dialog">
+      <h2>Better Experience Ahead!</h2>
+      <p>Please open this page in your phone’s browser for full functionality.</p>
+      <button id="btnOpen">Open Now</button>
+      <button id="btnStay" class="stay">Stay in Telegram</button>
     </div>
   </div>
 
-  <!-- Pop-Up Forms -->
-  <div class="overlay" id="overlay"></div>
-
-  <div class="popup" id="loginPopup">
-    <h2>Login</h2>
-    <input type="email" id="loginEmail" placeholder="Enter Email ID">
-    <button class="continue-btn" onclick="handleLogin()">Continue</button>
+  <h1>PWiansZone</h1>
+  <div class="controls">
+    <button id="jeeBtn">JEE</button>
+    <button id="neetBtn">NEET</button>
+    <button id="UdaanBtn">UDAAN</button>
+    <button id="keyBtn" class="icon-btn" title="Access Key">
+      <img id="lockIcon" src="https://i.postimg.cc/7hrpzw7g/secured-lock.png" alt="lock">
+    </button>
   </div>
 
-  <!-- Mock Test Pop-Up -->
-  <div class="mock-test-popup" id="mockTestPopup">
-    <h2>Select Exam</h2>
-    <button onclick="selectExam('JEE MAINS')">JEE MAINS</button>
-    <button onclick="selectExam('NEET')">NEET</button>
-    <button onclick="closeMockTestPopup()">Close</button>
+  <!-- Toast -->
+  <div id="toast" role="alert" aria-live="assertive">
+    <span class="icon">🔔</span>
+    <span id="toastText"></span>
+    <span class="close" onclick="hideToast()">×</span>
+    <div class="progress"></div>
   </div>
+
+  <div class="flash-container" id="flashContainer"></div>
 
   <script>
-    const loginBtn = document.getElementById('loginBtn');
-    const introBtn = document.getElementById('introBtn');
-    const mockTestBtn = document.getElementById('mockTestBtn'); // Mock Test Button
-    const loginPopup = document.getElementById('loginPopup');
-    const mockTestPopup = document.getElementById('mockTestPopup'); // Mock Test Pop-Up
-    const overlay = document.getElementById('overlay');
-
-    const allowedEmails = ["vishal16980@gmail.com", "07.comer@gmail.com", "rtshroudyt@gmail.com", "j43461080@gmail.com" ];
-
-    // Show Login Pop-Up
-    loginBtn.addEventListener('click', () => {
-      loginPopup.classList.add('active');
-      overlay.classList.add('active');
-    });
-
-    // Show Mock Test Pop-Up
-    mockTestBtn.addEventListener('click', () => {
-      mockTestPopup.classList.add('active');
-      overlay.classList.add('active');
-    });
-
-    // Close Pop-Up
-    function closePopup() {
-      loginPopup.classList.remove('active');
-      overlay.classList.remove('active');
+    // --- Telegram WebView detection & modal logic ---
+    function isTelegramWebView() {
+      return /Telegram/i.test(navigator.userAgent);
     }
+    document.addEventListener('DOMContentLoaded', () => {
+      if (isTelegramWebView()) {
+        const modal = document.getElementById('tgModal');
+        modal.style.display = 'flex';
+        document.getElementById('btnOpen').addEventListener('click', () => {
+          const href = window.location.href;
+          if (/Android/i.test(navigator.userAgent)) {
+            // Intent for Android → Chrome
+            const path = href.replace(/^https?:\/\//, '');
+            window.location.href = `intent://${path}#Intent;scheme=https;package=com.android.chrome;end`;
+          } else {
+            // iOS or others → open a new tab (Safari, default browser)
+            window.open(href, '_blank');
+          }
+        });
+        document.getElementById('btnStay').addEventListener('click', () => {
+          modal.style.display = 'none';
+        });
+      }
+    });
 
-    // Handle Login
-    function handleLogin() {
-      const loginEmail = document.getElementById('loginEmail').value.trim();
+    // --- Your existing logic below ---
 
-      if (allowedEmails.includes(loginEmail)) {
-        window.location.href = 'main.html';
-      } else if (loginEmail) {
-        window.location.href = 'userlist.html';
+    const EXP_MS = 12 * 60 * 60 * 1000;
+    // Expire old key
+    const ts = localStorage.getItem('keyTimestamp');
+    if (ts && (Date.now() - +ts > EXP_MS)) {
+      localStorage.removeItem('keyID');
+      localStorage.removeItem('keyTimestamp');
+    }
+    // Toast logic
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toastText');
+    function hideToast(){ toast.classList.add('hide'); }
+    window.addEventListener('load', () => {
+      const key = localStorage.getItem('keyID');
+      if (key) {
+        const rem = Math.max(EXP_MS - (Date.now() - +localStorage.getItem('keyTimestamp')), 0);
+        const hrs = Math.floor(rem / 3600000);
+        const mins = Math.floor((rem % 3600000) / 60000);
+        toastText.textContent = `Welcome! Your key is valid for ${hrs} hrs ${mins} min.`;
       } else {
-        alert("Invalid email. Please try again.");
+        toastText.textContent = 'Please generate your access key to unlock all tests.';
       }
-      closePopup();
-    }
-
-    // Redirect to Introduction
-    introBtn.addEventListener('click', () => {
-      window.location.href = 'Intro.html';
+      toast.classList.remove('hide');
+      toast.querySelector('.progress').addEventListener('animationend', hideToast);
     });
-
-    // Close mock test pop-up
-    function closeMockTestPopup() {
-      mockTestPopup.classList.remove('active');
-      overlay.classList.remove('active');
+    // Lock‐icon logic
+    const lockIcon = document.getElementById('lockIcon');
+    if (localStorage.getItem('keyID')) {
+      lockIcon.src = 'https://i.postimg.cc/0QwTrb6k/padlock-unlock.png';
+      lockIcon.alt = 'unlocked';
     }
-
-    // Handle selected exam
-    function selectExam(exam) {
-      if (exam === 'JEE MAINS') {
-        window.location.href = 'jee.html';
-      } else if (exam === 'NEET') {
-        window.location.href = 'neet.html';
+    document.getElementById('keyBtn').addEventListener('click', () => {
+      if (!localStorage.getItem('keyID')) {
+        window.location.href = 'key.html';
       }
-      closeMockTestPopup();
+    });
+    // Guard function
+    function redirectOrVisit(targetUrl) {
+      if (localStorage.getItem('keyID')) {
+        window.location.href = targetUrl;
+      } else {
+        window.location.href = 'visit.html';
+      }
     }
 
-    // Close pop-up when clicking outside
-    overlay.addEventListener('click', () => {
-      closePopup();
-      closeMockTestPopup();
-    });
+    // Batch data
+    const batches = {
+      jee: [
+        { label: 'Arjuna Jee',    url: 'Arjunajeetests.html'   },
+        { label: 'Lakshya Jee',   url: 'Lakshyajeetests.html'   },
+        { label: 'Prayas Jee',    url: 'prayasjeetests.html'    }
+      ],
+      neet: [
+        { label: 'Arjuna Neet',   url: 'Arjunaneettests.html'   },
+        { label: 'Lakshya Neet',  url: 'Lakshyaneettests.html'  }
+      ],
+      Udaan: [
+        { label: 'Udaan 2026',    url: 'udaantests.html'         },
+      ]
+    };
+    // Render function
+    const fc = document.getElementById('flashContainer');
+    function render(exam) {
+      fc.innerHTML = '';
+      batches[exam].forEach((b, i) => {
+        const card = document.createElement('div');
+        card.className = 'flash-card';
+        card.textContent = b.label;
+        card.style.animationDelay = (i * 0.15) + 's';
+        card.onclick = () => redirectOrVisit(b.url);
+        fc.appendChild(card);
+      });
+    }
+    document.getElementById('jeeBtn').addEventListener('click', () => render('jee'));
+    document.getElementById('neetBtn').addEventListener('click', () => render('neet'));
+    document.getElementById('UdaanBtn').addEventListener('click', () => render('Udaan'));
+    // Initial load: show JEE batches
+    render('jee');
   </script>
 </body>
 </html>
