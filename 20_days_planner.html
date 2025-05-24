@@ -1,139 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Class 11 Physics Study Checklist</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Physics Chapters Dashboard</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f2f5;
+      background: #f4f6f9;
+      margin: 0;
       padding: 20px;
-      max-width: 900px;
-      margin: auto;
     }
+
+    .container {
+      max-width: 960px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
+
     h1 {
       text-align: center;
-      color: #2c3e50;
-      margin-bottom: 0;
+      color: #333;
+      margin-bottom: 30px;
     }
-    #motivation {
-      text-align: center;
-      font-style: italic;
-      margin-bottom: 25px;
-      font-size: 1.2em;
-      color: #27ae60;
-      min-height: 48px;
+
+    .class-section {
+      margin-bottom: 40px;
     }
-    .day-title {
-      margin-top: 30px;
-      font-size: 20px;
-      color: #2980b9;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 3px;
+
+    h2 {
+      border-left: 5px solid #007bff;
+      padding-left: 10px;
+      color: #007bff;
     }
-    .task {
+
+    .chapter {
+      background: #f8f9fa;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 5px;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      background: #fff;
-      margin: 8px 0;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      font-size: 1em;
-      user-select: none;
+      justify-content: space-between;
     }
-    .task input[type="checkbox"] {
-      transform: scale(1.3);
-      margin-right: 15px;
-      cursor: pointer;
-    }
-    .task.done {
-      background: #dff0d8;
-      text-decoration: line-through;
-      color: #2c3e50;
-    }
-    .time {
+
+    .chapter-name {
+      flex: 1;
       font-weight: 600;
-      margin-right: 10px;
-      width: 200px;
-      color: #34495e;
     }
-    .type {
-      color: #888;
-      font-size: 14px;
-      margin-left: auto;
-      font-style: italic;
+
+    .checkboxes {
+      flex: 1;
+      display: flex;
+      gap: 20px;
+      justify-content: flex-end;
     }
-    .break-task {
-      background: #fffae6;
-      border-left: 5px solid #f1c40f;
-      color: #a67c00;
-      font-weight: 600;
+
+    input[type="checkbox"] {
+      margin-right: 5px;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Class 11 & 12 Physics Dashboard</h1>
+    
+    <div class="class-section">
+      <h2>Class 11 Physics</h2>
+      <div id="class11-chapters" class="chapter-list"></div>
+    </div>
 
-<h1>Class 11 Physics Study Checklist</h1>
-<div id="motivation">Loading motivation...</div>
+    <div class="class-section">
+      <h2>Class 12 Physics</h2>
+      <div id="class12-chapters" class="chapter-list"></div>
+    </div>
+  </div>
 
-<!-- Day 1 -->
-<!-- Day 1 -->
-<div class="day-title">📅 May 21</div>
-<div class="task"><input type="checkbox" /><span class="time">8:00 – 10:45 PM</span>Motion in 1D <span class="type">(Normal)</span></div>
-<div class="task"><input type="checkbox" /><span class="time">10:45 PM – 2:15 AM</span>NLM + Friction <span class="type">(Tough)</span></div>
+  <script>
+    const class11Chapters = [
+      "Physical World",
+      "Units and Measurements",
+      "Motion in a Straight Line",
+      "Motion in a Plane",
+      "Laws of Motion",
+      "Work, Energy and Power",
+      "System of Particles and Rotational Motion",
+      "Gravitation",
+      "Mechanical Properties of Solids",
+      "Mechanical Properties of Fluids",
+      "Thermal Properties of Matter",
+      "Thermodynamics",
+      "Kinetic Theory",
+      "Oscillations",
+      "Waves"
+    ];
 
-<!-- Night Study -->
-<div class="day-title">🌙 Night – May 22</div>
-<div class="task break-task"><input type="checkbox" /><span class="time">2:15 – 3:00 AM</span>Break / Dinner</div>
-<div class="task"><input type="checkbox" /><span class="time">3:00 – 5:45 AM</span>Gravitation <span class="type">(Normal)</span></div>
-<div class="task"><input type="checkbox" /><span class="time">5:45 – 9:15 AM</span>Rotational Motion <span class="type">(Tough)</span></div>
-<div class="task"><input type="checkbox" /><span class="time">9:15 AM – 12:00 PM</span>Waves <span class="type">(Normal)</span></div>
+    const class12Chapters = [
+      "Electric Charges and Fields",
+      "Electrostatic Potential and Capacitance",
+      "Current Electricity",
+      "Moving Charges and Magnetism",
+      "Magnetism and Matter",
+      "Electromagnetic Induction",
+      "Alternating Current",
+      "Electromagnetic Waves",
+      "Ray Optics and Optical Instruments",
+      "Wave Optics",
+      "Dual Nature of Radiation and Matter",
+      "Atoms",
+      "Nuclei",
+      "Semiconductor Electronics: Materials, Devices and Simple Circuits"
+    ];
 
-<!-- Day 2 -->
-<div class="day-title">📅 May 22</div>
-<div class="task"><input type="checkbox" /><span class="time">12:30 – 4:00 PM</span>Circular Motion <span class="type">(Tough)</span></div>
-<div class="task"><input type="checkbox" /><span class="time">4:00 – 6:45 PM</span>Units + Error <span class="type">(Normal)</span></div>
-<div class="task break-task"><input type="checkbox" /><span class="time">6:45 – 8:15 PM</span>Lunch + Nap Break</div>
-<div class="task"><input type="checkbox" /><span class="time">8:15 – 11:45 PM</span>Thermo + KTG <span class="type">(Tough)</span></div>
+    function createChapterList(containerId, chapters) {
+      const container = document.getElementById(containerId);
+      chapters.forEach(chapter => {
+        const chapterDiv = document.createElement('div');
+        chapterDiv.className = 'chapter';
 
-<!-- Night Study -->
-<div class="day-title">🌙 Night – May 23</div>
-<div class="task"><input type="checkbox" /><span class="time">11:45 PM – 2:30 AM</span>Motion in 2D <span class="type">(Normal)</span></div>
-<div class="task break-task"><input type="checkbox" /><span class="time">2:30 – 3:15 AM</span>Dinner + Break</div>
-<div class="task"><input type="checkbox" /><span class="time">3:15 – 6:45 AM</span>Mech Prop of Fluids <span class="type">(Tough)</span></div>
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'chapter-name';
+        nameDiv.textContent = chapter;
 
-<!-- Day 3 -->
-<div class="day-title">📅 May 23</div>
-<div class="task"><input type="checkbox" /><span class="time">7:00 – 9:45 AM</span>SHM <span class="type">(Normal)</span></div>
-<div class="task"><input type="checkbox" /><span class="time">9:45 AM – 1:15 PM</span>Mech Prop of Solids <span class="type">(Tough)</span></div>
-<div class="task break-task"><input type="checkbox" /><span class="time">1:15 – 2:30 PM</span>Lunch + Break</div>
-<div class="task"><input type="checkbox" /><span class="time">2:30 – 5:00 PM</span>Thermal Properties <span class="type">(Normal)</span></div>
-<div class="task"><input type="checkbox" /><span class="time">5:00 – 8:30 PM</span>WEP (Work Energy Power) <span class="type">(Tough)</span></div>
-<div class="task break-task"><input type="checkbox" /><span class="time">8:30 – 9:15 PM</span>Dinner + Break</div>
-<div class="task"><input type="checkbox" /><span class="time">9:15 PM – 12:00 AM</span>Backup / Weak Areas <span class="type">(Mixed)</span></div>
-  
-<script>
-  // Motivation quotes - changes on reload
-  const quotes = [
-    "Believe in yourself! Every step counts. 💪",
-    "Small progress is still progress. Keep going! 🚀",
-    "You got this! Physics is just another challenge to conquer. 🔥",
-    "Stay focused, work hard, and make it happen. 🌟",
-    "Keep calm and solve physics problems. You're a champ! 🏆",
-    "Dream big, study hard, and shine bright! ✨",
-    "Success is the sum of small efforts repeated daily. 📚"
-  ];
-  const motivationEl = document.getElementById('motivation');
-  motivationEl.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+        const checkboxesDiv = document.createElement('div');
+        checkboxesDiv.className = 'checkboxes';
 
-  // Toggle done style on checkbox toggle
-  document.querySelectorAll('input[type="checkbox"]').forEach(box => {
-    box.addEventListener('change', () => {
-      box.parentElement.classList.toggle('done', box.checked);
-    });
-  });
-</script>
+        ['Theory', '20 Questions', '10 NCERT Questions'].forEach(label => {
+          const labelEl = document.createElement('label');
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          labelEl.appendChild(checkbox);
+          labelEl.appendChild(document.createTextNode(label));
+          checkboxesDiv.appendChild(labelEl);
+        });
 
+        chapterDiv.appendChild(nameDiv);
+        chapterDiv.appendChild(checkboxesDiv);
+        container.appendChild(chapterDiv);
+      });
+    }
+
+    createChapterList("class11-chapters", class11Chapters);
+    createChapterList("class12-chapters", class12Chapters);
+  </script>
 </body>
 </html>
