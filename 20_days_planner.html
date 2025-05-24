@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Physics Chapters Dashboard</title>
   <style>
+    /* Skin-tone inspired theme */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f6f9;
+      background: #fbeee0; /* soft peach */
       margin: 0;
       padding: 20px;
     }
@@ -15,15 +16,15 @@
     .container {
       max-width: 960px;
       margin: auto;
-      background: #fff;
+      background: #fff7f0; /* warm beige */
       padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
       text-align: center;
-      color: #333;
+      color: #5a3e36; /* soft brown */
       margin-bottom: 30px;
     }
 
@@ -32,25 +33,28 @@
     }
 
     h2 {
-      border-left: 5px solid #007bff;
-      padding-left: 10px;
-      color: #007bff;
+      border-left: 6px solid #d2996b; /* caramel tone */
+      padding-left: 12px;
+      color: #b26e45;
+      font-size: 1.4rem;
     }
 
     .chapter {
-      background: #f8f9fa;
+      background: #fffaf5;
       margin: 10px 0;
       padding: 15px;
-      border-radius: 5px;
+      border-radius: 6px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
+      border: 1px solid #f0d5c3;
     }
 
     .chapter-name {
       flex: 1;
       font-weight: 600;
+      color: #6b4c3b;
     }
 
     .checkboxes {
@@ -58,17 +62,24 @@
       display: flex;
       gap: 20px;
       justify-content: flex-end;
+      color: #5a3e36;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
     }
 
     input[type="checkbox"] {
-      margin-right: 5px;
+      margin-right: 6px;
+      accent-color: #d2996b;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Class 11 & 12 Physics Dashboard</h1>
-    
+
     <div class="class-section">
       <h2>Class 11 Physics</h2>
       <div id="class11-chapters" class="chapter-list"></div>
@@ -82,43 +93,25 @@
 
   <script>
     const class11Chapters = [
-      "Physical World",
-      "Units and Measurements",
-      "Motion in a Straight Line",
-      "Motion in a Plane",
-      "Laws of Motion",
-      "Work, Energy and Power",
-      "System of Particles and Rotational Motion",
-      "Gravitation",
-      "Mechanical Properties of Solids",
-      "Mechanical Properties of Fluids",
-      "Thermal Properties of Matter",
-      "Thermodynamics",
-      "Kinetic Theory",
-      "Oscillations",
-      "Waves"
+      "Physical World", "Units and Measurements", "Motion in a Straight Line", "Motion in a Plane",
+      "Laws of Motion", "Work, Energy and Power", "System of Particles and Rotational Motion",
+      "Gravitation", "Mechanical Properties of Solids", "Mechanical Properties of Fluids",
+      "Thermal Properties of Matter", "Thermodynamics", "Kinetic Theory", "Oscillations", "Waves"
     ];
 
     const class12Chapters = [
-      "Electric Charges and Fields",
-      "Electrostatic Potential and Capacitance",
-      "Current Electricity",
-      "Moving Charges and Magnetism",
-      "Magnetism and Matter",
-      "Electromagnetic Induction",
-      "Alternating Current",
-      "Electromagnetic Waves",
-      "Ray Optics and Optical Instruments",
-      "Wave Optics",
-      "Dual Nature of Radiation and Matter",
-      "Atoms",
-      "Nuclei",
+      "Electric Charges and Fields", "Electrostatic Potential and Capacitance", "Current Electricity",
+      "Moving Charges and Magnetism", "Magnetism and Matter", "Electromagnetic Induction",
+      "Alternating Current", "Electromagnetic Waves", "Ray Optics and Optical Instruments",
+      "Wave Optics", "Dual Nature of Radiation and Matter", "Atoms", "Nuclei",
       "Semiconductor Electronics: Materials, Devices and Simple Circuits"
     ];
 
-    function createChapterList(containerId, chapters) {
+    const checkboxLabels = ['Theory', '20 Questions', '10 NCERT Questions'];
+
+    function createChapterList(containerId, classLabel, chapters) {
       const container = document.getElementById(containerId);
-      chapters.forEach(chapter => {
+      chapters.forEach((chapter, index) => {
         const chapterDiv = document.createElement('div');
         chapterDiv.className = 'chapter';
 
@@ -129,10 +122,22 @@
         const checkboxesDiv = document.createElement('div');
         checkboxesDiv.className = 'checkboxes';
 
-        ['Theory', '20 Questions', '10 NCERT Questions'].forEach(label => {
+        checkboxLabels.forEach((label, i) => {
+          const checkboxId = `${classLabel}-${index}-${i}`;
           const labelEl = document.createElement('label');
           const checkbox = document.createElement('input');
           checkbox.type = 'checkbox';
+          checkbox.id = checkboxId;
+
+          // Load from localStorage
+          const saved = localStorage.getItem(checkboxId);
+          if (saved === 'true') checkbox.checked = true;
+
+          // Save to localStorage on change
+          checkbox.addEventListener('change', () => {
+            localStorage.setItem(checkboxId, checkbox.checked);
+          });
+
           labelEl.appendChild(checkbox);
           labelEl.appendChild(document.createTextNode(label));
           checkboxesDiv.appendChild(labelEl);
@@ -144,8 +149,8 @@
       });
     }
 
-    createChapterList("class11-chapters", class11Chapters);
-    createChapterList("class12-chapters", class12Chapters);
+    createChapterList("class11-chapters", "class11", class11Chapters);
+    createChapterList("class12-chapters", "class12", class12Chapters);
   </script>
 </body>
 </html>
