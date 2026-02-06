@@ -3,179 +3,584 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mock Test Instructions</title>
+  <title>Mock Test Instructions - Edurack</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    * {
       margin: 0;
-      padding: 20px;
-      background-color: #f4f4f4;
-      height: 100vh;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #0a1419 0%, #0d2625 50%, #081f20 100%);
+      color: #f5f5f5;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      padding: 16px;
+      transition: background 0.3s ease;
+    }
+
+    body.light-mode {
+      background: linear-gradient(135deg, #f8fafb 0%, #f0f9fa 50%, #ecf8f9 100%);
+      color: #1a1a1a;
+    }
+
+    .top-bar {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 24px;
+      padding-top: 8px;
+    }
+
+    .theme-toggle {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      color: #f5f5f5;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
       align-items: center;
-      line-height: 1.6;
-      overflow-x: hidden; /* Prevent horizontal scrolling */
+      justify-content: center;
     }
 
-    h2, h3 {
-      margin-top: 20px;
-      color: #333;
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: scale(1.05);
     }
 
-    p, ul {
-      margin-top: 10px;
-      color: #555;
-      font-size: 16px;
-      line-height: 1.6;
+    body.light-mode .theme-toggle {
+      background: rgba(0, 0, 0, 0.08);
+      color: #1a1a1a;
+    }
+
+    body.light-mode .theme-toggle:hover {
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .header-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #f5f5f5;
+    }
+
+    body.light-mode .header-title {
+      color: #1a1a1a;
+    }
+
+    .header-subtitle {
+      font-size: 0.95rem;
+      color: #a0aec0;
+    }
+
+    body.light-mode .header-subtitle {
+      color: #6b7280;
+    }
+
+    .content {
+      background: linear-gradient(135deg, rgba(20, 80, 100, 0.4), rgba(30, 100, 120, 0.3));
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(79, 172, 189, 0.3);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+
+    body.light-mode .content {
+      background: linear-gradient(135deg, rgba(79, 172, 189, 0.08), rgba(79, 172, 189, 0.05));
+      border: 1px solid rgba(79, 172, 189, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    .scrollable-content {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 12px;
+    }
+
+    .scrollable-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .scrollable-content::-webkit-scrollbar-track {
+      background: rgba(79, 172, 189, 0.1);
+      border-radius: 10px;
+    }
+
+    .scrollable-content::-webkit-scrollbar-thumb {
+      background: rgba(79, 172, 189, 0.4);
+      border-radius: 10px;
+    }
+
+    .scrollable-content::-webkit-scrollbar-thumb:hover {
+      background: rgba(79, 172, 189, 0.6);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 0;
+      margin-bottom: 18px;
+      color: #7dd3fc;
+    }
+
+    body.light-mode h2 {
+      color: #0369a1;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      color: #a7f3d0;
+    }
+
+    body.light-mode h3 {
+      color: #059669;
+    }
+
+    p {
+      margin-bottom: 14px;
+      line-height: 1.7;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+    }
+
+    body.light-mode p {
+      color: #6b7280;
+    }
+
+    ul {
+      padding-left: 0;
+      list-style: none;
+      margin-bottom: 16px;
+    }
+
+    li {
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #cbd5e1;
+    }
+
+    body.light-mode li {
+      color: #6b7280;
     }
 
     .icon-list {
-      list-style: none;
-      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 20px 0;
     }
 
     .icon-list li {
       display: flex;
-      align-items: center;
-      margin-bottom: 12px;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 12px;
+      background: rgba(79, 172, 189, 0.1);
+      border-radius: 12px;
+      border-left: 3px solid rgba(79, 172, 189, 0.5);
+    }
+
+    body.light-mode .icon-list li {
+      background: rgba(79, 172, 189, 0.05);
     }
 
     .icon-list img {
-      width: 24px;
-      height: 24px;
-      margin-right: 10px;
-    }
-
-    .start-button-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 40px;
-    }
-
-    .start-button {
-      background-color: #146fe6;
-      color: white;
-      padding: 12px 24px;
-      font-size: 18px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .start-button:disabled {
-      background-color: #a9a9a9;
-      cursor: not-allowed;
-    }
-
-    .instruction-item {
-      display: flex;
-      flex-direction: row;
-      margin-bottom: 15px;
-    }
-
-    .instruction-item span {
-      font-weight: bold;
-    }
-
-    .content {
-      max-width: 900px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: white;
+      width: 50px;
+      height: 50px;
       border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      overflow-wrap: break-word; /* Prevent text overflow */
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px;
     }
 
-    .content ul {
+    .icon-list span {
+      display: block;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    body.light-mode .icon-list span {
+      color: #6b7280;
+    }
+
+    .regular-list {
       padding-left: 20px;
     }
 
-    /* Scrollable content area */
-    .scrollable-content {
-      max-height: 75vh;
-      overflow-y: auto;
+    .regular-list li {
+      list-style: disc;
+      margin-left: 8px;
     }
 
-    label {
-      font-size: 14px;
-      margin-top: 15px;
-      display: block;
+    .agreement-section {
+      margin-top: 28px;
+      padding: 20px;
+      background: rgba(79, 172, 189, 0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(79, 172, 189, 0.2);
     }
 
+    body.light-mode .agreement-section {
+      background: rgba(79, 172, 189, 0.05);
+      border: 1px solid rgba(79, 172, 189, 0.15);
+    }
+
+    .checkbox-container {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 4px;
+      cursor: pointer;
+      accent-color: #4face5;
+      flex-shrink: 0;
+    }
+
+    .checkbox-label {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      cursor: pointer;
+    }
+
+    body.light-mode .checkbox-label {
+      color: #6b7280;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .start-button {
+      background: linear-gradient(135deg, #4face5 0%, #06b6d4 100%);
+      color: #fff;
+      padding: 14px 40px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 20px rgba(79, 172, 189, 0.35);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.3px;
+    }
+
+    .start-button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(79, 172, 189, 0.45);
+    }
+
+    .start-button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .start-button:disabled {
+      background: rgba(148, 163, 184, 0.3);
+      color: #94a3b8;
+      cursor: not-allowed;
+      opacity: 0.6;
+      box-shadow: none;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(79, 172, 189, 0.1);
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    body.light-mode .footer {
+      color: #9ca3af;
+      border-color: rgba(79, 172, 189, 0.15);
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
+
+      .header-title {
+        font-size: 1.5rem;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .scrollable-content {
+        padding-right: 8px;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+      }
+
+      h3 {
+        font-size: 1rem;
+        margin-top: 20px;
+      }
+
+      p, li, .checkbox-label {
+        font-size: 0.9rem;
+      }
+
+      .icon-list img {
+        width: 44px;
+        height: 44px;
+      }
+
+      .agreement-section {
+        padding: 16px;
+      }
+
+      .start-button {
+        padding: 12px 32px;
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        margin-bottom: 24px;
+      }
+
+      .header-title {
+        font-size: 1.25rem;
+      }
+
+      .content {
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      h2 {
+        font-size: 1.1rem;
+        margin-bottom: 14px;
+      }
+
+      h3 {
+        font-size: 0.95rem;
+        margin-top: 16px;
+        margin-bottom: 10px;
+      }
+
+      p, li {
+        font-size: 0.85rem;
+        line-height: 1.6;
+      }
+
+      .icon-list li {
+        gap: 12px;
+        padding: 10px;
+      }
+
+      .icon-list img {
+        width: 40px;
+        height: 40px;
+      }
+
+      .checkbox-container {
+        gap: 10px;
+      }
+
+      input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+      }
+
+      .checkbox-label {
+        font-size: 0.85rem;
+        line-height: 1.5;
+      }
+
+      .button-container {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 24px;
+      }
+
+      .start-button {
+        width: 100%;
+        padding: 12px 24px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .content {
+      animation: slideIn 0.5s ease-out;
+    }
   </style>
 </head>
 <body>
-  <div class="content">
-    <h2>General Instructions:</h2>
-    <div class="scrollable-content">
-      <p>Total duration of examination is 180 minutes.</p>
-      <p>The clock will be set at the server. The countdown timer in the top right corner of the screen will display the remaining time available for you to complete the examination. When the timer reaches zero, the examination will end by itself. You will not be required to end or submit your examination.</p>
-
-      <p>The Question Palette displayed on the right side of the screen will show the status of each question using the following symbols:</p>
-
-      <ul class="icon-list">
-        <li>
-          <img src="https://i.postimg.cc/W4BrrWsK/Screenshot-2025-02-04-233901.png"  style="width: 50px; height: 50px;" alt="Icon for Question 1">
-          <span>You have not visited the question yet.</span>
-        </li>
-        <li>
-          <img src="https://i.postimg.cc/26nWxQ65/Screenshot-2025-02-04-233925.png" style="width: 50px; height: 50px;" alt="Icon for Question 2">
-          <span>You have not answered the question.</span>
-        </li>
-        <li>
-          <img src="https://i.postimg.cc/kMF86vz1/Screenshot-2025-02-04-233948.png" style="width: 50px; height: 50px;" alt="Icon for Question 3">
-          <span>You have answered the question.</span>
-        </li>
-        <li>
-          <img src="https://i.postimg.cc/L5R1QJY3/Screenshot-2025-02-04-234008.png" style="width: 50px; height: 50px;" alt="Icon for Question 4">
-          <span>You have NOT answered the question, but have marked the question for review.</span>
-        </li>
-        <li>
-          <img src="https://i.postimg.cc/sxcZk35d/Screenshot-2025-02-04-234021.png" style="width: 50px; height: 50px;" alt="Icon for Question 5">
-          <span>The question(s) "Answered and Marked for Review" will be considered for evaluation.</span>
-        </li>
-      </ul>
-
-      <p>The Marked for Review status for a question simply indicates that you would like to look at that question again.</p>
-
-      <h3>Navigating to a Question:</h3>
-      <p>Procedure for answering a multiple-choice type question:</p>
-      <ul>
-        <li>To select your answer, click on the button of one of the options.</li>
-        <li>To deselect your chosen answer, click on the button of the chosen option again or click on the Clear Selection button.</li>
-        <li>To change your chosen answer, click on the button of another option.</li>
-        <li>To save your answer, you MUST click on the Save & Next button.</li>
-        <li>To mark the question for review, click on the Mark for Review button.</li>
-        <li>To change your answer to a question that has already been answered, first select that question for answering and then follow the procedure for answering that type of question.</li>
-      </ul>
-
-      
-      <div style="margin-top: 20px;">
-        <label>
-          <input type="checkbox" id="agreement-checkbox" onclick="toggleStartButton()"> 
-          I have read and understood the instructions. All computer hardware allotted to me are in proper working condition. I declare that I am not in possession of / not wearing / not carrying any prohibited gadget like mobile phone, bluetooth devices etc. /any prohibited material with me into the Examination Hall. I agree that in case of not adhering to the instructions, I shall be liable to be debarred from this Test and/or to disciplinary action, which may include ban from future Tests / Examinations.
-        </label>
-      </div>
-    </div>
+  <div class="top-bar">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode">
+      <span id="themeIcon">🌙</span>
+    </button>
   </div>
 
-  <div class="start-button-container">
-    <a href="page2.html">
-      <button id="start-test-button" class="start-button" disabled>NEXT</button>
-    </a>
+  <div class="container">
+    <div class="header">
+      <h1 class="header-title">Mock Test Instructions</h1>
+      <p class="header-subtitle">Please read carefully before starting your test</p>
+    </div>
+
+    <div class="content">
+      <div class="scrollable-content">
+        <h2>General Instructions</h2>
+        <p>Total duration of examination is 180 minutes.</p>
+        <p>The clock will be set at the server. The countdown timer in the top right corner of the screen will display the remaining time available for you to complete the examination. When the timer reaches zero, the examination will end by itself. You will not be required to end or submit your examination.</p>
+
+        <p>The Question Palette displayed on the right side of the screen will show the status of each question using the following symbols:</p>
+
+        <ul class="icon-list">
+          <li>
+            <img src="https://i.postimg.cc/W4BrrWsK/Screenshot-2025-02-04-233901.png" alt="Not visited">
+            <span>You have not visited the question yet.</span>
+          </li>
+          <li>
+            <img src="https://i.postimg.cc/26nWxQ65/Screenshot-2025-02-04-233925.png" alt="Not answered">
+            <span>You have not answered the question.</span>
+          </li>
+          <li>
+            <img src="https://i.postimg.cc/kMF86vz1/Screenshot-2025-02-04-233948.png" alt="Answered">
+            <span>You have answered the question.</span>
+          </li>
+          <li>
+            <img src="https://i.postimg.cc/L5R1QJY3/Screenshot-2025-02-04-234008.png" alt="Marked for review">
+            <span>You have NOT answered the question, but have marked the question for review.</span>
+          </li>
+          <li>
+            <img src="https://i.postimg.cc/sxcZk35d/Screenshot-2025-02-04-234021.png" alt="Answered and marked">
+            <span>The question(s) "Answered and Marked for Review" will be considered for evaluation.</span>
+          </li>
+        </ul>
+
+        <p>The Marked for Review status for a question simply indicates that you would like to look at that question again.</p>
+
+        <h3>Navigating to a Question</h3>
+        <p>Procedure for answering a multiple-choice type question:</p>
+        <ul class="regular-list">
+          <li>To select your answer, click on the button of one of the options.</li>
+          <li>To deselect your chosen answer, click on the button of the chosen option again or click on the Clear Selection button.</li>
+          <li>To change your chosen answer, click on the button of another option.</li>
+          <li>To save your answer, you MUST click on the Save & Next button.</li>
+          <li>To mark the question for review, click on the Mark for Review button.</li>
+          <li>To change your answer to a question that has already been answered, first select that question for answering and then follow the procedure for answering that type of question.</li>
+        </ul>
+
+        <div class="agreement-section">
+          <div class="checkbox-container">
+            <input type="checkbox" id="agreement-checkbox" onchange="toggleStartButton()">
+            <label for="agreement-checkbox" class="checkbox-label">
+              I have read and understood the instructions. All computer hardware allotted to me are in proper working condition. I declare that I am not in possession of / not wearing / not carrying any prohibited gadget like mobile phone, bluetooth devices etc. /any prohibited material with me into the Examination Hall. I agree that in case of not adhering to the instructions, I shall be liable to be debarred from this Test and/or to disciplinary action, which may include ban from future Tests / Examinations.
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-container">
+        <a href="page2.html" style="width: 100%; text-align: center;">
+          <button id="start-test-button" class="start-button" disabled>Start Test</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>© 2026 Edurack. All rights reserved. Premium NEET Preparation Platform</p>
+    </div>
   </div>
 
   <script>
     function toggleStartButton() {
-      var checkbox = document.getElementById('agreement-checkbox');
-      var startButton = document.getElementById('start-test-button');
+      const checkbox = document.getElementById('agreement-checkbox');
+      const startButton = document.getElementById('start-test-button');
       startButton.disabled = !checkbox.checked;
     }
+
+    function toggleTheme() {
+      const body = document.body;
+      const themeIcon = document.getElementById('themeIcon');
+      
+      body.classList.toggle('light-mode');
+      
+      if (body.classList.contains('light-mode')) {
+        themeIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
+      } else {
+        themeIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme');
+      const themeIcon = document.getElementById('themeIcon');
+      
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        themeIcon.textContent = '☀️';
+      }
+
+      document.documentElement.style.scrollBehavior = 'smooth';
+    });
   </script>
 </body>
 </html>
