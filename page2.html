@@ -1,154 +1,565 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exam Pattern - Introduction</title>
+  <title>NEET Exam Pattern</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(79, 172, 189, 0.3);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(79, 172, 189, 0.5);
+    }
+
+    body {
+      background: #0a1419;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      color: #f5f5f5;
+      min-height: 100vh;
       padding: 20px;
-      background-color: #f4f4f4;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      transition: background 0.3s ease;
       line-height: 1.6;
-      height: 100%;
-      overflow-x: hidden;
     }
 
-    h2, h3 {
-      margin-top: 20px;
-      color: #333;
+    body.light-mode {
+      background: #f8fafb;
+      color: #1a1a1a;
     }
 
-    p, ul {
-      margin-top: 10px;
-      color: #555;
+    body.light-mode ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.02);
     }
 
-    .content {
-      max-width: 900px;
+    body.light-mode ::-webkit-scrollbar-thumb {
+      background: rgba(79, 172, 189, 0.2);
+    }
+
+    body.light-mode ::-webkit-scrollbar-thumb:hover {
+      background: rgba(79, 172, 189, 0.4);
+    }
+
+    .top-bar {
       width: 100%;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      overflow-x: hidden;
-    }
-
-    .exam-pattern ul {
-      padding-left: 20px;
-    }
-
-    .exam-pattern li {
-      margin-bottom: 12px;
-    }
-
-    .start-button-container {
+      max-width: 800px;
       display: flex;
-      justify-content: center;
-      margin-top: 40px;
-      width: 100%;
+      justify-content: flex-end;
+      margin-bottom: 30px;
+      padding-top: 10px;
     }
 
-    .start-button {
-      background-color: #146fe6;
-      color: white;
-      padding: 12px 24px;
-      font-size: 18px;
+    .theme-toggle {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
       border: none;
-      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #f5f5f5;
+      font-size: 1.2rem;
       cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: scale(1.05);
+    }
+
+    body.light-mode .theme-toggle {
+      background: rgba(0, 0, 0, 0.08);
+      color: #1a1a1a;
+    }
+
+    body.light-mode .theme-toggle:hover {
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .header {
       text-align: center;
-      width: auto;
-      max-width: 300px;
+      margin-bottom: 35px;
     }
 
-    .start-button:hover {
-      background-color: #1258a2;
+    .header-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #f5f5f5;
     }
 
-    /* Responsive Design */
+    body.light-mode .header-title {
+      color: #1a1a1a;
+    }
+
+    .header-subtitle {
+      font-size: 0.95rem;
+      color: #a0aec0;
+      font-weight: 400;
+    }
+
+    body.light-mode .header-subtitle {
+      color: #6b7280;
+    }
+
+    .info-card {
+      background: linear-gradient(135deg, rgba(20, 80, 100, 0.4), rgba(30, 100, 120, 0.3));
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(79, 172, 189, 0.3);
+      border-radius: 22px;
+      padding: 28px;
+      margin-bottom: 20px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -40%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(79, 172, 189, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .info-card:hover {
+      border-color: rgba(79, 172, 189, 0.6);
+      box-shadow: 0 20px 50px rgba(79, 172, 189, 0.2);
+      transform: translateY(-4px);
+    }
+
+    body.light-mode .info-card {
+      background: linear-gradient(135deg, rgba(79, 172, 189, 0.08), rgba(79, 172, 189, 0.05));
+      border: 1px solid rgba(79, 172, 189, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    body.light-mode .info-card:hover {
+      border-color: rgba(79, 172, 189, 0.5);
+      box-shadow: 0 20px 50px rgba(79, 172, 189, 0.15);
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #ecfdf5;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+      padding-bottom: 10px;
+      border-bottom: 2px solid rgba(79, 172, 189, 0.2);
+    }
+
+    body.light-mode .card-title {
+      color: #1a1a1a;
+    }
+
+    .pattern-list {
+      position: relative;
+      z-index: 1;
+      list-style: none;
+    }
+
+    .pattern-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding: 10px 12px;
+      background: rgba(79, 172, 189, 0.05);
+      border-left: 3px solid rgba(79, 172, 189, 0.4);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .pattern-list li:hover {
+      background: rgba(79, 172, 189, 0.1);
+      border-left-color: rgba(79, 172, 189, 0.8);
+      padding-left: 16px;
+    }
+
+    body.light-mode .pattern-list li {
+      background: rgba(79, 172, 189, 0.05);
+      border-left-color: rgba(79, 172, 189, 0.3);
+      color: #6b7280;
+    }
+
+    body.light-mode .pattern-list li:hover {
+      background: rgba(79, 172, 189, 0.12);
+      border-left-color: rgba(79, 172, 189, 0.6);
+    }
+
+    .pattern-list strong {
+      color: #7dd3fc;
+      min-width: 120px;
+      display: inline-block;
+    }
+
+    body.light-mode .pattern-list strong {
+      color: #0369a1;
+    }
+
+    .pattern-list li span {
+      color: #cbd5e1;
+    }
+
+    body.light-mode .pattern-list li span {
+      color: #6b7280;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn {
+      padding: 14px 40px;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, #4face5 0%, #06b6d4 100%);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(79, 172, 189, 0.35);
+      min-width: 180px;
+    }
+
+    .btn-start:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(79, 172, 189, 0.45);
+    }
+
+    .btn-start:active {
+      transform: translateY(0);
+    }
+
+    .footer {
+      margin-top: 50px;
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(79, 172, 189, 0.1);
+    }
+
+    .footer-text {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      font-weight: 400;
+    }
+
+    body.light-mode .footer-text {
+      color: #9ca3af;
+    }
+
     @media (max-width: 768px) {
-      .content {
-        padding: 15px;
+      .header-title {
+        font-size: 1.6rem;
       }
 
-      .start-button {
-        width: 80%;
+      .info-card {
+        padding: 24px;
+      }
+
+      .card-title {
+        font-size: 1.1rem;
+      }
+
+      .pattern-list li {
+        font-size: 0.9rem;
+        gap: 10px;
+      }
+
+      .pattern-list strong {
+        min-width: 100px;
+      }
+
+      .btn-start {
+        min-width: 160px;
+        padding: 12px 32px;
       }
     }
 
     @media (max-width: 480px) {
-      h2, h3 {
-        font-size: 18px;
+      .top-bar {
+        margin-bottom: 20px;
       }
 
-      .start-button {
-        width: 90%;
-        font-size: 16px;
+      .theme-toggle {
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
       }
+
+      .header-title {
+        font-size: 1.35rem;
+      }
+
+      .header-subtitle {
+        font-size: 0.9rem;
+      }
+
+      .info-card {
+        padding: 18px;
+        margin-bottom: 16px;
+        border-radius: 18px;
+      }
+
+      .card-title {
+        font-size: 1rem;
+        margin-bottom: 12px;
+      }
+
+      .pattern-list li {
+        font-size: 0.85rem;
+        gap: 8px;
+        padding: 8px 10px;
+        margin-bottom: 10px;
+      }
+
+      .pattern-list li:hover {
+        padding-left: 12px;
+      }
+
+      .pattern-list strong {
+        min-width: 75px;
+        font-size: 0.85rem;
+      }
+
+      .button-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .btn-start {
+        width: 100%;
+        min-width: unset;
+        padding: 13px 24px;
+        font-size: 0.9rem;
+      }
+
+      .footer-text {
+        font-size: 0.8rem;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header {
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .info-card {
+      animation: slideIn 0.6s ease-out forwards;
+    }
+
+    .info-card:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .info-card:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .info-card:nth-child(4) {
+      animation-delay: 0.3s;
+    }
+
+    .button-container {
+      animation: slideIn 0.7s ease-out;
     }
   </style>
 </head>
 <body>
-  <div class="content">
-    <h2>Exam Pattern</h2>
+  <div class="top-bar">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode">
+      <span id="themeIcon">🌙</span>
+    </button>
+  </div>
 
-    <div class="exam-pattern">
+  <div class="container">
+    <div class="header">
+      <h1 class="header-title">Exam Pattern</h1>
+      <p class="header-subtitle">Complete Overview of NEET Mock Test Structure</p>
+    </div>
 
-      <h3>Subjects and Sections:</h3>
-      <ul>
-        <li><strong>Physics:</strong> 45 questions</li>
-        <li><strong>Chemistry:</strong> 45 questions</li>
-        <li><strong>Biology:</strong> 90 questions (45 each from Botany and Zoology)</li>
+    <div class="info-card">
+      <h2 class="card-title">Subjects and Sections</h2>
+      <ul class="pattern-list">
+        <li><strong>Physics:</strong> <span>45 questions</span></li>
+        <li><strong>Chemistry:</strong> <span>45 questions</span></li>
+        <li><strong>Biology:</strong> <span>90 questions (45 Botany + 45 Zoology)</span></li>
       </ul>
+    </div>
 
-      <h3>Total Questions:</h3>
-      <ul>
-        <li><strong>Total Questions:</strong> 180 questions </li>
+    <div class="info-card">
+      <h2 class="card-title">Total Questions</h2>
+      <ul class="pattern-list">
+        <li><strong>Total Questions:</strong> <span>180 questions</span></li>
       </ul>
+    </div>
 
-      <h3>Marking Scheme:</h3>
-      <ul>
-        <li><strong>Correct Answer:</strong> +4 marks</li>
-        <li><strong>Incorrect Answer:</strong> -1 mark</li>
-        <li><strong>Unanswered Question:</strong> 0 marks</li>
-        <li><strong>Extra Attempted Question:</strong> 0 marks</li>
+    <div class="info-card">
+      <h2 class="card-title">Marking Scheme</h2>
+      <ul class="pattern-list">
+        <li><strong>Correct Answer:</strong> <span>+4 marks</span></li>
+        <li><strong>Incorrect Answer:</strong> <span>-1 mark</span></li>
+        <li><strong>Unanswered Question:</strong> <span>0 marks</span></li>
+        <li><strong>Extra Attempted Question:</strong> <span>0 marks</span></li>
       </ul>
+    </div>
 
-      <h3>Total Marks:</h3>
-      <ul>
-        <li><strong>Total Marks:</strong> 720 marks</li>
+    <div class="info-card">
+      <h2 class="card-title">Total Marks</h2>
+      <ul class="pattern-list">
+        <li><strong>Total Marks:</strong> <span>720 marks</span></li>
       </ul>
+    </div>
 
-      <h3>Important Notes:</h3>
-      <ul>
-        <li>The exam includes multiple-choice questions (MCQs).</li>
-        <li>The marking scheme includes negative marking for incorrect answers.</li>
+    <div class="info-card">
+      <h2 class="card-title">Important Notes</h2>
+      <ul class="pattern-list">
+        <li><strong>Question Type:</strong> <span>Multiple-choice questions (MCQs)</span></li>
+        <li><strong>Negative Marking:</strong> <span>Included for incorrect answers</span></li>
       </ul>
+    </div>
+
+    <div class="button-container">
+      <button class="btn btn-start" onclick="redirectUser()">Start Test</button>
+    </div>
+
+    <div class="footer">
+      <p class="footer-text">© 2026 Edurack. All rights reserved. Premium NEET Preparation Platform</p>
     </div>
   </div>
 
-  <div class="start-button-container">
-    <button class="start-button" onclick="redirectUser()">Start Test</button>
-</div>
-
-<script>
-function redirectUser() {
-    // Check if the user is on an Android device
-    if (/Android/i.test(navigator.userAgent)) {
-        window.location.href = "androidtest.html";  // Redirect Android users
-    } else {
-        window.location.href = "neetT1.html";  // Redirect Web/Desktop users
+  <script>
+    function toggleTheme() {
+      const body = document.body;
+      const themeIcon = document.getElementById('themeIcon');
+      
+      body.classList.toggle('light-mode');
+      
+      if (body.classList.contains('light-mode')) {
+        themeIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
+      } else {
+        themeIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
+      }
     }
-}
+
+    function redirectUser() {
+      if (/Android/i.test(navigator.userAgent)) {
+        window.location.href = "androidtest.html";
+      } else {
+        window.location.href = "neetT1.html";
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme');
+      const themeIcon = document.getElementById('themeIcon');
+      
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        themeIcon.textContent = '☀️';
+      }
+      
+      document.documentElement.style.scrollBehavior = 'smooth';
+    });
+  </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
 </script>
-
-
 </body>
 </html>
