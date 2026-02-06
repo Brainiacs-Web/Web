@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/JzzPN25Y/alien-monster-microsoft.png">
+  <link rel="icon" type="image/png" href="https://i.postimg.cc/JzzPN25Y/alien-monster-microsoft.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mock Test 01</title>
 
@@ -13,354 +12,822 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
 
   <style>
-body {
-  font-family: ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-  margin: 0;
-  padding: 0;
-  background-color: #f0f0f0;
-  color: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  flex-direction: column;
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-.top-container {
-  width: 100%;
-  height: 90px;
-  background-color: #7363fc;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: white;
-  font-size: 1rem;
-  padding: 0 20px;
-  margin-bottom: 5px;
-  box-sizing: border-box;
-}
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
 
-.left-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+    }
 
-.candidate-name,
-.test-name {
-  font-weight: bold;
-  font-size: 1rem;
-  color: #fefcfb;
-}
+    ::-webkit-scrollbar-thumb {
+      background: rgba(79, 172, 189, 0.3);
+      border-radius: 10px;
+    }
 
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(79, 172, 189, 0.5);
+    }
 
-.container {
-  display: flex;
-  width: 100%;
-  max-width: 1200px;
-  min-height: 500px;
-  justify-content: space-between;
-  margin-top: 5px;
-  height: calc(100vh - 120px); /* Ensure full height minus the top container */
-}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #0a1419;
+      color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+      transition: background 0.3s ease;
+    }
 
-.question-card {
-  flex-grow: 1; /* Allow both containers to grow equally */
-  margin-right: 20px;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 100%; /* Fill available space */
-}
+    body.light-mode {
+      background: #f8fafb;
+      color: #1a1a1a;
+    }
 
-  .progress-container {
-flex-grow: 1; /* Allow both containers to grow equally */
-  margin-right: 20px;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 100%; /* Fill available space */
-}
+    body.light-mode ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.02);
+    }
 
+    body.light-mode ::-webkit-scrollbar-thumb {
+      background: rgba(79, 172, 189, 0.2);
+    }
 
+    body.light-mode ::-webkit-scrollbar-thumb:hover {
+      background: rgba(79, 172, 189, 0.4);
+    }
 
-.progress-container span {
-  width: 20px; /* Reduced size */
-  height: 25px; /* Reduced size */
-  background-color: white;
-  border: 2px solid #ddd;
-  border-radius: 8px; /* Rounded edges */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px; /* Smaller font size for better fit */
-  color: #333;
-  font-weight: bold;
-}
+    .top-container {
+      width: 100%;
+      height: auto;
+      min-height: 90px;
+      background: linear-gradient(135deg, rgba(20, 80, 100, 0.5), rgba(30, 100, 120, 0.4));
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(79, 172, 189, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #f5f5f5;
+      font-size: 1rem;
+      padding: 15px 30px;
+      box-sizing: border-box;
+      margin-bottom: 0;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
 
-.question-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: calc(100vh - 120px); /* Adjusted to fill the entire screen height minus the top-container */
-  box-sizing: border-box;
-  padding: 20px; /* Keep the padding for better spacing */
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow-y: auto; /* Enable scrolling if content exceeds height */
-  width: 70%;
-}
+    body.light-mode .top-container {
+      background: linear-gradient(135deg, rgba(79, 172, 189, 0.08), rgba(79, 172, 189, 0.05));
+      border-color: rgba(79, 172, 189, 0.15);
+      color: #1a1a1a;
+    }
 
+    .left-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+    }
 
-.progress-container {
-  overflow-y: auto;
-  width: 20%; /* Decreased width of the progress container */
-}
+    .left-info div {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
 
-.question-text {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-}
+    .candidate-name,
+    .test-name {
+      font-weight: 600;
+      color: #7dd3fc;
+    }
 
-.question-number {
-  display: inline-block;
-  margin-bottom: 10px;
-  padding: 5px 10px;
-  border: 1px solid black;
-  border-radius: 50px; /* Ensure circular appearance */
-  background-color: #cdd1d8;;
-  cursor: pointer;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
+    body.light-mode .candidate-name,
+    body.light-mode .test-name {
+      color: #0369a1;
+    }
 
-#question-progress {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Max 5 questions per row */
-  gap: 10px; /* Space between the boxes */
-}
+    .timer-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
 
-.question-number.active {
-  background-color: white;
-  border: 2px solid black;
-}
+    .theme-toggle {
+      width: 45px;
+      height: 45px;
+      border-radius: 10px;
+      border: 1px solid rgba(79, 172, 189, 0.3);
+      background: rgba(79, 172, 189, 0.1);
+      color: #f5f5f5;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.question-number.answered {
-  background-color: #3f8e58;
-  color: white;
-}
+    .theme-toggle:hover {
+      background: rgba(79, 172, 189, 0.2);
+      border-color: rgba(79, 172, 189, 0.5);
+    }
 
-.question-number.reviewed {
-  background-color: #b907ff;
-  color: black;
-}
+    body.light-mode .theme-toggle {
+      color: #1a1a1a;
+    }
 
-.question-number.unanswered {
-  background-color: #f8061a;
-  color: black;
-}
+    .timer {
+      font-size: 1rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #4face5 0%, #06b6d4 100%);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(79, 172, 189, 0.3);
+    }
 
-.option-container {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 100%;
-}
-.dim-background {
-  filter: brightness(0.5);
-  pointer-events: none; /* Prevents interactions with the background */
-}
-.image-option {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  padding: 12px 15px;
-  width: 93%;
-  max-width: 450px;
-  cursor: pointer;
-  background: #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  font-size: 1rem;
-  position: relative;
-}
+    .timer img {
+      width: 20px;
+      height: 20px;
+    }
 
+    .container {
+      display: flex;
+      width: 100%;
+      max-width: 1400px;
+      min-height: calc(100vh - 120px);
+      justify-content: space-between;
+      margin-top: 0;
+      gap: 20px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
 
+    .question-card {
+      flex-grow: 1;
+      background: linear-gradient(135deg, rgba(20, 80, 100, 0.4), rgba(30, 100, 120, 0.3));
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(79, 172, 189, 0.3);
+      padding: 30px;
+      border-radius: 22px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+      overflow-y: auto;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-.image-option.selected {
-  background: #6200ea;
-  color: rgb(255, 255, 255);
-}
-.image-option:hover, 
-.image-option.selected {
-  border: 2px solid black;
-}
+    .question-card:hover {
+      border-color: rgba(79, 172, 189, 0.6);
+      box-shadow: 0 20px 50px rgba(79, 172, 189, 0.2);
+    }
 
+    body.light-mode .question-card {
+      background: linear-gradient(135deg, rgba(79, 172, 189, 0.08), rgba(79, 172, 189, 0.05));
+      border: 1px solid rgba(79, 172, 189, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    }
 
+    body.light-mode .question-card:hover {
+      border-color: rgba(79, 172, 189, 0.5);
+      box-shadow: 0 20px 50px rgba(79, 172, 189, 0.15);
+    }
 
-/* REMOVE unnecessary styles from label */
-.image-option label {
-  width: 100%;
-  height: 100%;
-  padding: 0;  /* Remove extra padding */
-  cursor: pointer;
-  box-sizing: border-box;
-  background: none; /* Remove background */
-}
+    .progress-container {
+      background: linear-gradient(135deg, rgba(20, 80, 100, 0.4), rgba(30, 100, 120, 0.3));
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(79, 172, 189, 0.3);
+      padding: 25px;
+      border-radius: 22px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      width: 280px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      overflow-y: auto;
+      box-sizing: border-box;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-.option-content {
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 1rem;
+    .progress-container:hover {
+      border-color: rgba(79, 172, 189, 0.6);
+      box-shadow: 0 20px 50px rgba(79, 172, 189, 0.2);
+    }
 
-  transition: all 0.3s ease;
-}
+    body.light-mode .progress-container {
+      background: linear-gradient(135deg, rgba(79, 172, 189, 0.08), rgba(79, 172, 189, 0.05));
+      border: 1px solid rgba(79, 172, 189, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    }
 
+    body.light-mode .progress-container:hover {
+      border-color: rgba(79, 172, 189, 0.5);
+      box-shadow: 0 20px 50px rgba(79, 172, 189, 0.15);
+    }
 
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: auto;
-}
+    .progress-container h3 {
+      color: #ecfdf5;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
 
-.save-next-btn,
-.previous-btn {
-  width: 150px;
-}
+    body.light-mode .progress-container h3 {
+      color: #1a1a1a;
+    }
 
-button {
-  padding: 10px 20px;
-  background-color: #7363fc;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 1rem;
-}
+    #question-progress {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
 
+    .question-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background: rgba(79, 172, 189, 0.15);
+      border: 2px solid rgba(79, 172, 189, 0.4);
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      transition: all 0.3s ease;
+    }
 
+    .question-number:hover {
+      border-color: rgba(79, 172, 189, 0.8);
+      background: rgba(79, 172, 189, 0.25);
+      transform: scale(1.05);
+    }
 
-.progress-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    height: 100%; /* Adjust as needed */
-    position: relative;
-}
+    body.light-mode .question-number {
+      background: rgba(79, 172, 189, 0.08);
+      border-color: rgba(79, 172, 189, 0.25);
+      color: #6b7280;
+    }
 
-/* Modal styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
+    body.light-mode .question-number:hover {
+      background: rgba(79, 172, 189, 0.15);
+      border-color: rgba(79, 172, 189, 0.5);
+    }
 
-.modal {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+    .question-number.active {
+      background: linear-gradient(135deg, #4face5 0%, #06b6d4 100%);
+      border: 2px solid rgba(79, 172, 189, 0.8);
+      color: white;
+      box-shadow: 0 4px 12px rgba(79, 172, 189, 0.3);
+    }
 
-input[type="text"] {
-  padding: 10px;
-  width: 80%;
-  margin-top: 10px;
-  border: none;
-  border-radius: 4px;
-  background-color: #e0e0e0;
-  color: black;
-}
+    .question-number.answered {
+      background: rgba(34, 197, 94, 0.25);
+      border-color: rgba(34, 197, 94, 0.6);
+      color: #86efac;
+    }
 
-.continue-btn {
-  margin-top: 10px;
-}
+    .question-number.reviewed {
+      background: rgba(168, 85, 247, 0.25);
+      border-color: rgba(168, 85, 247, 0.6);
+      color: #d8b4fe;
+    }
 
-.submit-button {
-    align-self: center;
-    margin-top: auto; /* Pushes the submit button to the bottom */
-    margin-bottom: 20px; /* Adjust the spacing from the bottom */
-}
-.timer {
-  font-size: 1rem;
-  font-weight: bold;
-  background: transparent;
-  color: white;
-  padding: 5px 10px;
-  margin: 0;
-}
+    .question-number.unanswered {
+      background: rgba(248, 113, 113, 0.25);
+      border-color: rgba(248, 113, 113, 0.6);
+      color: #fca5a5;
+    }
 
+    .question-text {
+      font-size: 1.15rem;
+      margin-bottom: 25px;
+      color: #ecfdf5;
+      line-height: 1.6;
+    }
 
+    body.light-mode .question-text {
+      color: #1a1a1a;
+    }
 
-/* Disable text selection */
-body, .question-card, .option-container, .top-container, .progress-container {
-  user-select: none; /* Prevents text selection */
-  -webkit-user-select: none; /* For Safari */
-  -moz-user-select: none; /* For Firefox */
-  -ms-user-select: none; /* For Internet Explorer/Edge */
-}
+    .question-text img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
 
-/* Disable right-click */
-body {
-  -webkit-touch-callout: none; /* Prevents "copy" on iOS */
-  -webkit-user-select: none; /* Prevents text selection in WebKit browsers */
-}
+    .option-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 25px;
+    }
 
-/* Disable drag of images and elements */
-img {
-  pointer-events: none; /* Disable image drag */
-}
+    .image-option {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      border: 2px solid rgba(79, 172, 189, 0.3);
+      border-radius: 12px;
+      padding: 15px;
+      width: 100%;
+      cursor: pointer;
+      background: rgba(79, 172, 189, 0.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      position: relative;
+    }
 
-/* Optional: Show a message on right-click attempt */
-body::after {
-  content: "Right-click is disabled on this page.";
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  color: rgb(247, 244, 244);
-  display: none;
-  font-size: 1.2rem;
-}
+    .image-option:hover {
+      border-color: rgba(79, 172, 189, 0.6);
+      background: rgba(79, 172, 189, 0.12);
+      transform: translateX(4px);
+    }
 
-body.no-right-click::after {
-  display: block;
-}
+    .image-option.selected {
+      background: linear-gradient(135deg, rgba(79, 172, 189, 0.3), rgba(79, 172, 189, 0.2));
+      border: 2px solid rgba(79, 172, 189, 0.8);
+      box-shadow: 0 8px 20px rgba(79, 172, 189, 0.25);
+    }
 
+    body.light-mode .image-option {
+      background: rgba(79, 172, 189, 0.05);
+      border-color: rgba(79, 172, 189, 0.2);
+    }
 
+    body.light-mode .image-option:hover {
+      background: rgba(79, 172, 189, 0.12);
+      border-color: rgba(79, 172, 189, 0.5);
+    }
+
+    body.light-mode .image-option.selected {
+      background: rgba(79, 172, 189, 0.15);
+      border-color: rgba(79, 172, 189, 0.6);
+    }
+
+    .image-option label {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      cursor: pointer;
+      box-sizing: border-box;
+      background: none;
+    }
+
+    .image-option input[type="radio"] {
+      margin-right: 12px;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #4face5;
+    }
+
+    .option-content {
+      width: 100%;
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    body.light-mode .option-content {
+      color: #6b7280;
+    }
+
+    .option-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #4face5 0%, #06b6d4 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(79, 172, 189, 0.25);
+      white-space: nowrap;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(79, 172, 189, 0.35);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .clear-btn,
+    .mark-review-btn {
+      background: rgba(79, 172, 189, 0.15);
+      color: #7dd3fc;
+      border: 1.5px solid rgba(79, 172, 189, 0.4);
+    }
+
+    .clear-btn:hover,
+    .mark-review-btn:hover {
+      background: rgba(79, 172, 189, 0.25);
+      border-color: rgba(79, 172, 189, 0.6);
+    }
+
+    body.light-mode .clear-btn,
+    body.light-mode .mark-review-btn {
+      color: #0369a1;
+      border-color: rgba(79, 172, 189, 0.3);
+    }
+
+    body.light-mode .clear-btn:hover,
+    body.light-mode .mark-review-btn:hover {
+      background: rgba(79, 172, 189, 0.15);
+      border-color: rgba(79, 172, 189, 0.5);
+    }
+
+    .submit-button {
+      width: 100%;
+      margin-top: auto;
+      margin-bottom: 0;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal {
+      background: linear-gradient(135deg, rgba(20, 80, 100, 0.5), rgba(30, 100, 120, 0.4));
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(79, 172, 189, 0.3);
+      padding: 40px;
+      border-radius: 22px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .modal h2 {
+      color: #ecfdf5;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    body.light-mode .modal {
+      background: linear-gradient(135deg, rgba(79, 172, 189, 0.08), rgba(79, 172, 189, 0.05));
+      border-color: rgba(79, 172, 189, 0.2);
+    }
+
+    body.light-mode .modal h2 {
+      color: #1a1a1a;
+    }
+
+    input[type="text"] {
+      padding: 12px 16px;
+      width: 100%;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      border: 1.5px solid rgba(79, 172, 189, 0.3);
+      border-radius: 10px;
+      background: rgba(79, 172, 189, 0.1);
+      color: #f5f5f5;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: rgba(79, 172, 189, 0.8);
+      background: rgba(79, 172, 189, 0.15);
+      box-shadow: 0 0 0 3px rgba(79, 172, 189, 0.1);
+    }
+
+    body.light-mode input[type="text"] {
+      background: rgba(79, 172, 189, 0.08);
+      color: #1a1a1a;
+    }
+
+    body.light-mode input[type="text"]::placeholder {
+      color: #9ca3af;
+    }
+
+    .continue-btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .dim-background {
+      filter: brightness(0.5);
+      pointer-events: none;
+    }
+
+    body, .question-card, .option-container, .top-container, .progress-container {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+
+    body {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+    }
+
+    img {
+      pointer-events: none;
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .progress-container {
+        width: 100%;
+        height: auto;
+      }
+
+      #question-progress {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .question-card {
+        padding: 25px;
+      }
+
+      .question-text {
+        font-size: 1.1rem;
+      }
+
+      .button-container {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .top-container {
+        padding: 12px 20px;
+        min-height: 80px;
+      }
+
+      .left-info div {
+        font-size: 0.9rem;
+      }
+
+      .timer {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+
+      .timer img {
+        width: 18px;
+        height: 18px;
+      }
+
+      .theme-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+
+      .container {
+        padding: 15px;
+        gap: 12px;
+      }
+
+      .question-card {
+        padding: 20px;
+      }
+
+      .progress-container {
+        padding: 20px;
+      }
+
+      .progress-container h3 {
+        font-size: 1rem;
+      }
+
+      #question-progress {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+
+      .question-number {
+        width: 45px;
+        height: 45px;
+        font-size: 0.85rem;
+      }
+
+      .question-text {
+        font-size: 1rem;
+        margin-bottom: 18px;
+      }
+
+      .option-container {
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .image-option {
+        padding: 12px;
+      }
+
+      .button-container {
+        gap: 8px;
+      }
+
+      button {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .top-container {
+        padding: 10px 15px;
+        min-height: 70px;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .timer-section {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .left-info div {
+        font-size: 0.8rem;
+      }
+
+      .timer {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+
+      .container {
+        padding: 10px;
+        gap: 10px;
+        min-height: calc(100vh - 100px);
+      }
+
+      .question-card,
+      .progress-container {
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      .progress-container {
+        width: 100%;
+      }
+
+      .progress-container h3 {
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+      }
+
+      #question-progress {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+
+      .question-number {
+        width: 40px;
+        height: 40px;
+        font-size: 0.8rem;
+      }
+
+      .question-text {
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+      }
+
+      .option-container {
+        gap: 8px;
+        margin-bottom: 15px;
+      }
+
+      .image-option {
+        padding: 10px;
+        border-radius: 10px;
+      }
+
+      .option-content {
+        font-size: 0.9rem;
+      }
+
+      .button-container {
+        gap: 6px;
+        margin-top: 15px;
+      }
+
+      button {
+        padding: 9px 12px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+      }
+
+      .modal {
+        padding: 30px 20px;
+        width: 95%;
+      }
+
+      .modal h2 {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+      }
+
+      input[type="text"] {
+        font-size: 0.9rem;
+        padding: 10px 12px;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .question-card {
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .progress-container {
+      animation: slideIn 0.6s ease-out;
+    }
   </style>
 </head>
 
 <body>
+  <div class="top-container">
+    <div class="left-info">
+      <div><strong>Candidate Name:</strong> <span class="candidate-name" id="logged-username">Username</span></div>
+      <div><strong>Test Name:</strong> <span class="test-name">Mock Test 01</span></div>
+    </div>
 
- <div class="top-container">
-  <div class="left-info">
-    <div><strong>Candidate Name</strong> : <span class="candidate-name" id="logged-username">Username</span></div>
-    <div><strong>Test Name</strong> : <span class="test-name">Mock Test 01</span></div>
+    <div class="timer-section">
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode">
+        <span id="themeIcon">🌙</span>
+      </button>
+      <div class="timer" id="timer">
+        <img src="https://i.postimg.cc/Fs22Dm1C/timer-1.png" alt="Timer Icon">
+        <span id="time-left">03:00:00</span>
+      </div>
+    </div>
   </div>
-  
-  <div class="timer" id="timer">
-    <img src="https://i.postimg.cc/Fs22Dm1C/timer-1.png" alt="Timer Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;">
-    <span id="time-left">03:00:00</span>
-</div>
-
-</div>
 
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal">
@@ -370,22 +837,14 @@ body.no-right-click::after {
     </div>
   </div>
 
-  <div class="container blur" id="content">
+  <div class="container" id="content">
     <div class="question-card" id="question-card"></div>
     <div class="progress-container">
       <h3>Questions</h3>
-      
       <div id="question-progress"></div>
-      
-        <button onclick="submitTest()">Submit Test</button>
-      </div>
-
-      
+      <button class="submit-button" onclick="submitTest()">Submit Test</button>
     </div>
   </div>
-
-  
-  
 
   <script type="module">
     const firebaseConfig = {
@@ -409,104 +868,102 @@ body.no-right-click::after {
     let userResponses = [];
 
     async function fetchQuestions() {
-  const questionsSnapshot = await getDocs(collection(db, "questions"));
-  questions = [];
+      const questionsSnapshot = await getDocs(collection(db, "questions"));
+      questions = [];
 
-  questionsSnapshot.forEach((doc) => {
-    const data = doc.data();
-    questions.push({ ...data, id: doc.id });
-  });
+      questionsSnapshot.forEach((doc) => {
+        const data = doc.data();
+        questions.push({ ...data, id: doc.id });
+      });
 
-  console.log("Fetched Questions Before Sorting:", questions);
+      questions.sort((a, b) => (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0));
 
-  // Sort questions based on timestamp (newest first)
-  questions.sort((a, b) => (b.addedAt?.seconds || 0) - (a.addedAt?.seconds || 0));
+      displayQuestion();
+      displayProgress();
+    }
 
-  console.log("Sorted Questions:", questions); // Debugging log
+    function displayQuestion() {
+      const questionData = questions[currentQuestionIndex];
+      const questionCard = document.getElementById("question-card");
 
-  displayQuestion();
-  displayProgress();
-}
+      const savedAnswer = localStorage.getItem(`response_${currentQuestionIndex}`);
+      const isMarkedForReview = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
 
+      function isURL(str) {
+        return /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$/i.test(str);
+      }
 
-function displayQuestion() {
-  console.log("Displaying question", currentQuestionIndex); // Debugging line
-
-  const questionData = questions[currentQuestionIndex];
-  const questionCard = document.getElementById("question-card");
-
-
-  const savedAnswer = localStorage.getItem(`response_${currentQuestionIndex}`);
-  const isMarkedForReview = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
-
-  // Function to check if a string is a URL
-  function isURL(str) {
-    return /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg))$/i.test(str);
-  }
-
-  questionCard.innerHTML = `  
-    <p class="question-number">Question ${currentQuestionIndex + 1}</p>
-    <div class="question-text">
-      ${isURL(questionData.question) ? `<img src="${questionData.question}" alt="Question Image" style="max-width:90%; height:auto;">` : questionData.question}
-    </div>
-    <div class="option-container">
-      ${questionData.options
-        .map(
-          (option, index) => ` 
-        <div class="image-option">
-          <input type="radio" name="q${currentQuestionIndex}" id="option${index}" value="${String.fromCharCode(65 + index)}">
-          <label for="option${index}">
-            <div class="option-content">
-              ${isURL(option) ? `<img src="${option}" alt="Option Image" style="max-width:100px; height:auto;">` : `${String.fromCharCode(65 + index)}. ${option}`}
-            </div>
-          </label>
+      questionCard.innerHTML = `  
+        <div>
+          <p class="question-number">Question ${currentQuestionIndex + 1}</p>
+          <div class="question-text">
+            ${isURL(questionData.question) ? `<img src="${questionData.question}" alt="Question Image">` : questionData.question}
+          </div>
+          <div class="option-container">
+            ${questionData.options
+              .map(
+                (option, index) => ` 
+              <div class="image-option">
+                <input type="radio" name="q${currentQuestionIndex}" id="option${index}" value="${String.fromCharCode(65 + index)}">
+                <label for="option${index}">
+                  <div class="option-content">
+                    ${isURL(option) ? `<img src="${option}" alt="Option Image">` : `${String.fromCharCode(65 + index)}. ${option}`}
+                  </div>
+                </label>
+              </div>
+            `
+              )
+              .join("")}
+          </div>
         </div>
-      `
-        )
-        .join("")}
-    </div>
-    <div class="button-container">
-      <button class="previous-btn" onclick="goToPrevious()">Previous</button>
-      <button class="clear-btn" onclick="clearSelection()">Clear Selection</button>
-      <button class="mark-review-btn" onclick="markAsReview()">${isMarkedForReview ? "Unmark Review" : "Mark as Review"}</button>
-      <button class="save-next-btn" onclick="saveAndNext()">Save and Next</button>
-    </div>
-  `;
+        <div class="button-container">
+          <button class="previous-btn" onclick="goToPrevious()">Previous</button>
+          <button class="clear-btn" onclick="clearSelection()">Clear</button>
+          <button class="mark-review-btn" onclick="markAsReview()">${isMarkedForReview ? "Unmark" : "Mark"}</button>
+          <button class="save-next-btn" onclick="saveAndNext()">Save & Next</button>
+        </div>
+      `;
 
-  // Restore saved answer
-  if (savedAnswer) {
-    const radioBtn = document.querySelector(`input[name="q${currentQuestionIndex}"][value="${savedAnswer}"]`);
-    if (radioBtn) radioBtn.checked = true;
-  }
-}
+      if (savedAnswer) {
+        const radioBtn = document.querySelector(`input[name="q${currentQuestionIndex}"][value="${savedAnswer}"]`);
+        if (radioBtn) {
+          radioBtn.checked = true;
+          radioBtn.closest('.image-option').classList.add('selected');
+        }
+      }
+
+      document.querySelectorAll(`input[name="q${currentQuestionIndex}"]`).forEach(radio => {
+        radio.addEventListener('change', function() {
+          document.querySelectorAll('.image-option').forEach(opt => opt.classList.remove('selected'));
+          if (this.checked) {
+            this.closest('.image-option').classList.add('selected');
+          }
+        });
+      });
+    }
 
     window.markAsReview = function () {
       const isMarkedForReview = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
 
       if (isMarkedForReview) {
-        // Unmark the question for review
         localStorage.removeItem(`review_${currentQuestionIndex}`);
       } else {
-        // Mark the question for review
         localStorage.setItem(`review_${currentQuestionIndex}`, "true");
       }
 
-      // Update the question display and progress bar
       displayQuestion();
       updateProgress();
     };
-    // Previous button function (updated)
+
     window.goToPrevious = function () {
       if (currentQuestionIndex > 0) {
-        currentQuestionIndex--; // Decrement the question index
-        displayQuestion(); // Display the previous question
-        updateProgress(); // Update the progress bar
+        currentQuestionIndex--;
+        displayQuestion();
+        updateProgress();
       } else {
         alert("This is the first question!");
       }
     };
-
-
 
     function displayProgress() {
       const progressContainer = document.getElementById("question-progress");
@@ -525,293 +982,199 @@ function displayQuestion() {
       displayQuestion();
       updateProgress();
     }
+
     function updateProgress() {
-  const progressContainer = document.getElementById("question-progress");
-  const questionNumbers = progressContainer.querySelectorAll(".question-number");
+      const progressContainer = document.getElementById("question-progress");
+      const questionNumbers = progressContainer.querySelectorAll(".question-number");
 
-  questionNumbers.forEach((num, index) => {
-    num.classList.remove("active", "answered", "reviewed", "unanswered", "completed");
+      questionNumbers.forEach((num, index) => {
+        num.classList.remove("active", "answered", "reviewed", "unanswered");
 
-    // If the question has not been visited, leave it unchanged
-    if (!localStorage.getItem(`visited_${index}`) && index !== currentQuestionIndex) {
-      return;
+        if (!localStorage.getItem(`visited_${index}`) && index !== currentQuestionIndex) {
+          return;
+        }
+
+        localStorage.setItem(`visited_${index}`, "true");
+
+        const selectedAnswer = localStorage.getItem(`response_${index}`);
+        const isMarkedForReview = localStorage.getItem(`review_${index}`) === "true";
+
+        if (selectedAnswer) {
+          if (isMarkedForReview) {
+            num.classList.add("reviewed");
+          } else {
+            num.classList.add("answered");
+          }
+        } else if (isMarkedForReview) {
+          num.classList.add("reviewed");
+        } else {
+          num.classList.add("unanswered");
+        }
+
+        if (index === currentQuestionIndex) {
+          num.classList.add("active");
+        }
+      });
     }
 
-    // Mark question as visited
-    localStorage.setItem(`visited_${index}`, "true");
+    window.saveAndNext = function () {
+      const selectedOption = document.querySelector(`input[name="q${currentQuestionIndex}"]:checked`);
+      const selectedAnswer = selectedOption ? selectedOption.value : null;
 
-    // Retrieve saved answer and review status
-    const selectedAnswer = localStorage.getItem(`response_${index}`);
-    const isMarkedForReview = localStorage.getItem(`review_${index}`) === "true";
-
-    // Determine color based on state
-    if (selectedAnswer) {
-      if (isMarkedForReview) {
-        localStorage.setItem(`color_${index}`, "gray"); // Answered & Marked for review
+      if (selectedAnswer) {
+        localStorage.setItem(`response_${currentQuestionIndex}`, selectedAnswer);
       } else {
-        localStorage.setItem(`color_${index}`, "#3f8e58"); // Answered
+        localStorage.removeItem(`response_${currentQuestionIndex}`);
       }
-    } else if (isMarkedForReview) {
-      localStorage.setItem(`color_${index}`, "#b907ff"); // Only marked for review
-    } else {
-      localStorage.setItem(`color_${index}`, "#f8061a"); // Viewed but unanswered
-    }
 
-    // Apply stored color
-    num.style.backgroundColor = localStorage.getItem(`color_${index}`);
-    num.style.color = 'white';
+      currentQuestionIndex++;
+      if (currentQuestionIndex >= questions.length) {
+        currentQuestionIndex = 0;
+      }
 
-    // Highlight the current question
-    if (index === currentQuestionIndex) {
-      num.classList.add("active");
-    }
-  });
-}
+      displayQuestion();
+      updateProgress();
+    };
 
-window.saveAndNext = function () {
-  const selectedOption = document.querySelector(`input[name="q${currentQuestionIndex}"]:checked`);
-  const selectedAnswer = selectedOption ? selectedOption.value : null;
-
-  // Save answer if selected
-  if (selectedAnswer) {
-    localStorage.setItem(`response_${currentQuestionIndex}`, selectedAnswer);
-  } else {
-    localStorage.removeItem(`response_${currentQuestionIndex}`); // Ensure unanswered questions are cleared
-  }
-
-  // Check if marked for review
-  const isMarkedForReview = localStorage.getItem(`review_${currentQuestionIndex}`) === "true";
-
-  // Update color logic
-  if (selectedAnswer) {
-    if (isMarkedForReview) {
-      localStorage.setItem(`color_${currentQuestionIndex}`, "gray");
-    } else {
-      localStorage.setItem(`color_${currentQuestionIndex}`, "#3f8e58");
-    }
-  } else {
-    localStorage.setItem(`color_${currentQuestionIndex}`, "#f8061a"); // If unanswered, mark as red
-  }
-
-  // Move to next question
-  currentQuestionIndex++;
-  if (currentQuestionIndex >= questions.length) {
-    currentQuestionIndex = 0;
-  }
-
-  displayQuestion();
-  updateProgress();
-};
-
-
-window.submitTest = function (autoSubmit = false) {
-    if (!autoSubmit) {
+    window.submitTest = function (autoSubmit = false) {
+      if (!autoSubmit) {
         const confirmation = confirm("Are you sure you want to submit the test?");
         if (!confirmation) return;
-    }
+      }
 
-    const userDocRef = doc(db, "responses", username);
-    const responseData = {};
+      const userDocRef = doc(db, "responses", username);
+      const responseData = {};
 
-    for (let i = 0; i < questions.length; i++) {
-        // Fetch saved response from localStorage
+      for (let i = 0; i < questions.length; i++) {
         const storedAnswer = localStorage.getItem(`response_${i}`) || null;
-        const isMarkedForReview = localStorage.getItem(`review_${i}`) === "true";
 
-        // Store the answer as it is, without modifying it for review
         responseData[`responses.${i}`] = {
-            question: questions[i].question,
-            selectedAnswer: storedAnswer // Store the selected answer normally, regardless of review status
+          question: questions[i].question,
+          selectedAnswer: storedAnswer
         };
+      }
 
-        // Optionally, you can track the review status separately for internal purposes if needed
-        // This could be stored in a separate field or used for processing later.
-        if (isMarkedForReview) {
-            responseData[`responses.${i}.markedForReview`] = true;
-        }
-    }
-
-    // Save user responses to Firestore
-    setDoc(
+      setDoc(
         userDocRef,
         {
-            ...responseData,
-            timestamp: serverTimestamp(),
+          ...responseData,
+          timestamp: serverTimestamp(),
         },
         { merge: true }
-    )
-    .then(() => {
-        // Clear local storage after successful submission
+      )
+      .then(() => {
         localStorage.clear();
-        localStorage.removeItem('timeLeft'); // Ensure timer is reset in localStorage
-
-        // Reset timer display to default time
-        timeLeft = 3 * 60 * 60; // Reset to 3 hours (in seconds)
+        timeLeft = 3 * 60 * 60;
         updateTimerDisplay();
 
         if (autoSubmit) {
-            alert("You have switched tabs too many times. Your test has been submitted.");
-            window.location.href = "cheat.html"; // Redirect to cheat page if auto-submitted
+          alert("Test submitted automatically.");
+          window.location.href = "cheat.html";
         } else {
-            alert("Test submitted successfully!");
-            window.location.href = `results.html?username=${username}`; // Redirect to result page for manual submission
+          alert("Test submitted successfully!");
+          window.location.href = `results.html?username=${username}`;
         }
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         alert("Error submitting test: " + error.message);
-    });
-};
-window.clearSelection = function () {
-  const radios = document.querySelectorAll(`input[name="q${currentQuestionIndex}"]`);
-  radios.forEach(radio => (radio.checked = false));
+      });
+    };
 
-  // Remove answer from storage
-  localStorage.removeItem(`response_${currentQuestionIndex}`);
+    window.clearSelection = function () {
+      const radios = document.querySelectorAll(`input[name="q${currentQuestionIndex}"]`);
+      radios.forEach(radio => (radio.checked = false));
 
-  // If visited, mark it red
-  if (localStorage.getItem(`visited_${currentQuestionIndex}`)) {
-    localStorage.setItem(`color_${currentQuestionIndex}`, "red");
-  }
+      localStorage.removeItem(`response_${currentQuestionIndex}`);
 
-  updateProgress();
-};
+      document.querySelectorAll('.image-option').forEach(opt => opt.classList.remove('selected'));
 
+      updateProgress();
+    };
 
-window.validateUsername = function () {
-  const usernameInput = document.getElementById("username").value;
-  const modalOverlay = document.getElementById("modal-overlay");
-  const content = document.getElementById("content");
+    window.validateUsername = function () {
+      const usernameInput = document.getElementById("username").value;
+      const modalOverlay = document.getElementById("modal-overlay");
+      const content = document.getElementById("content");
 
-  if (usernameInput) {
-    document.getElementById("logged-username").textContent = usernameInput;
-    username = usernameInput;
-    setDoc(doc(db, "responses", username), {
-      timestamp: serverTimestamp(),
-      responses: [],
-    });
-    
-    modalOverlay.style.display = "none";
-    content.classList.remove("dim-background"); // Remove dim effect
-    alert("Welcome, " + username);
-    fetchQuestions();
-  } else {
-    alert("Invalid username. Access denied.");
-  }
-};
+      if (usernameInput) {
+        document.getElementById("logged-username").textContent = usernameInput;
+        username = usernameInput;
+        setDoc(doc(db, "responses", username), {
+          timestamp: serverTimestamp(),
+          responses: [],
+        });
 
-// Function to open a popup and dim the background
-function showModal() {
-  document.getElementById("modal-overlay").style.display = "flex";
-  document.getElementById("content").classList.add("dim-background");
-}
+        modalOverlay.style.display = "none";
+        content.classList.remove("dim-background");
+        alert("Welcome, " + username);
+        fetchQuestions();
+      } else {
+        alert("Invalid username. Access denied.");
+      }
+    };
 
-// Function to close a popup and restore brightness
-function closeModal() {
-  document.getElementById("modal-overlay").style.display = "none";
-  document.getElementById("content").classList.remove("dim-background");
-}
+    function toggleTheme() {
+      const body = document.body;
+      const themeIcon = document.getElementById('themeIcon');
 
+      body.classList.toggle('light-mode');
 
-  
-  let timerInterval;
-let timeLeft = localStorage.getItem('timeLeft') ? Number(localStorage.getItem('timeLeft')) : 3 * 60 * 60; // Load saved time or default to 3 hours in seconds
-
-function updateTimerDisplay() {
-  const hours = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
-  const minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
-  const seconds = String(timeLeft % 60).padStart(2, '0');
-  document.getElementById('time-left').textContent = `${hours}:${minutes}:${seconds}`;
-}
-
-function startTimer() {
-  // Start the timer interval, this will run every second regardless of tab visibility
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    localStorage.setItem('timeLeft', timeLeft); // Save the current timeLeft in local storage
-    updateTimerDisplay();
-
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      alert("Time's up!");
-      submitTest(); // Call the function to submit the test after time is up
-      localStorage.removeItem('timeLeft'); // Clear the timer from localStorage when time's up
+      if (body.classList.contains('light-mode')) {
+        themeIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
+      } else {
+        themeIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
+      }
     }
-  }, 1000);
-}
 
-// Call updateTimerDisplay() on page load to initialize the display with the correct time
-updateTimerDisplay();
+    let timerInterval;
+    let timeLeft = localStorage.getItem('timeLeft') ? Number(localStorage.getItem('timeLeft')) : 3 * 60 * 60;
 
+    function updateTimerDisplay() {
+      const hours = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
+      const minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
+      const seconds = String(timeLeft % 60).padStart(2, '0');
+      document.getElementById('time-left').textContent = `${hours}:${minutes}:${seconds}`;
+    }
 
-// Start the timer as soon as the page loads
-window.onload = startTimer;
-
-
-// Optionally, display a message when the tab is switched
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    // Show a warning message (you can customize this)
-    console.log("You switched tabs. The timer will continue running in the background.");
-  } else {
-    // Optionally, show that the tab is back in focus (you can customize this)
-    console.log("You're back on the page. The timer continues.");
-  }
-});
-
-
-
-    // Disable right-click functionality
-document.addEventListener('contextmenu', function (event) {
-  event.preventDefault(); // Disable the right-click menu
-  document.body.classList.add('no-right-click');
-});
-
-// Optional: You can also disable text selection using JavaScript
-document.addEventListener('selectstart', function (event) {
-  event.preventDefault(); // Prevents text selection
-});
-
-
-let tabSwitchCount = 0;
-const maxTabSwitches = 5;
-
-document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-        tabSwitchCount++;
-
-        if (tabSwitchCount >= maxTabSwitches) {
-            alert("You have switched tabs too many times. Your test is being submitted.");
-            submitTest(true); // Auto-submit due to tab switching
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          localStorage.setItem('timeLeft', timeLeft);
+          updateTimerDisplay();
         } else {
-            showWarningPopup();
+          clearInterval(timerInterval);
+          submitTest(true);
         }
+      }, 1000);
     }
-});
 
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme');
+      const themeIcon = document.getElementById('themeIcon');
 
-
-function showWarningPopup() {
-    const popup = document.createElement("div");
-    popup.innerHTML = `
-        <div style="
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            border-radius: 8px; z-index: 1000; text-align: center;
-        ">
-            <h2>Switching tabs will submit the test</h2>
-            <p>Changing tab while attempting the test will submit the test next time, please make sure that you don't switch tabs.</p>
-            <button onclick="this.parentElement.remove()">OK</button>
-        </div>
-    `;
-    document.body.appendChild(popup);
-}
-
-if (sessionStorage.getItem("cheatingDetected")) {
-        window.location.href = "cheat.html"; // Immediately redirect if flagged
-        window.location.href = "results.html"; // Immediately redirect if flagged
-
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        themeIcon.textContent = '☀️';
       }
 
+      updateTimerDisplay();
+      startTimer();
+      window.addEventListener('beforeunload', () => {
+        localStorage.setItem('timeLeft', timeLeft);
+      });
+    });
+
+    window.addEventListener('blur', () => {
+      let tabSwitchCount = parseInt(localStorage.getItem('tabSwitches') || '0') + 1;
+      localStorage.setItem('tabSwitches', tabSwitchCount);
+
+      if (tabSwitchCount > 2) {
+        submitTest(true);
+      }
+    });
   </script>
 </body>
 
