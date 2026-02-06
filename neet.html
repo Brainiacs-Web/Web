@@ -1,177 +1,497 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEET Mock Tests</title>
+  <title>NEET Mock Tests - Premium Edition</title>
   <link rel="icon" type="image/png" href="https://i.postimg.cc/JzzPN25Y/alien-monster-microsoft.png">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      background-color: #121212;
-      font-family: 'Poppins', sans-serif;
-      color: #e0e0e0;
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a1419;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      color: #f5f5f5;
+      min-height: 100vh;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      transition: background 0.3s ease;
     }
+
+    body.light-mode {
+      background: #f8fafb;
+      color: #1a1a1a;
+    }
+
+    .top-bar {
+      width: 100%;
+      max-width: 700px;
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 30px;
+      padding-top: 10px;
+    }
+
+    .theme-toggle {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      color: #f5f5f5;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    body.light-mode .theme-toggle {
+      background: rgba(0, 0, 0, 0.08);
+      color: #1a1a1a;
+    }
+
+    body.light-mode .theme-toggle:hover {
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #f5f5f5;
+    }
+
+    body.light-mode .header-title {
+      color: #1a1a1a;
+    }
+
+    .header-subtitle {
+      font-size: 0.95rem;
+      color: #a0aec0;
+      font-weight: 400;
+    }
+
+    body.light-mode .header-subtitle {
+      color: #6b7280;
+    }
+
     .test-card {
-      width: 85%;
-      max-width: 650px;
-      background-color: #1e1e1e;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      border: 1px solid #333;
+      background: linear-gradient(135deg, rgba(20, 80, 100, 0.4), rgba(30, 100, 120, 0.3));
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(79, 172, 189, 0.3);
+      border-radius: 22px;
+      padding: 28px;
+      margin-bottom: 20px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
+
+    .test-card::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -40%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(79, 172, 189, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .test-card:hover {
+      border-color: rgba(79, 172, 189, 0.6);
+      box-shadow: 0 20px 50px rgba(79, 172, 189, 0.2);
+      transform: translateY(-6px);
+      background: linear-gradient(135deg, rgba(20, 100, 120, 0.5), rgba(30, 120, 140, 0.4));
+    }
+
+    body.light-mode .test-card {
+      background: linear-gradient(135deg, rgba(79, 172, 189, 0.08), rgba(79, 172, 189, 0.05));
+      border: 1px solid rgba(79, 172, 189, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    body.light-mode .test-card:hover {
+      border-color: rgba(79, 172, 189, 0.5);
+      box-shadow: 0 20px 50px rgba(79, 172, 189, 0.15);
+    }
+
     .test-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
     }
-    .test-title {
-      font-size: 1rem;
-      font-weight: 600;
-    }
-    .test-info {
-      font-size: 0.85rem;
-      color: #b0b0b0;
-      margin: 3px 0;
-    }
-    .syllabus-link {
-      color: #00bcd4;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.85rem;
-    }
-    .syllabus-link:hover {
-      text-decoration: underline;
-    }
-    .start-button {
+
+    .badge {
       display: inline-block;
       padding: 6px 14px;
-      background-color: #00bcd4;
-      color: #121212;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .badge-completed {
+      background: rgba(34, 197, 94, 0.25);
+      color: #86efac;
+      border: 1px solid rgba(34, 197, 94, 0.5);
+    }
+
+    .badge-available {
+      background: rgba(79, 172, 189, 0.25);
+      color: #7dd3fc;
+      border: 1px solid rgba(79, 172, 189, 0.5);
+    }
+
+    body.light-mode .badge-completed {
+      background: rgba(34, 197, 94, 0.15);
+      color: #16a34a;
+    }
+
+    body.light-mode .badge-available {
+      background: rgba(79, 172, 189, 0.15);
+      color: #0369a1;
+    }
+
+    .test-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #ecfdf5;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    body.light-mode .test-title {
+      color: #1a1a1a;
+    }
+
+    .test-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      font-weight: 400;
+    }
+
+    body.light-mode .meta-item {
+      color: #6b7280;
+    }
+
+    .meta-icon {
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+
+    .test-date {
+      font-size: 0.95rem;
+      color: #7dd3fc;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    body.light-mode .test-date {
+      color: #0369a1;
+    }
+
+    .syllabus-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #7dd3fc;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 8px 0;
+      transition: all 0.25s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    body.light-mode .syllabus-link {
+      color: #0369a1;
+    }
+
+    .syllabus-link:hover {
+      gap: 10px;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 12px 20px;
       border: none;
-      border-radius: 5px;
-      font-size: 0.85rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
-      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
     }
-    .start-button:hover {
-      background-color: #0097a7;
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4face5 0%, #06b6d4 100%);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(79, 172, 189, 0.35);
     }
-    .start-button:disabled {
-      background-color: #555;
-      color: #888;
-      cursor: not-allowed;
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(79, 172, 189, 0.45);
     }
-    .upcoming-badge {
-      background-color: #2d2d2d;
-      color: #00bcd4;
-      padding: 4px 8px;
-      font-size: 0.75rem;
-      border-radius: 5px;
-      font-weight: 600;
+
+    .btn-secondary {
+      background: rgba(79, 172, 189, 0.15);
+      color: #7dd3fc;
+      border: 1.5px solid rgba(79, 172, 189, 0.35);
     }
-    .button-container {
-      margin-top: 8px;
-      text-align: right;
+
+    .btn-secondary:hover {
+      background: rgba(79, 172, 189, 0.25);
+      border-color: rgba(79, 172, 189, 0.6);
     }
-    #countdown {
+
+    body.light-mode .btn-secondary {
+      color: #0369a1;
+      border-color: rgba(79, 172, 189, 0.25);
+    }
+
+    body.light-mode .btn-secondary:hover {
+      background: rgba(79, 172, 189, 0.15);
+    }
+
+    .footer {
+      margin-top: 50px;
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(79, 172, 189, 0.1);
+    }
+
+    .footer-text {
       font-size: 0.85rem;
-      color: #ff5252;
-      font-weight: 600;
-      margin-top: 5px;
+      color: #94a3b8;
+      font-weight: 400;
+    }
+
+    body.light-mode .footer-text {
+      color: #9ca3af;
+      border-color: rgba(79, 172, 189, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      .header-title {
+        font-size: 1.5rem;
+      }
+
+      .test-title {
+        font-size: 1.1rem;
+      }
+
+      .button-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .btn {
+        min-width: unset;
+      }
+
+      .test-card {
+        padding: 20px;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .test-card {
+      animation: slideIn 0.5s ease-out forwards;
+    }
+
+    .test-card:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .test-card:nth-child(3) {
+      animation-delay: 0.2s;
     }
   </style>
 </head>
 <body>
-  <!-- TEST 1 -->
-  <div class="test-card">
-    <div class="test-header">
-      <span class="upcoming-badge">Result Declared</span>
-      <span class="test-title">Full syllabus Test 01</span>
-    </div>
-    <p class="test-info">📄 180 Questions | 🏆 720 Marks | ⏳ 180 Mins </p>
-    <p class="test-info">📅 Held on Feb 07, 2025 at 2:00 PM</p>
-    <a href="#" class="syllabus-link">📖 View Syllabus</a>
-    <div class="button-container">
-      <button class="start-button" onclick="window.location.href='page1.html'">➜ Start</button>
-      <button class="start-button" onclick="window.location.href='test1pdf.html'">PDF</button>
-    </div>
+  <div class="top-bar">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode">
+      <span id="themeIcon">🌙</span>
+    </button>
   </div>
 
-  <!-- TEST 2 (Unlocks on Feb 25, 2025, at 2:00 PM) -->
-  <div class="test-card">
-    <div class="test-header">
-      <span class="upcoming-badge">Upcoming</span>
-      <span class="test-title">Full syllabus Test 02</span>
+  <div class="container">
+    <div class="header">
+      <h1 class="header-title">NEET Mock Tests</h1>
+      <p class="header-subtitle">Premium Test Series for Your Success</p>
     </div>
-    <p class="test-info">📄 180 Questions | 🏆 720 Marks | ⏳ 180 Mins </p>
-    <p class="test-info">📅 Starts on Feb 25, 2025 at 2:00 PM | Ends at 5:00 PM</p>
-    <a href="#" class="syllabus-link">📖 View Syllabus</a>
-    <div class="button-container">
-      <button id="test2Start" class="start-button" disabled>➜ Start</button>
+
+    <!-- TEST 1 -->
+    <div class="test-card completed">
+      <div class="test-header">
+        <span class="badge badge-completed">✓ Result Declared</span>
+      </div>
+      <h2 class="test-title">Full Syllabus Test 01</h2>
+      <div class="test-meta">
+        <div class="meta-item">
+          <span class="meta-icon">📄</span>
+          <span>180 Questions | 720 Marks | 180 Minutes</span>
+        </div>
+        <div class="test-date">
+          <span class="meta-icon">📅</span>
+          <span>Held on Feb 04, 2026 at 2:00 PM</span>
+        </div>
+      </div>
+      <a href="#" class="syllabus-link">📖 View Syllabus</a>
+      <div class="button-container">
+        <button class="btn btn-primary" onclick="window.location.href='page1.html'">
+          ➜ Start Test
+        </button>
+        <button class="btn btn-secondary" onclick="window.location.href='test1pdf.html'">
+          ⬇ Download PDF
+        </button>
+      </div>
     </div>
-    <div id="countdown">Unlocks in: --:--:--</div>
+
+    <!-- TEST 2 -->
+    <div class="test-card available">
+      <div class="test-header">
+        <span class="badge badge-available">✓ Available Now</span>
+      </div>
+      <h2 class="test-title">Full Syllabus Test 02</h2>
+      <div class="test-meta">
+        <div class="meta-item">
+          <span class="meta-icon">📄</span>
+          <span>180 Questions | 720 Marks | 180 Minutes</span>
+        </div>
+        <div class="test-date">
+          <span class="meta-icon">📅</span>
+          <span>Available from Feb 06, 2026 | 2:00 PM - 5:00 PM</span>
+        </div>
+      </div>
+      <a href="#" class="syllabus-link">📖 View Syllabus</a>
+      <div class="button-container">
+        <button id="test2Start" class="btn btn-primary" onclick="handleTest2Click()">
+          ➜ Start Test
+        </button>
+        <button class="btn btn-secondary" onclick="window.location.href='test2pdf.html'">
+          ⬇ Download PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p class="footer-text">© 2026 Edurack. All rights reserved. Premium NEET Preparation Platform</p>
+    </div>
   </div>
-
-  <!-- Planner Button -->
-  <button class="start-button" style="margin-top: 10px;" onclick="window.location.href='https://drive.google.com/file/d/14emdjw4vj6YcVFLBCCiE1sLWRsax1XQK/view?usp=drivesdk'">📅 Planner</button>
-
-  <!-- Register Button -->
-  <button class="start-button" style="margin-top: 10px;" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSc1goezKBrtvpDVEcMOlLnny4NdyKqQA7304laQQtjVcwf0eA/viewform?usp=header'">📝 Register Now</button>
 
   <script>
-    // Unlock time: Feb 25, 2025, 2:00 PM
-    const unlockDate = new Date("February 25, 2025 14:00:00").getTime();
+    function handleTest2Click() {
+      // Device-based redirection for Test 2
+      function getRedirectURL() {
+        if (navigator.userAgent.match(/Android/i)) {
+          return "androidtest.html";
+        } else {
+          return "neetT2.html";
+        }
+      }
+      window.location.href = getRedirectURL();
+    }
 
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const timeLeft = unlockDate - now;
-      const countdownElement = document.getElementById("countdown");
-      const startButton = document.getElementById("test2Start");
-
-      if (timeLeft > 0) {
-        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-        countdownElement.textContent = `Unlocks in: ${hours}h ${minutes}m ${seconds}s`;
+    function toggleTheme() {
+      const body = document.body;
+      const themeIcon = document.getElementById('themeIcon');
+      
+      body.classList.toggle('light-mode');
+      
+      if (body.classList.contains('light-mode')) {
+        themeIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
       } else {
-        clearInterval(countdownTimer);
-        countdownElement.textContent = "Test Unlocked!";
-        startButton.disabled = false;
+        themeIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
       }
     }
 
-    const countdownTimer = setInterval(updateCountdown, 1000);
-    updateCountdown();
-
-    // Device-based redirection for Test 2 Start button.
-    document.addEventListener("DOMContentLoaded", function () {
-      const startButton = document.getElementById("test2Start");
-
-      // Determine the target URL based on the user's device
-      function getRedirectURL() {
-        // Check if the user agent contains "Android"
-        if (navigator.userAgent.match(/Android/i)) {
-          return "androidtest.html";  // For Android devices
-        } else {
-          return "neetT2.html";     // For PC/Laptop and other devices
-        }
+    // Restore theme preference on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedTheme = localStorage.getItem('theme');
+      const themeIcon = document.getElementById('themeIcon');
+      
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        themeIcon.textContent = '☀️';
       }
-
-      // Attach the click event listener to the button
-      startButton.addEventListener("click", function () {
-        window.location.href = getRedirectURL();
-      });
+      
+      document.documentElement.style.scrollBehavior = 'smooth';
     });
   </script>
 </body>
